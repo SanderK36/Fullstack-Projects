@@ -1,0 +1,41 @@
+#meSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 50px 0 0 0;
+    text-align: center;
+}
+.imageOfMe {
+    border-radius: 50%;
+    height: 200px;
+}
+
+.aboutMeHeader {
+    font-size: 40px;
+    margin-top: 25px;
+    margin-bottom: 0;
+}
+
+.aboutMeText {
+    font-size: 20px;
+    margin-top: 0px;
+}
+
+#mainHeader {
+    transition: font-size 0.3s ease;
+    cursor: default
+}
+
+#mainHeader:hover {
+    font-size: 60px;
+}
+
+.skillHeader {
+    transition: transform 0.3s ease;
+    cursor: default;
+    margin-bottom: 50px;
+}
+
+.skillHeader:hover {
+    transform: scale(1.4);
+}

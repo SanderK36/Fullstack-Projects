@@ -1,0 +1,116 @@
+.hero {
+  background: linear-gradient(300deg, #00bfff, #ff4c68, #ef8172);
+  background-size: 180% 180%;
+  animation: gradient-animation 18s ease infinite;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+#meSection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 50px 0 0 0;
+    text-align: center;
+}
+.imageOfMe {
+    border-radius: 50%;
+    height: 200px;
+}
+
+.aboutMeHeader {
+    font-size: 40px;
+    margin-top: 25px;
+    margin-bottom: 0;
+}
+
+.aboutMeText {
+    font-size: 20px;
+    margin-top: 0px;
+}
+
+#mainHeader {
+    transition: font-size 0.3s ease;
+    cursor: default
+}
+
+#mainHeader:hover {
+    font-size: 60px;
+}
+
+.skillHeader {
+    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    cursor: default;
+    margin-bottom: 50px;
+    box-shadow: 0 6px 12px rgba(0,0,0,.25);
+    border: 1px solid transparent;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.skillHeader:hover {
+    transform: scale(1.3);
+}
+
+/* JavaScript */
+.javascript:hover {
+    background-color: #F7DF1E;
+    color: #000;
+}
+
+/* CSS */
+.css:hover {
+    background-color: #2965F1;
+    color: #fff;
+}
+
+/* HTML */
+.html:hover {
+    background-color: #E34F26;
+    color: #fff;
+}
+
+/* React */
+.react:hover {
+    background-color: #61DAFB;
+    color: #000;
+}
+
+/* Vue */
+.vue:hover {
+    background-color: #42B883;
+    color: #fff;
+}
+
+/* TypeScript */
+.typescript:hover {
+    background-color: #3178C6;
+    color: #fff;
+}
+
+/* Express */
+.express:hover {
+    background-color: #303030; /* Dark gray from Express branding */
+    color: #fff;
+}
+
+/* Node.js */
+.node:hover {
+    background-color: #539E43;
+    color: #fff;
+}
+
+/* Tailwind CSS */
+.tailwind:hover {
+    background-color: #06B6D4;
+    color: #fff;
+}

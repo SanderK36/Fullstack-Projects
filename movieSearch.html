@@ -3,14 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Movie Search</title>
+    <link rel="stylesheet" href="./movieSearch.css">
 </head>
 <body>
-    <div class="showMovie"></div>
-    <div class="action">
-        <input type="text" id="inputField">
-        <button onclick="searchMovies()">Søk</button>
+    <div class="container">
+        <div id="showMovie"></div>
+        <div class="searchWrapper">
+            <div class="action">
+                <input 
+                    type="text" 
+                    id="inputField" 
+                    placeholder="Search for a movie..."
+                    oninput="showSuggestions()"
+                >
+                <button onclick="searchMovies()">Søk</button>
+            </div>
+
+            <div id="suggestions"></div>
+        </div>
     </div>
+
     <script src="./movieSearch.js"></script>
 </body>
 </html>

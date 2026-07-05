@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search</title>
+    <link rel="stylesheet" href="./movieSearch.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg custom-navbar">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="./movieSearch.html">Movie Finder</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link active" href="./movieSearch.html">Search</a>
+                    <a class="nav-link" href="./watchlist.html">Watchlist</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <section class="introPanel">
+            <p class="eyebrow">Find your next screen obsession</p>
+            <h1>Search movies and shows with a little extra personality.</h1>
+        </section>
+
+        <div id="showMovie"></div>
+
+        <div class="searchWrapper">
+            <div class="action">
+                <input
+                    type="text"
+                    id="inputField"
+                    placeholder="Search for a movie or show..."
+                    oninput="showSuggestions()"
+                >
+                <button onclick="searchMovies()">Search</button>
+            </div>
+
+            <div id="suggestions"></div>
+        </div>
+
+        <div class="quickActions">
+            <button type="button" onclick="surpriseMe()">Surprise Me</button>
+            <button type="button" onclick="quickSearch('dark comedy')">Dark Comedy</button>
+            <button type="button" onclick="quickSearch('space')">Space</button>
+            <button type="button" onclick="quickSearch('mystery')">Mystery</button>
+        </div>
+
+        <div id="toastMessage"></div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./movieSearch.js"></script>
+</body>
+</html>

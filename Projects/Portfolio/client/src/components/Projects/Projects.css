@@ -1,0 +1,19 @@
+.projects {
+  padding: 6rem 0 8rem;
+}
+
+.projects h2 {
+  margin: 0 0 3rem;
+  text-align: center;
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: #f8fafc;
+}
+
+.projects-list {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(280px, 1fr)
+  );
+  gap: 1.5rem;
+}

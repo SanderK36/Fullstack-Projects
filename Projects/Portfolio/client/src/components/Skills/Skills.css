@@ -11,9 +11,7 @@
 
 .skills h2 {
   margin: 0 0 2rem;
-
   font-size: clamp(2rem, 5vw, 3rem);
-
   color: #f8fafc;
 }
 

@@ -1,3 +1,4 @@
+import FadeIn from "../FadeIn/FadeIn";
 import Skill from "../Skill/Skill";
 import "./Skills.css";
 
@@ -21,16 +22,17 @@ function Skills() {
     ]
 
   return (
-    <section className="skills">
-      <div className="container">
-        <h2>My Skills</h2>
-
-        <div className="skills-list">
-          {skills.map((skill) => (
-            <Skill key={skill.name} name={skill.name} color={skill.color} />
-          ))}
-        </div>
+    <section id="skills" className="skills">
+      <FadeIn>
+        <div className="container">
+          <h2>My Skills</h2>
+          <div className="skills-list">
+            {skills.map((skill) => (
+              <Skill key={skill.name} name={skill.name} color={skill.color} />
+              ))}
+          </div>
       </div>
+      </FadeIn>
     </section>
   );
 }

@@ -8,9 +8,15 @@ function Hero() {
 
         <p>Junior Developer</p>
 
-        <a href="#projects" className="hero-button">
-          View My Projects
-        </a>
+        <div className="hero-buttons">
+          <a href="#projects" className="hero-button"> View My Projects </a>
+
+          <a href="https://github.com/SanderK36"className="hero-button hero-secondary-button" target="_blank" rel="noopener noreferrer">GitHub</a>
+
+          <a href="https://www.linkedin.com/in/sander-karlsen-21ab91412/" className="hero-button hero-secondary-button" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+
+          <a href="/Sander_Karlsen_CV_oppdatert.pdf" className="hero-button hero-secondary-button" download>Download CV</a>
+        </div>
       </div>
     </section>
   );

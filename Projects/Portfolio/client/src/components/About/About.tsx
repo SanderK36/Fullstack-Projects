@@ -1,14 +1,21 @@
-import "./About.css"
+import FadeIn from "../FadeIn/FadeIn";
+import "./About.css";
 
 function About() {
-    return(
+  return (
+    <section id="about" className="about">
+      <FadeIn>
         <div className="container">
-            <section id="about" className="about">
-                <h2>About me</h2>
-                <p>Hi! I'm Sander Karlsen. A junior full-stack developer with a passion for coding</p>
-            </section>
+          <h2>About Me</h2>
+
+          <p>
+            Hi! I'm Sander Karlsen, a junior full-stack developer with a
+            passion for coding.
+          </p>
         </div>
-    )
+      </FadeIn>
+    </section>
+  );
 }
 
 export default About;

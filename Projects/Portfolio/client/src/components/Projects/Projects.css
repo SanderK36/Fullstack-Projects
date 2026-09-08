@@ -17,3 +17,18 @@
   );
   gap: 1.5rem;
 }
+
+@media (max-width: 600px) {
+  .projects {
+    padding: 4rem 0 5rem;
+  }
+
+  .projects h2 {
+    margin-bottom: 2rem;
+  }
+
+  .projects-list {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}

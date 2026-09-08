@@ -1,5 +1,5 @@
 .contact {
-  padding: 6rem 0 8rem;
+  padding: 6rem 0;
   text-align: center;
 }
 
@@ -10,94 +10,104 @@
 }
 
 .contact h2 {
-  margin: 0 0 1rem;
-
+  margin: 0 0 2rem;
   font-size: clamp(2rem, 5vw, 3rem);
-}
-
-.contact-description {
-  max-width: 600px;
-  margin: 0 0 2.5rem;
-
-  color: #94a3b8;
-  line-height: 1.6;
 }
 
 .contact-form {
   width: 100%;
-  max-width: 600px;
-
+  max-width: 520px;
   display: flex;
   flex-direction: column;
-
-  gap: 0.75rem;
-
+  gap: 1rem;
   text-align: left;
 }
 
-.contact-form label {
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.contact-form input,
-.contact-form textarea {
+.contact-form input, .contact-form textarea {
   width: 100%;
-
-  padding: 0.9rem 1rem;
-
-  background: #1e293b;
+  box-sizing: border-box;
+  padding: 1rem 1.1rem;
+  background: rgba(30, 41, 59, 0.7);
   border: 1px solid #334155;
-  border-radius: 8px;
-
+  border-radius: 12px;
   color: #f8fafc;
-
   font: inherit;
-
   outline: none;
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.contact-form input::placeholder,
-.contact-form textarea::placeholder {
-  color: #64748b;
+.contact-form input::placeholder, .contact-form textarea::placeholder {
+  color: #94a3b8;
 }
 
-.contact-form input:focus,
-.contact-form textarea:focus {
+.contact-form input:focus, .contact-form textarea:focus {
   border-color: #6366f1;
-
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
 }
 
 .contact-form textarea {
+  min-height: 140px;
   resize: vertical;
 }
 
 .contact-form button {
-  margin-top: 1rem;
-  padding: 0.9rem 1.5rem;
-
+  align-self: center;
+  margin-top: 0.5rem;
+  padding: 0.9rem 2rem;
   background: #6366f1;
   border: none;
   border-radius: 10px;
-
   color: white;
-
   font: inherit;
   font-weight: 600;
-
   cursor: pointer;
-
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .contact-form button:hover {
   transform: translateY(-2px);
   background: #818cf8;
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+}
+
+.form-status {
+  margin: 0.5rem 0 0;
+  text-align: center;
+  color: #94a3b8;
+}
+
+@media (max-width: 600px) {
+  .contact {
+    padding: 4rem 0;
+  }
+
+  .contact-form {
+    max-width: 100%;
+  }
+
+  .contact-form input, .contact-form textarea {
+    padding: 0.9rem 1rem;
+  }
+
+  .contact-form button {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+.contact-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.contact-form input:disabled, .contact-form textarea:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.form-success {
+  margin: 0.5rem 0 0;
+  text-align: center;
+  color: #4ade80;
 }

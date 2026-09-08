@@ -1,5 +1,11 @@
+import "dotenv/config";
+
 import express from "express";
 import cors from "cors";
+
+import connectDatabase from "./config/database.js";
+import contactRouter from "./routes/contact.js";
+
 const app = express();
 const PORT = 5000;
 
@@ -7,20 +13,17 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
-    res.send("Portfolio API is running!")
+  res.send("Portfolio API is running!");
 });
 
-app.post("/api/contact", (req, res) =>  {
-    const {name, email, message} = req.body;
+app.use("/api/contact", contactRouter);
 
-    console.log("New contact message:");
-    console.log({name, email, message});
-    res.status(200).json({
-        success: true,
-        message: "Message received!"
-    })
-})
+async function startServer() {
+  await connectDatabase();
 
-app.listen(PORT, () => {
-    console.log(`Server running on https://localhost:${PORT}`);
-})
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
+
+startServer();

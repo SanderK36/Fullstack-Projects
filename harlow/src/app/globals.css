@@ -3,3 +3,17 @@ body {
   background: #080808;
   color: #d8d5d0;
 }
+
+.game {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.game-panel {
+  width: 100%;
+  box-sizing: border-box;
+  background: #111111;
+  border: 1px solid #292929;
+  padding: 30px;
+}

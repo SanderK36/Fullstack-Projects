@@ -7,7 +7,6 @@ import ActionButton from "@/components/ActionButton/ActionButton";
 import ActionList from "@/components/ActionList/ActionList";
 import { getNextDay, getDaysInMonth, getNextMonth } from "@/game/utils";
 import { advanceTime } from "@/game/time";
-import { time } from "console";
 
 
 export default function Home() {
@@ -49,15 +48,16 @@ export default function Home() {
     }
 }
   return (
-    <main>
-      <h1>HARLOW</h1>
-      <GameStatus player={playerState} gameState={gameState} />
-      <ActionList title="What do you want to do?">
-        <ActionButton label="Wait 5 min" onClick={() => handleAdvanceTime(5)}/>
-        <ActionButton label="Wait 15 min" onClick={() => handleAdvanceTime(15)}/>
-        <ActionButton label="Wait 30 min" onClick={() => handleAdvanceTime(30)}/>
-        <ActionButton label="Wait 60 min" onClick={() => handleAdvanceTime(60)}/>
-      </ActionList>
+    <main className="game">
+      <div className="game-panel">
+        <h1>HARLOW</h1>
+        <GameStatus player={playerState} gameState={gameState} />
+        <ActionList title="What do you want to do?">
+          <ActionButton label="Wait 5 min" onClick={() => handleAdvanceTime(5)}/>
+          <ActionButton label="Wait 15 min" onClick={() => handleAdvanceTime(15)}/>
+          <ActionButton label="Wait 30 min" onClick={() => handleAdvanceTime(30)}/>
+        </ActionList>
+      </div>
     </main>
   );
 }

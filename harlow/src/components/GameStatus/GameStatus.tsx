@@ -1,5 +1,6 @@
 import type { Player, GameState } from "@/game/types"
 import {formatTime} from "@/game/utils"
+import styles from "./GameStatus.module.css";
 
 type GameStatusProps = {
   player: Player;
@@ -8,7 +9,7 @@ type GameStatusProps = {
 
 export default function GameStatus({ player, gameState}: GameStatusProps) {
   return(
-    <p>
+    <div className={styles.status}>
       {player.name} <br />
       {player.money}$ <br />
       {player.health}/{player.maxHealth} HP <br />
@@ -26,6 +27,6 @@ export default function GameStatus({ player, gameState}: GameStatusProps) {
       {formatTime(gameState.time)}<br />
       {gameState.location}<br />
       {gameState.weather}<br />
-    </p>
+    </div>
   )
 }

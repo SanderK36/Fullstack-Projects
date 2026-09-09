@@ -1,0 +1,12 @@
+.actionButton {
+  padding: 10px 15px;
+  background: #111111;
+  border: 1px solid #292929;
+  color: #d8d5d0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.actionButton:hover {
+  background: #181818;
+}

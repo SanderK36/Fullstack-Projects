@@ -1,0 +1,71 @@
+.storyLog {
+  margin-top: 30px;
+  padding: 20px;
+  background: #0d0d0d;
+  border: 1px solid #292929;
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.storyLog p {
+  margin: 0 0 16px;
+  line-height: 1.6;
+}
+
+.storyLog p:last-child {
+  margin-bottom: 0;
+}
+
+.storyEntry {
+  margin: 0 0 16px;
+  line-height: 1.6;
+  animation: storyAppear 0.4s ease-out;
+}
+
+.storyLog::-webkit-scrollbar {
+  width: 8px;
+}
+
+.storyLog::-webkit-scrollbar-track {
+  background: #080808;
+}
+
+.storyLog::-webkit-scrollbar-thumb {
+  background: #292929;
+}
+
+.storyLog::-webkit-scrollbar-thumb:hover {
+  background: #8f1111;
+}
+.effect {
+  margin-left: 10px;
+  font-weight: 500;
+}
+
+.health {
+  color: #a02b2b;
+}
+
+.stamina {
+  color: rgb(74, 74, 215);
+}
+
+.fear {
+  color: rgba(255, 255, 0, 0.703);
+}
+
+.money {
+  color: rgb(45, 133, 45);
+}
+
+@keyframes storyAppear {
+  from {
+    opacity: 0;
+    transform: translateX(-15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

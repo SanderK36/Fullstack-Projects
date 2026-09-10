@@ -6,7 +6,7 @@ body {
 }
 
 .game {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 40px 20px;
 }
@@ -16,4 +16,13 @@ body {
   border: 1px solid #292929;
   padding: 40px;
   border-radius: 4px;
+}
+
+.scene-image {
+  display: block;
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+  margin-top: 30px;
+  border: 1px solid #292929;
 }

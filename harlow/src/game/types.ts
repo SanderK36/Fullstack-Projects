@@ -46,6 +46,9 @@ export type Location =
 "Bar" |
 "Park" |
 "Police Station" |
+"Home front yard"|
+"Home back yard"|
+"Cementary"|
 "Hospital";
 
 export type Weather =

@@ -69,3 +69,7 @@ export function getNextMonth(month: Month) {
 
     return months[nextIndex];
 }
+
+export function isNightTime(minutes: number) {
+  return minutes >= 1080 || minutes < 360;
+}

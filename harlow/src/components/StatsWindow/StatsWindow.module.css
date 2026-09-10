@@ -1,21 +1,57 @@
+
 .window {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 280px;
-  background: #181818;
+  z-index: 1;
+
+  width: 500px !important;
+  height: 350px;
+
+  background: url("/statsBackground.png");
+  background-size: cover;
+  background-position: center;
   border: 1px solid #292929;
   padding: 25px;
-  z-index: 1;
 }
 
+.window h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 50px;
+  align-items: center;
+  justify-self: center;
+}
+
+
 .window p {
-  margin: 8px 0;
+  font-size: 22px;
+  align-items: center;
+  justify-self: center;
+}
+
+.statsNumber {
+  color: #c62828;
 }
 
 .backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.7);
+}
+
+.closeButton {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  color: #777777;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  color: #8f1111
 }

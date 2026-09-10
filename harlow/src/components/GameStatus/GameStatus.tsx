@@ -1,40 +1,88 @@
-import type { Player, GameState } from "@/game/types"
-import {formatTime} from "@/game/utils"
 import styles from "./GameStatus.module.css";
+import type { Player, GameState } from "@/game/types";
+import { formatTime } from "@/game/utils";
 
 type GameStatusProps = {
   player: Player;
   gameState: GameState;
   onStatsClick: () => void;
-}
+};
 
-export default function GameStatus({ player, gameState, onStatsClick}: GameStatusProps) {
-  return(
+export default function GameStatus({
+  player,
+  gameState,
+  onStatsClick,
+}: GameStatusProps) {
+  return (
     <div className={styles.status}>
+
+      {/* Player */}
       <div className={styles.playerInfo}>
-         <span>{player.name}</span>
-         <span>{player.money}$</span>
-         <span>{player.health}/{player.maxHealth} HP </span>
-         <span>{player.stamina}/{player.maxStamina} STAM </span>
-         <span>Fear: {player.fear}</span>
-         <button onClick={onStatsClick}>STATS</button>
+
+        <div className={styles.portraitSection}>
+          <img
+            className={styles.portrait}
+            src="/images/characters/EthanParker/EthanParker.jpg"
+            alt=""
+          />
+
+          <button
+            className={styles.statsButton}
+            onClick={onStatsClick}
+          >
+            STATS
+          </button>
+        </div>
+
+        <div className={styles.playerDetails}>
+          <h2>{player.name}</h2>
+
+          <div className={styles.playerStats}>
+            <p className={styles.money}>
+              ${player.money}
+            </p>
+
+            <p className={styles.health}>
+              {player.health}/{player.maxHealth} HP
+            </p>
+
+            <p className={styles.stamina}>
+              {player.stamina}/{player.maxStamina} STAM
+            </p>
+
+            <p className={styles.fear}>
+              FEAR: {player.fear}
+            </p>
+          </div>
+        </div>
+
       </div>
 
-      <div className={styles.skills}>
-        <span>Courage: {player.courage}</span>
-        <span>Intelligence: {player.intelligence}</span>
-        <span>Charisma:{player.charisma}</span>
-        <span>Athletics:{player.athletics}</span>
-        <span>Strength:{player.strength}</span>
-      </div>
-
+      {/* World */}
       <div className={styles.worldInfo}>
-        <span>Day: {gameState.dayOfWeek}</span>
-        <span>Date: {gameState.currentMonth} {gameState.dayNumber}</span>
-        <span>Time: {formatTime(gameState.time)}</span>
-        <span>Location: {gameState.location}</span>
-        <span>Weather: {gameState.weather}</span>
+
+        <div className={styles.timeInfo}>
+          {formatTime(gameState.time)}
+        </div>
+
+        <div className={styles.worldDetails}>
+
+          <div className={styles.dateInfo}>
+            <span>{gameState.dayOfWeek}</span>
+            <strong>
+              {gameState.currentMonth} {gameState.dayNumber}
+            </strong>
+          </div>
+
+          <div className={styles.locationInfo}>
+            <strong>{gameState.location}</strong>
+            <span>{gameState.weather}</span>
+          </div>
+
+        </div>
+
       </div>
+
     </div>
-  )
+  );
 }

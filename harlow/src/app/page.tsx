@@ -7,11 +7,13 @@ import ActionButton from "@/components/ActionButton/ActionButton";
 import ActionList from "@/components/ActionList/ActionList";
 import { getNextDay, getDaysInMonth, getNextMonth } from "@/game/utils";
 import { advanceTime } from "@/game/time";
+import StatsWindow from "@/components/StatsWindow/StatsWindow";
 
 
 export default function Home() {
   const [gameState, setGameState] = useState(initialGameState);
-  const [playerState, setPlayerState] = useState(player)
+  const [playerState, setPlayerState] = useState(player);
+  const [showStats, setShowStats] = useState(false);
 
   function handleAdvanceTime(minutes: number) {
     const timeResult = advanceTime(gameState.time, minutes);
@@ -51,7 +53,8 @@ export default function Home() {
     <main className="game">
       <div className="game-panel">
         <h1>HARLOW</h1>
-        <GameStatus player={playerState} gameState={gameState} />
+        <GameStatus player={playerState} gameState={gameState} onStatsClick={() => setShowStats(true)}/>
+        {showStats && (<StatsWindow player={playerState}/>)}
         <ActionList title="What do you want to do?">
           <ActionButton label="Wait 5 min" onClick={() => handleAdvanceTime(5)}/>
           <ActionButton label="Wait 15 min" onClick={() => handleAdvanceTime(15)}/>

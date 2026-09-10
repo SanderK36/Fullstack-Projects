@@ -85,7 +85,14 @@ export const madeCoffee: Scene = {
       text: "Just what I needed",
     },
   ],
-  choices: [],
+  choices: [
+    {
+      label: "Go outside",
+      action: "leftHouse",
+      nextScene: "morning-at-home",
+      timeCost: 5,
+    },
+  ],
   location: "Home",
   image: {day: "./images/locations/home/homeHallway.jpg", night:"./images/locations/home/homeHallway.jpg"},
 };

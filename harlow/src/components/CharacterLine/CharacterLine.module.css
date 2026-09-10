@@ -2,24 +2,35 @@
   display: flex;
   align-items: flex-start;
   gap: 15px;
-  margin-top: 20px;
-  padding: 15px;
-  background: #111111;
-  border: 1px solid #292929;
+  margin: 20px 0;
+  padding: 5px 0;
 }
 
 .portrait {
-  width: 90px;
-  height: 115px;
+  display: block;
+  width: 75px;
+  height: 95px;
   object-fit: cover;
   border: 1px solid #292929;
   flex-shrink: 0;
 }
 
 .text {
+  padding-top: 4px;
   flex: 1;
-  padding: 12px 15px;
-  
+}
+
+.text strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #777777;
+}
+
+.text p {
+  margin: 0;
   font-size: 16px;
   line-height: 1.6;
 }
@@ -31,17 +42,4 @@
 .thought {
   color: #777777;
   font-style: italic;
-}
-
-.text strong {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #777777;
-}
-
-.text p {
-  margin: 0;
 }

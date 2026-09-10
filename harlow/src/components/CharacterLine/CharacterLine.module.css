@@ -1,0 +1,47 @@
+.characterLine {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  margin-top: 20px;
+  padding: 15px;
+  background: #111111;
+  border: 1px solid #292929;
+}
+
+.portrait {
+  width: 90px;
+  height: 115px;
+  object-fit: cover;
+  border: 1px solid #292929;
+  flex-shrink: 0;
+}
+
+.text {
+  flex: 1;
+  padding: 12px 15px;
+  
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.speech {
+  color: #d8d5d0;
+}
+
+.thought {
+  color: #777777;
+  font-style: italic;
+}
+
+.text strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #777777;
+}
+
+.text p {
+  margin: 0;
+}

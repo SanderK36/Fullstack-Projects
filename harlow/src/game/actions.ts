@@ -2,6 +2,7 @@ export type GameActions = {
   lookAround: () => void;
   makeCoffee: () => void;
   leaveHouse: () => void;
+  goHome: () => void;
 };
 
 export function resolveAction(

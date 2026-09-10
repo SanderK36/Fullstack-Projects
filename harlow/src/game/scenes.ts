@@ -1,9 +1,10 @@
 import type { Location } from "./types";
 import type { Choice } from "./choices";
+import type { StoryEntry } from "./story";
 
 export type Scene = {
   id: string;
-  text: string;
+  story: StoryEntry[]
   location: Location;
   image: {day: string; night: string;}
   choices: Choice[];
@@ -11,7 +12,18 @@ export type Scene = {
 
 export const morningAtHome: Scene = {
   id: "morning-at-home",
-  text: "The rain taps softly against the windows.",
+  story: [
+    {
+      type: "narration",
+      text: "The rain taps softly against the windows.",
+    },
+    {
+      type: "dialogue",
+      character: "Ethan",
+      dialogueType: "thought",
+      text: "I should probably get going.",
+    },
+  ],
   location: "Home",
   image: {day: "./images/locations/home/homeHallway.jpg", night:"./images/locations/home/homeHallway.jpg"},
   choices: [
@@ -26,7 +38,18 @@ export const morningAtHome: Scene = {
 
 export const lookingAroundHouse: Scene = {
   id: "looking-around-house",
-  text: "You look around the house. Everything seems normal.",
+  story: [
+    {
+      type: "narration",
+      text: "You look around the house. Everything seems normal.",
+    },
+    {
+      type: "dialogue",
+      character: "Ethan",
+      dialogueType: "thought",
+      text: "A lot of memories in here...",
+    },
+  ],
   location: "Home",
   image: {day: "./images/locations/home/homeHallway.jpg", night:"./images/locations/home/homeHallway.jpg"},
   choices: [
@@ -50,7 +73,18 @@ export const lookingAroundHouse: Scene = {
 
 export const madeCoffee: Scene = {
   id: "made-coffee",
-  text: "The coffee is hot. You stand by the kitchen window and watch the rain." ,
+  story: [
+    {
+      type: "narration",
+      text: "You felt a bit drowsy so you made yourself some coffee",
+    },
+    {
+      type: "dialogue",
+      character: "Ethan",
+      dialogueType: "thought",
+      text: "Just what I needed",
+    },
+  ],
   choices: [],
   location: "Home",
   image: {day: "./images/locations/home/homeHallway.jpg", night:"./images/locations/home/homeHallway.jpg"},
@@ -58,7 +92,18 @@ export const madeCoffee: Scene = {
 
 export const leftHouse: Scene = {
   id: "left-house",
-  text: "You step outside into the rain. The cold air hits your face.",
+  story: [
+    {
+      type: "narration",
+      text: "You step outside into the rain. The cold air hits your face.",
+    },
+    {
+      type: "dialogue",
+      character: "Ethan",
+      dialogueType: "thought",
+      text: "It's colder than I expected.",
+    },
+  ],
   location: "Home front yard",
   image: {day: "./images/locations/home/homeDayTime.jpg", night:"./images/locations/home/homeNightTime.jpg"},
   choices: [

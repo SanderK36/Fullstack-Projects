@@ -13,19 +13,13 @@ import { morningAtHome, lookingAroundHouse, madeCoffee, leftHouse } from "@/game
 import { resolveAction } from "@/game/actions";
 import { applyEffects } from "@/game/effects";
 import type { StoryEntry } from "@/game/story";
-import ActionButton from "@/components/ActionButton/ActionButton";
 
 
 export default function Home() {
   const [gameState, setGameState] = useState(initialGameState);
   const [playerState, setPlayerState] = useState(player);
   const [showStats, setShowStats] = useState(false);
-  const [storyText, setStoryText] = useState<StoryEntry[]>([
-    {
-      type: "narration",
-      text: morningAtHome.text,
-    }
-  ]);
+  const [storyText, setStoryText] = useState<StoryEntry[]>(morningAtHome.story)
   const [currentScene, setCurrentScene] = useState(morningAtHome);
 
   function handleAdvanceTime(minutes: number) {
@@ -68,10 +62,7 @@ export default function Home() {
   function makeCoffee() {}
 
   function leaveHouse() {}
-
-  function waitOneHour() {
-  handleAdvanceTime(60);
-}
+  function goHome() {}
 
   const choices = currentScene.choices;
 
@@ -95,13 +86,10 @@ function setCurrentSceneById(sceneId: string) {
     ...previousGameState,
     location: scene.location,
   }));
-
+  
   setStoryText((previousStory) => [
     ...previousStory,
-    {
-      type: "narration",
-      text: scene.text,
-    }
+    ...scene.story,
   ]);
 }
   return (
@@ -121,6 +109,7 @@ function setCurrentSceneById(sceneId: string) {
             lookAround,
             makeCoffee,
             leaveHouse,
+            goHome,
           })
           handleAdvanceTime(choice.timeCost);
 
@@ -142,13 +131,6 @@ function setCurrentSceneById(sceneId: string) {
           }
           setCurrentSceneById(choice.nextScene);
         }}/>
-
-        {gameState.location === "Home front yard" && (
-  <ActionButton
-    label="Wait 1 hour"
-    onClick={waitOneHour}
-  />
-)}
       </div>
     </main>
   );

@@ -17,10 +17,11 @@ export type StoryEntry =
       stat: "health" | "stamina" | "fear" | "money";
       amount: number;
     };
-
+    
     export type ConversationChoice = {
       label: string;
       response: StoryEntry[];
+      endsConversation?: boolean;
     };
     
     export type Conversation = {

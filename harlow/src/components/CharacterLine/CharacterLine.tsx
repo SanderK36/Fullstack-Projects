@@ -2,14 +2,21 @@ import styles from "./CharacterLine.module.css";
 
 type CharacterLineProps = {
   text: string;
+  effect?: {
+    stat: string;
+    amount: number;
+  };
 };
 
 export default function CharacterLine({
   text,
+  effect,
 }: CharacterLineProps) {
+  const sign =
+    effect && effect.amount >= 0 ? "+" : "";
+
   return (
     <div className={styles.characterLine}>
-
       <img
         src="/images/characters/EthanParker/EthanParker.jpg"
         alt="Ethan Parker"
@@ -19,9 +26,21 @@ export default function CharacterLine({
       <div className={styles.text}>
         <strong>ETHAN</strong>
 
-        <p>{text}</p>
-      </div>
+        <div className={styles.thoughtRow}>
+          <p>{text}</p>
 
+          {effect && (
+            <span
+              className={`${styles.effect} ${
+                styles[effect.stat.toLowerCase()]
+              }`}
+            >
+              {sign}
+              {effect.amount} {effect.stat.toUpperCase()}
+            </span>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

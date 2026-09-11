@@ -1,5 +1,6 @@
 import type { Player } from "./types";
 import type { ChoiceEffects } from "./choices";
+import type { StoryEntry } from "./story";
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -23,4 +24,20 @@ export function applyEffects(
     fear: player.fear + (effects.fear ?? 0),
     money: player.money + (effects.money ?? 0),
   };
+}
+
+export function effectsToStory(
+  effects: ChoiceEffects
+): StoryEntry[] {
+  return Object.entries(effects).map(
+    ([stat, amount]) => ({
+      type: "effect",
+      stat: stat as
+        | "health"
+        | "stamina"
+        | "fear"
+        | "money",
+      amount: amount as number,
+    })
+  );
 }

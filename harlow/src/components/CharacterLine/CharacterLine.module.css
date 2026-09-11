@@ -30,12 +30,40 @@
   color: #777777;
 }
 
+.thoughtRow {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
 .text p {
   margin: 0;
   color: #777777;
   font-size: 16px;
   line-height: 1.6;
   font-style: italic;
+}
+
+.effect {
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.health {
+  color: #a02b2b;
+}
+
+.stamina {
+  color: rgb(74, 74, 215);
+}
+
+.fear {
+  color: rgba(255, 255, 0, 0.703);
+}
+
+.money {
+  color: rgb(45, 133, 45);
 }
 
 @keyframes thoughtAppear {

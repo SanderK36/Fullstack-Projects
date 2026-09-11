@@ -1,25 +1,14 @@
-export type GameActions = {
-  lookAround: () => void;
-  makeCoffee: () => void;
-  leaveHouse: () => void;
-  goHome: () => void;
-  goLivingRoom: () => void;
-  talkToMom: () => void;
-  sayMorningToMom: () => void;
-  askMomAboutSleep: () => void;
-  tellMomLeaving: () => void;
-};
+import type { GameChoice } from "./choices";
 
 export function resolveAction(
-  action: string,
-  actions: GameActions
+  choice: GameChoice
 ) {
-  const gameAction =
-    actions[action as keyof GameActions];
-
-  if (!gameAction) {
+  if ("response" in choice) {
     return;
   }
 
-  gameAction();
+  // Actions will eventually contain
+  // special game logic that cannot be
+  // handled by the choice itself.
+  console.log(`Action: ${choice.action}`);
 }

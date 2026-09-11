@@ -1,3 +1,4 @@
+import type { ConversationChoice } from "./story";
 
 export type ChoiceEffects = Partial<{
   courage: number;
@@ -18,3 +19,5 @@ export type Choice = {
   timeCost: number;
   effects?: ChoiceEffects;
 };
+
+export type GameChoice = Choice | ConversationChoice;

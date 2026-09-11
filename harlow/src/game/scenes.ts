@@ -1,6 +1,7 @@
 import type { Location } from "./types";
 import type { Choice } from "./choices";
-import type { StoryEntry } from "./story";
+import {type StoryEntry, npc, ethan, narration, thought, type Conversation} from "./story";
+
 
 export type Scene = {
   id: string;
@@ -13,14 +14,8 @@ export type Scene = {
 export const morningAtHome: Scene = {
   id: "morning-at-home",
   story: [
-    {
-      type: "narration",
-      text: "The rain taps softly against the windows.",
-    },
-    {
-      type: "thought",
-      text: "I should probably get going.",
-    },
+    narration("The rain taps softly against the windows."),
+    thought("I should probably get going.")
   ],
   location: "Home",
   image: {day: "./images/locations/home/homeHallway.jpg", night:"./images/locations/home/homeHallway.jpg"},
@@ -43,14 +38,8 @@ export const morningAtHome: Scene = {
 export const lookingAroundHouse: Scene = {
   id: "looking-around-house",
   story: [
-    {
-      type: "narration",
-      text: "You spent some time looking around the house. Everything seems normal.",
-    },
-    {
-      type: "thought",
-      text: "A lot of memories in here...",
-    },
+    narration("You spent some time looking around the house. Everything seems normal."),
+    thought("A lot of memories in here...")
   ],
   location: "Home",
   image: {day: "./images/locations/home/homeHallway.jpg", night:"./images/locations/home/homeHallway.jpg"},
@@ -76,14 +65,8 @@ export const lookingAroundHouse: Scene = {
 export const madeCoffee: Scene = {
   id: "made-coffee",
   story: [
-    {
-      type: "narration",
-      text: "You felt a bit drowsy so you made yourself some coffee",
-    },
-    {
-      type: "thought",
-      text: "Just what I needed",
-    },
+    narration("You felt a bit drowsy so you made yourself some coffee",),
+    thought("Just what i needed")
   ],
   choices: [
     {
@@ -100,14 +83,8 @@ export const madeCoffee: Scene = {
 export const leftHouse: Scene = {
   id: "left-house",
   story: [
-    {
-      type: "narration",
-      text: "You step outside into the rain. The cold air hits your face.",
-    },
-    {
-      type: "thought",
-      text: "It's colder than I expected.",
-    },
+    narration("You step outside into the rain. The cold air hits your face."),
+    thought("It's colder than I expected."),
   ],
   location: "Home front yard",
   image: {day: "./images/locations/home/homeDayTime.jpg", night:"./images/locations/home/homeNightTime.jpg"},
@@ -125,10 +102,7 @@ export const livingRoom: Scene = {
   id: "living-room",
   
   story: [
-    {
-      type: "narration",
-      text: "You walk into the living room.",
-    },
+    narration("You walk into the living room."),
   ],
   location: "Living room",
   image: {day: "./images/locations/home/LindaParkerHome.jpg", night:"./images/locations/home/livingRoomNight.png"},
@@ -143,15 +117,43 @@ export const livingRoom: Scene = {
   ],
 };
 
+export const momConversation: Conversation = {
+  opening: [
+    npc("Linda", "Morning, honey."),
+  ],
+
+  choices: [
+    {
+      label: "Morning, Mom.",
+      response: [
+        ethan("Morning, Mom."),
+        npc("Linda", "You look tired. Did you sleep alright?"),
+      ],
+    },
+
+    {
+      label: "Did you sleep well?",
+      response: [
+        ethan("Did you sleep well?"),
+        npc("Linda", "I slept alright. Just a little restless."),
+      ],
+    },
+
+    {
+      label: "I'm heading out.",
+      response: [
+        ethan("I'm heading out."),
+        npc("Linda", "Alright, honey. Be careful out there."),
+      ],
+    },
+  ],
+};
+
 export const talkingToMom: Scene = {
   id: "talking-to-mom",
 
   story: [
-    {
-      type: "conversation",
-      character: "Linda",
-      text: "Morning, honey.",
-    },
+    npc("Linda", "Morning, honey."),
   ],
 
   location: "Living room",

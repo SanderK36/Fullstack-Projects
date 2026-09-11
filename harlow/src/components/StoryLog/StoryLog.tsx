@@ -1,6 +1,6 @@
 import styles from "./StoryLog.module.css";
 import type { StoryEntry } from "@/game/story";
-import CharacterLine from "@/components/CharacterLine/CharacterLine";
+import ConversationLine from "@/components/ConversationLine/ConversationLine";
 
 type StoryLogProps = {
   entries: StoryEntry[];
@@ -10,11 +10,16 @@ export default function StoryLog({ entries }: StoryLogProps) {
   return (
     <div className={styles.storyLog}>
       {entries.map((entry, index) => {
-        if (entry.type === "dialogue") {
-          return (
-            <CharacterLine key={index} text={entry.text} type={entry.dialogueType} character={entry.character}/>
-          )
+        if (entry.type === "thought") {
+          return null;
         }
+        
+        if (entry.type === "conversation") {
+          return (
+          <ConversationLine key={index} character={entry.character} text={entry.text} />
+        );
+      }
+      
         if (entry.type === "effect") {
           return null;
         }

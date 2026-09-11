@@ -4,13 +4,16 @@ export type StoryEntry =
       text: string;
     }
   | {
+      type: "thought";
+      text: string;
+    }
+  | {
+      type: "conversation";
+      character: string;
+      text: string;
+    }
+  | {
       type: "effect";
       stat: "health" | "stamina" | "fear" | "money";
       amount: number;
-    }
-  | {
-      type: "dialogue";
-      character: "Ethan";
-      dialogueType: "speech" | "thought";
-      text: string;
-  }
+    };

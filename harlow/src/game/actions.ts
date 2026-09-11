@@ -3,13 +3,19 @@ export type GameActions = {
   makeCoffee: () => void;
   leaveHouse: () => void;
   goHome: () => void;
+  goLivingRoom: () => void;
+  talkToMom: () => void;
+  sayMorningToMom: () => void;
+  askMomAboutSleep: () => void;
+  tellMomLeaving: () => void;
 };
 
 export function resolveAction(
   action: string,
   actions: GameActions
 ) {
-  const gameAction = actions[action as keyof GameActions];
+  const gameAction =
+    actions[action as keyof GameActions];
 
   if (!gameAction) {
     return;

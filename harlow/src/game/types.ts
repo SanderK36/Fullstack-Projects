@@ -41,6 +41,15 @@ export type DayOfWeek =
 
 export type Location =
 "Home" |
+"Living room"|
+"Kitchen" |
+"Bathroom" |
+"Ethan's room"|
+"Attic" |
+"Basement" |
+"Garage" |
+"Mom's room" |
+"Emily's room" |
 "Vinyl Shop" |
 "Corner store" |
 "Bar" |

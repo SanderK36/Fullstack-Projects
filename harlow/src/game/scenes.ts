@@ -18,9 +18,7 @@ export const morningAtHome: Scene = {
       text: "The rain taps softly against the windows.",
     },
     {
-      type: "dialogue",
-      character: "Ethan",
-      dialogueType: "thought",
+      type: "thought",
       text: "I should probably get going.",
     },
   ],
@@ -32,6 +30,12 @@ export const morningAtHome: Scene = {
         action: "lookAround",
         nextScene: "looking-around-house",
         timeCost: 25,
+    },
+    {
+      label: "Go to the living room",
+      action: "goLivingRoom",
+      nextScene: "living-room",
+      timeCost: 0,
     }
   ],
 };
@@ -41,12 +45,10 @@ export const lookingAroundHouse: Scene = {
   story: [
     {
       type: "narration",
-      text: "You look around the house. Everything seems normal.",
+      text: "You spent some time looking around the house. Everything seems normal.",
     },
     {
-      type: "dialogue",
-      character: "Ethan",
-      dialogueType: "thought",
+      type: "thought",
       text: "A lot of memories in here...",
     },
   ],
@@ -79,9 +81,7 @@ export const madeCoffee: Scene = {
       text: "You felt a bit drowsy so you made yourself some coffee",
     },
     {
-      type: "dialogue",
-      character: "Ethan",
-      dialogueType: "thought",
+      type: "thought",
       text: "Just what I needed",
     },
   ],
@@ -105,9 +105,7 @@ export const leftHouse: Scene = {
       text: "You step outside into the rain. The cold air hits your face.",
     },
     {
-      type: "dialogue",
-      character: "Ethan",
-      dialogueType: "thought",
+      type: "thought",
       text: "It's colder than I expected.",
     },
   ],
@@ -121,4 +119,92 @@ export const leftHouse: Scene = {
         timeCost: 5,
     },
   ],
+};
+
+export const livingRoom: Scene = {
+  id: "living-room",
+  
+  story: [
+    {
+      type: "narration",
+      text: "You walk into the living room.",
+    },
+  ],
+  location: "Living room",
+  image: {day: "./images/locations/home/LindaParkerHome.jpg", night:"./images/locations/home/livingRoomNight.png"},
+
+  choices: [
+    {
+      label: "Talk to mom",
+      action: "talkToMom",
+      nextScene: "talking-to-mom",
+      timeCost: 10,
+    }
+  ],
+};
+
+export const talkingToMom: Scene = {
+  id: "talking-to-mom",
+
+  story: [
+    {
+      type: "conversation",
+      character: "Linda",
+      text: "Morning, honey.",
+    },
+  ],
+
+  location: "Living room",
+
+  image: {
+    day: "/images/locations/home/LindaParkerHome.jpg",
+    night: "/images/locations/home/livingRoomNight.png",
+  },
+
+  choices: [
+    {
+      label: "Morning, Mom.",
+      action: "sayMorningToMom",
+      nextScene: "mom-said-morning",
+      timeCost: 0,
+    },
+    {
+      label: "Did you sleep well?",
+      action: "askMomAboutSleep",
+      nextScene: "mom-said-morning",
+      timeCost: 0,
+    },
+    {
+      label: "I'm heading out.",
+      action: "tellMomLeaving",
+      nextScene: "mom-said-morning",
+      timeCost: 0,
+    },
+  ],
+};
+
+export const momSaidMorning: Scene = {
+  id: "mom-said-morning",
+
+  story: [
+    {
+      type: "conversation",
+      character: "Ethan",
+      text: "Morning, Mom.",
+    },
+    {
+      type: "conversation",
+      character: "Linda",
+      text: "You look tired. Did you sleep alright?",
+    },
+  ],
+
+  location: "Living room",
+
+  image: {
+    day: "/images/locations/home/LindaParkerHome.jpg",
+    night: "/images/locations/home/livingRoomNight.png",
+  },
+
+  choices: [],
 };

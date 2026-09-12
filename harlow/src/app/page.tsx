@@ -20,6 +20,7 @@ export default function Home() {
     currentEffects,
     conversation,
     activeChoices,
+    activeCharacter,
     showStats,
     setShowStats,
     handleChoice,
@@ -43,9 +44,10 @@ export default function Home() {
 
         <img
           src={
-            isNightTime(gameState.time)
-              ? currentScene.image.night
-              : currentScene.image.day
+            activeCharacter?.image ??
+            (isNightTime(gameState.time)
+            ? currentScene.image.night
+            : currentScene.image.day)
           }
           alt=""
           className="scene-image"

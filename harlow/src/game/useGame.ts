@@ -62,6 +62,9 @@ export function useGame() {
   const [travelingTo, setTravelingTo] =
     useState<string | null>(null);
 
+  const [marleneActive, setMarleneActive] =
+    useState(false);
+
   function handleAdvanceTime(minutes: number) {
     const newGameState =
       advanceGameTime(
@@ -81,6 +84,28 @@ export function useGame() {
     return newGameState;
   }
 
+  const activeCharacter =
+    currentScene.characters?.find(
+      (character) => {
+        if (
+          character.name === "Marlene" &&
+          !marleneActive
+        ) {
+          return false;
+        }
+
+        const afterStart =
+          character.from === undefined ||
+          gameState.time >= character.from;
+
+        const beforeEnd =
+          character.until === undefined ||
+          gameState.time < character.until;
+
+        return afterStart && beforeEnd;
+      }
+    );
+
   function setCurrentSceneById(
     sceneId: string,
     time: number
@@ -94,7 +119,17 @@ export function useGame() {
       return;
     }
 
+    const previousSceneId =
+      currentScene.id;
+
     setCurrentScene(scene);
+
+    if (
+      sceneId === "hospital-reception" &&
+      previousSceneId !== "hospital-reception"
+    ) {
+      setMarleneActive(false);
+    }
 
     setCurrentEffects([]);
 
@@ -116,6 +151,7 @@ export function useGame() {
     setGameState(
       (previousGameState) => ({
         ...previousGameState,
+        time,
         location: scene.location,
       })
     );
@@ -152,7 +188,7 @@ export function useGame() {
       return;
     }
 
-    // Start a conversation
+    // Start a conversation with Mom
     if (choice.action === "talkToMom") {
       setConversation(
         momConversation.opening
@@ -161,11 +197,17 @@ export function useGame() {
       setConversationActive(true);
     }
 
+    // Talk to Marlene
+    if (
+      choice.action === "talkToMarlene"
+    ) {
+      setMarleneActive(true);
+    }
+
     // Resolve special action logic
     resolveAction(choice);
 
     // Travel
-       // Travel
     if (choice.travel) {
       const destinationScene =
         scenes[
@@ -189,7 +231,6 @@ export function useGame() {
           newGameState.time
         );
 
-        // Apply effects
         const effects = choice.effects;
 
         if (effects) {
@@ -213,20 +254,16 @@ export function useGame() {
     }
 
     // Normal actions
-
-    // Normal actions
     const newGameState =
       handleAdvanceTime(
         choice.timeCost
       );
 
-    // Change scene
     setCurrentSceneById(
       choice.nextScene,
       newGameState.time
     );
 
-    // Apply effects
     const effects = choice.effects;
 
     if (effects) {
@@ -275,6 +312,7 @@ export function useGame() {
     conversation,
     activeChoices,
     travelingTo,
+    activeCharacter,
 
     showStats,
     setShowStats,

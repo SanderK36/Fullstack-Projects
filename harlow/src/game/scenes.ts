@@ -16,6 +16,13 @@ export type SceneThought = {
   text: string;
 };
 
+export type SceneCharacter = {
+  name: string;
+  from?: number;
+  until?: number;
+  image?: string;
+};
+
 export type Scene = {
   id: string;
   story: StoryEntry[];
@@ -27,6 +34,7 @@ export type Scene = {
   };
   choices: Choice[];
   conversation?: Conversation;
+  characters?: SceneCharacter[];
 };
 
 // ----------------------------------------
@@ -614,12 +622,9 @@ export const gasStationInside: Scene = {
   id: "gas-station-inside",
 
   story: [
-    narration(
-      "You step inside the gas station."
-    ),
-    thought(
-      "It's warmer in here."
-    ),
+    narration("You step inside the gas station."),
+    thought("Ray is here", { until: 1380 }),
+    thought("It's quiet in here.", { from: 540 })
   ],
 
   location: "Gas Station Inside",
@@ -628,6 +633,15 @@ export const gasStationInside: Scene = {
     day: "./images/locations/gas_station/GasStationInsideDay.png",
     night: "./images/locations/gas_station/GasStationInsideNight.png",
   },
+  
+  characters: [
+    {
+      name: "Ray Mercer",
+      from: 540,
+      until: 1380,
+      image: "./images/locations/gas_station/rayMercerGasStation.png",
+    },
+  ],
 
   choices: [
     {
@@ -645,39 +659,111 @@ export const gasStationInside: Scene = {
 
 export const policeStation: Scene = {
   id: "police-station",
-
   story: [
-    narration(
-      "You arrive at the police station."
-    ),
-    thought(
-      "There are a few cars parked outside."
-    ),
+    narration("You arrive at the police station."),
+    thought("There are a few cars parked outside."),
   ],
-
   location: "Police Station",
-
   image: {
     day: "./images/locations/police_station/police_station_day.jpg",
     night: "./images/locations/police_station/police_station_night.jpg",
   },
+  choices: [
+    {
+      label: "Go inside",
+      action: "enterPoliceStation",
+      nextScene: "police-station-inside",
+      timeCost: 2,
+    },
+    {
+      label: "Walk back home (30min)",
+      action: "walkBackHome",
+      nextScene: "front-yard",
+      timeCost: 30,
+      travel: true,
+    },
+    {
+      label: "Take the bus back home (10min)",
+      action: "takeBusHome",
+      nextScene: "front-yard",
+      timeCost: 10,
+      travel: true,
+    },
+  ],
+};
 
- choices: [
-  {
-    label: "Walk back home (30min)",
-    action: "walkBackHome",
-    nextScene: "front-yard",
-    timeCost: 30,
-    travel: true,
+export const policeStationInside: Scene = {
+  id: "police-station-inside",
+  story: [
+    narration("You step inside the police station."),
+    thought("The station is quieter than you expected."),
+  ],
+  location: "Police Station Inside",
+  image: {
+    day: "./images/locations/police_station/policeStationInsideDay.png",
+    night: "./images/locations/police_station/policeStationInsideNight.png",
   },
-  {
-    label: "Take the bus back home (10min)",
-    action: "takeBusHome",
-    nextScene: "front-yard",
-    timeCost: 10,
-    travel: true,
+  choices: [
+    {
+      label: "Go outside",
+      action: "leavePoliceStation",
+      nextScene: "police-station",
+      timeCost: 0,
+    },
+    {
+      label: "Go to the sheriff's office",
+      action: "goToSheriffOffice",
+      nextScene: "sheriff-office",
+      timeCost: 2,
+    },
+  ],
+};
+
+export const sheriffOffice: Scene = {
+  id: "sheriff-office",
+
+  story: [
+    narration("You step into the sheriff's office."),
+    thought("The Sheriff is here.", { from: 460, until: 960 }),
+    thought("No one is here at the moment.", { from: 960, until: 1080 }),
+    thought("I shouldn't be here this late.", { from: 1080}),
+  ],
+
+  location: "Sheriff's office",
+
+  image: {
+    day: "./images/locations/police_station/walterOfficeDay.png",
+    night: "./images/locations/police_station/walterOfficeNight.png",
   },
-],
+  
+  characters: [
+    {
+      name: "Walter Harrington",
+      from: 480,
+      until: 960,
+      image: "./images/locations/police_station/WalterHarringtonOffice.jpg"
+    },
+    {
+      name: "Walter Harrington",
+      from: 960,
+      until: 1080,
+      image: "./images/locations/police_station/walterOfficeDay.png",
+    },
+    {
+      name: "Walter Harrington",
+      from: 1080,
+      image: "./images/locations/police_station/walterOfficeNight.png",
+    },
+  ],
+
+  choices: [
+    {
+      label: "Go back to the station",
+      action: "leaveSheriffOffice",
+      nextScene: "police-station-inside",
+      timeCost: 0,
+    },
+  ],
 };
 
 // ----------------------------------------
@@ -686,39 +772,63 @@ export const policeStation: Scene = {
 
 export const hospital: Scene = {
   id: "hospital",
-
   story: [
-    narration(
-      "You arrive at the hospital."
-    ),
-    thought(
-      "The building feels strangely quiet."
-    ),
+    narration("You arrive at the hospital."),
+    thought("The building is quiet."),
   ],
-
   location: "Hospital",
-
   image: {
-    day: "./images/locations/hospital/HospitalDay.jpg",
-    night: "./images/locations/hospital/HospitalNight.jpg",
+    day: "./images/locations/hospital/hospitalDay.jpg",
+    night: "./images/locations/hospital/hospitalNight.jpg",
   },
+  choices: [
+    {
+      label: "Go inside",
+      action: "enterHospital",
+      nextScene: "hospital-reception",
+      timeCost: 2,
+    },
+    {
+      label: "Walk back home",
+      action: "walkBackHome",
+      nextScene: "front-yard",
+      timeCost: 30,
+      travel: true,
+    },
+  ],
+};
 
- choices: [
-  {
-    label: "Walk back home (35min)",
-    action: "walkBackHome",
-    nextScene: "front-yard",
-    timeCost: 35,
-    travel: true,
+export const hospitalReception: Scene = {
+  id: "hospital-reception",
+  story: [
+    narration("You step inside the hospital."),
+    thought("The smell of disinfectant hangs in the air."),
+  ],
+  location: "Hospital",
+  image: {
+    day: "./images/locations/hospital/hospitalReception.png",
+    night: "./images/locations/hospital/hospitalReception.png",
   },
-  {
-    label: "Drive back home (15min)",
-    action: "driveBackHome",
-    nextScene: "front-yard",
-    timeCost: 15,
-    travel: true,
-  },
-],
+  characters: [
+    {
+      name: "Marlene",
+      image: "./images/locations/hospital/marleneWorking.png",
+    },
+  ],
+  choices: [
+    {
+      label: "Talk to Marlene",
+      action: "talkToMarlene",
+      nextScene: "hospital-reception",
+      timeCost: 0,
+    },
+    {
+      label: "Go outside",
+      action: "leaveHospital",
+      nextScene: "hospital",
+      timeCost: 0,
+    },
+  ],
 };
 
 export function getSceneThought(
@@ -782,5 +892,8 @@ export const scenes = {
   "gas-station": gasStation,
   "gas-station-inside": gasStationInside,
   "police-station": policeStation,
+  "police-station-inside": policeStationInside,
+  "sheriff-office": sheriffOffice,
   hospital,
+  "hospital-reception": hospitalReception,
 };

@@ -55,6 +55,8 @@ export type Location =
 "Bar" |
 "Park" |
 "Police Station" |
+"Police Station Inside" |
+"Sheriff's office" |
 "Home front yard"|
 "Home back yard"|
 "Cementary"|

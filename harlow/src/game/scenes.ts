@@ -193,6 +193,7 @@ export const frontYard: Scene = {
       action: "takeBus",
       nextScene: "needle-and-groove",
       timeCost: 10,
+      travel: true,
       effects: {
         money: -7,
       },
@@ -205,12 +206,42 @@ export const frontYard: Scene = {
       action: "walkToNeedleAndGroove",
       nextScene: "needle-and-groove",
       timeCost: 45,
+      travel: true,
     },
     {
-      label: "Walk to the gas station (20min)",
+      label: "Walk to the gas station (30min)",
       action: "walkToGasStation",
       nextScene: "gas-station",
-      timeCost: 20,
+      timeCost: 30,
+      travel: true,
+    },
+    {
+      label: "Walk to the police station (30min)",
+      action: "walkToPoliceStation",
+      nextScene: "police-station",
+      timeCost: 30,
+      travel: true,
+    },
+    {
+      label: "Take the bus to the police station (10min)",
+      action: "takeBusToPoliceStation",
+      nextScene: "police-station",
+      timeCost: 10,
+      travel: true,
+    },
+    {
+      label: "Walk to the hospital (35min)",
+      action: "walkToHospital",
+      nextScene: "hospital",
+      timeCost: 35,
+      travel: true,
+    },
+    {
+      label: "Drive to the hospital (15min)",
+      action: "driveToHospital",
+      nextScene: "hospital",
+      timeCost: 15,
+      travel: true,
     },
   ],
 };
@@ -510,6 +541,7 @@ export const needleAndGroove: Scene = {
       action: "takeBusHome",
       nextScene: "front-yard",
       timeCost: 10,
+      travel: true,
       effects: {
         money: -7,
       },
@@ -522,12 +554,14 @@ export const needleAndGroove: Scene = {
       action: "walkBackHome",
       nextScene: "front-yard",
       timeCost: 45,
+      travel: true,
     },
     {
       label: "Walk to the gas station (1h)",
       action: "walkToGasStation",
       nextScene: "gas-station",
       timeCost: 60,
+      travel: true,
     },
   ],
 };
@@ -567,6 +601,7 @@ export const gasStation: Scene = {
       action: "walkBackHome",
       nextScene: "front-yard",
       timeCost: 20,
+      travel: true,
     },
   ],
 };
@@ -602,6 +637,88 @@ export const gasStationInside: Scene = {
       timeCost: 0,
     },
   ],
+};
+
+// ----------------------------------------
+// POLICE STATION
+// ----------------------------------------
+
+export const policeStation: Scene = {
+  id: "police-station",
+
+  story: [
+    narration(
+      "You arrive at the police station."
+    ),
+    thought(
+      "There are a few cars parked outside."
+    ),
+  ],
+
+  location: "Police Station",
+
+  image: {
+    day: "./images/locations/police_station/police_station_day.jpg",
+    night: "./images/locations/police_station/police_station_night.jpg",
+  },
+
+ choices: [
+  {
+    label: "Walk back home (30min)",
+    action: "walkBackHome",
+    nextScene: "front-yard",
+    timeCost: 30,
+    travel: true,
+  },
+  {
+    label: "Take the bus back home (10min)",
+    action: "takeBusHome",
+    nextScene: "front-yard",
+    timeCost: 10,
+    travel: true,
+  },
+],
+};
+
+// ----------------------------------------
+// HOSPITAL
+// ----------------------------------------
+
+export const hospital: Scene = {
+  id: "hospital",
+
+  story: [
+    narration(
+      "You arrive at the hospital."
+    ),
+    thought(
+      "The building feels strangely quiet."
+    ),
+  ],
+
+  location: "Hospital",
+
+  image: {
+    day: "./images/locations/hospital/HospitalDay.jpg",
+    night: "./images/locations/hospital/HospitalNight.jpg",
+  },
+
+ choices: [
+  {
+    label: "Walk back home (35min)",
+    action: "walkBackHome",
+    nextScene: "front-yard",
+    timeCost: 35,
+    travel: true,
+  },
+  {
+    label: "Drive back home (15min)",
+    action: "driveBackHome",
+    nextScene: "front-yard",
+    timeCost: 15,
+    travel: true,
+  },
+],
 };
 
 export function getSceneThought(
@@ -664,4 +781,6 @@ export const scenes = {
   "needle-and-groove": needleAndGroove,
   "gas-station": gasStation,
   "gas-station-inside": gasStationInside,
+  "police-station": policeStation,
+  hospital,
 };

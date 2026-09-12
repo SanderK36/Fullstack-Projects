@@ -13,7 +13,7 @@ export default function ConversationLine({
 
   const portrait = isEthan
     ? "/images/characters/EthanParker/EthanParker.jpg"
-    : "./images/locations/home/LindaParkerHome.jpg";
+    : "./images/characters/LindaParker/LindaParker.png";
 
   return (
     <div

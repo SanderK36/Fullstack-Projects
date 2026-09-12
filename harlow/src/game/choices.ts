@@ -18,6 +18,7 @@ export type Choice = {
   nextScene: string;
   timeCost: number;
   effects?: ChoiceEffects;
+  travel?: boolean;
   requirements?: {
     money?: number;
   }

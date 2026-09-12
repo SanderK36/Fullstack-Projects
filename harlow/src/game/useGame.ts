@@ -164,19 +164,17 @@ export function useGame() {
     // Resolve special action logic
     resolveAction(choice);
 
-    // Travel actions
-    if (
-       choice.action === "takeBus" ||
-       choice.action === "walkToNeedleAndGroove" ||
-       choice.action === "takeBusHome" ||
-       choice.action === "walkBackHome" ||
-       choice.action === "walkToGasStation"
-    ) {
+    // Travel
+       // Travel
+    if (choice.travel) {
+      const destinationScene =
+        scenes[
+          choice.nextScene as keyof typeof scenes
+        ];
+
       const destination =
-        choice.action === "takeBusHome" ||
-        choice.action === "walkBackHome"
-          ? "Home"
-          : "Needle & Groove";
+        destinationScene?.location ??
+        "Unknown";
 
       setTravelingTo(destination);
 
@@ -191,7 +189,7 @@ export function useGame() {
           newGameState.time
         );
 
-        // Apply effects after traveling
+        // Apply effects
         const effects = choice.effects;
 
         if (effects) {
@@ -213,6 +211,8 @@ export function useGame() {
 
       return;
     }
+
+    // Normal actions
 
     // Normal actions
     const newGameState =

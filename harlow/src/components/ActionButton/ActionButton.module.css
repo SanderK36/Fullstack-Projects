@@ -10,3 +10,10 @@
 .actionButton:hover {
   background: #181818;
 }
+
+.actionButton:disabled {
+  color: #555555;
+  border-color: #1f1f1f;
+  background: #0d0d0d;
+  cursor: not-allowed;
+}

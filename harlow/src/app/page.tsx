@@ -6,6 +6,7 @@ import ActionButton from "@/components/ActionButton/ActionButton";
 import StatsWindow from "@/components/StatsWindow/StatsWindow";
 import StoryLog from "@/components/StoryLog/StoryLog";
 import CharacterLine from "@/components/CharacterLine/CharacterLine";
+import TravelOverlay from "@/components/TravelOverlay/TravelOverlay";
 
 import { isNightTime } from "@/game/utils";
 import { useGame } from "@/game/useGame";
@@ -23,6 +24,7 @@ export default function Home() {
     setShowStats,
     handleChoice,
     wait,
+    travelingTo
   } = useGame();
 
   return (
@@ -91,6 +93,7 @@ export default function Home() {
           title="What do you want to do?"
           choices={activeChoices}
           onChoice={handleChoice}
+          playerMoney={playerState.money}
         />
 
         {/* Temporary testing buttons */}
@@ -121,7 +124,7 @@ export default function Home() {
             onClick={() => wait(60)}
           />
         </div>
-
+        {travelingTo && ( <TravelOverlay location={travelingTo}/>)}
       </div>
     </main>
   );

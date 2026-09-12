@@ -16,7 +16,7 @@ const player: Player = {
 
     fear: 0,
 
-    money: 150,
+    money: 10,
 
     inventory: [
         "House key",

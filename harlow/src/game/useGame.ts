@@ -59,6 +59,9 @@ export function useGame() {
   const [currentEffects, setCurrentEffects] =
     useState<StoryEntry[]>([]);
 
+  const [travelingTo, setTravelingTo] =
+    useState<string | null>(null);
+
   function handleAdvanceTime(minutes: number) {
     const newGameState =
       advanceGameTime(
@@ -74,10 +77,13 @@ export function useGame() {
         newGameState.time
       )
     );
+
+    return newGameState;
   }
 
   function setCurrentSceneById(
-    sceneId: string
+    sceneId: string,
+    time: number
   ) {
     const scene =
       scenes[
@@ -103,7 +109,7 @@ export function useGame() {
     setCurrentThought(
       getSceneThought(
         scene.id,
-        gameState.time
+        time
       )
     );
 
@@ -137,6 +143,15 @@ export function useGame() {
       return;
     }
 
+    // Check requirements
+    if (
+      choice.requirements?.money !== undefined &&
+      playerState.money <
+        choice.requirements.money
+    ) {
+      return;
+    }
+
     // Start a conversation
     if (choice.action === "talkToMom") {
       setConversation(
@@ -149,14 +164,66 @@ export function useGame() {
     // Resolve special action logic
     resolveAction(choice);
 
-    // Advance time
-    handleAdvanceTime(
-      choice.timeCost
-    );
+    // Travel actions
+    if (
+       choice.action === "takeBus" ||
+       choice.action === "walkToNeedleAndGroove" ||
+       choice.action === "takeBusHome" ||
+       choice.action === "walkBackHome" ||
+       choice.action === "walkToGasStation"
+    ) {
+      const destination =
+        choice.action === "takeBusHome" ||
+        choice.action === "walkBackHome"
+          ? "Home"
+          : "Needle & Groove";
+
+      setTravelingTo(destination);
+
+      setTimeout(() => {
+        const newGameState =
+          handleAdvanceTime(
+            choice.timeCost
+          );
+
+        setCurrentSceneById(
+          choice.nextScene,
+          newGameState.time
+        );
+
+        // Apply effects after traveling
+        const effects = choice.effects;
+
+        if (effects) {
+          setPlayerState(
+            (previousPlayer) =>
+              applyEffects(
+                previousPlayer,
+                effects
+              )
+          );
+
+          setCurrentEffects(
+            effectsToStory(effects)
+          );
+        }
+
+        setTravelingTo(null);
+      }, 3000);
+
+      return;
+    }
+
+    // Normal actions
+    const newGameState =
+      handleAdvanceTime(
+        choice.timeCost
+      );
 
     // Change scene
     setCurrentSceneById(
-      choice.nextScene
+      choice.nextScene,
+      newGameState.time
     );
 
     // Apply effects
@@ -207,6 +274,7 @@ export function useGame() {
     currentEffects,
     conversation,
     activeChoices,
+    travelingTo,
 
     showStats,
     setShowStats,

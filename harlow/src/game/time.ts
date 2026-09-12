@@ -36,7 +36,7 @@ export function advanceGameTime(
     minutes
   );
 
-  let newGameState = {
+  const newGameState = {
     ...gameState,
     time: timeResult.time,
   };

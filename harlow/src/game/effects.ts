@@ -22,7 +22,7 @@ export function applyEffects(
     health: clamp(player.health + (effects.health ?? 0), 0, player.maxHealth),
     stamina: clamp(player.stamina + (effects.stamina ?? 0), 0, player.maxStamina),
     fear: player.fear + (effects.fear ?? 0),
-    money: player.money + (effects.money ?? 0),
+    money: clamp(player.money + (effects.money ?? 0), 0, Infinity)
   };
 }
 

@@ -1,0 +1,38 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #000000;
+}
+
+.text {
+  color: #d8d5d0;
+  font-size: 18px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+
+  animation: textFade 3s ease-in-out forwards;
+}
+
+@keyframes textFade {
+  0% {
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}

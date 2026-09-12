@@ -50,7 +50,7 @@ export type Location =
 "Garage" |
 "Mom's room" |
 "Emily's room" |
-"Vinyl Shop" |
+"Needle & Groove" |
 "Corner store" |
 "Bar" |
 "Park" |
@@ -58,6 +58,8 @@ export type Location =
 "Home front yard"|
 "Home back yard"|
 "Cementary"|
+"Gas Station" |
+"Gas Station Inside" |
 "Hospital";
 
 export type Weather =

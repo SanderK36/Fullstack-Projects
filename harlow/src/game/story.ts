@@ -1,3 +1,8 @@
+export type ThoughtCondition = {
+  from?: number;
+  until?: number;
+};
+
 export type StoryEntry =
   | {
       type: "narration";
@@ -6,6 +11,7 @@ export type StoryEntry =
   | {
       type: "thought";
       text: string;
+      condition?: ThoughtCondition;
     }
   | {
       type: "conversation";
@@ -17,31 +23,35 @@ export type StoryEntry =
       stat: "health" | "stamina" | "fear" | "money";
       amount: number;
     };
-    
-    export type ConversationChoice = {
-      label: string;
-      response: StoryEntry[];
-      endsConversation?: boolean;
-    };
-    
-    export type Conversation = {
-      opening: StoryEntry[];
-      choices: ConversationChoice[];
-    };
-    
-    export function narration(text: string): StoryEntry {
-      return {
-        type: "narration",
-        text,
-      };
-    }
-    
-    export function thought(text: string): StoryEntry {
-      return {
-        type: "thought",
-        text,
-      };
-    }
+
+export type ConversationChoice = {
+  label: string;
+  response: StoryEntry[];
+  endsConversation?: boolean;
+};
+
+export type Conversation = {
+  opening: StoryEntry[];
+  choices: ConversationChoice[];
+};
+
+export function narration(text: string): StoryEntry {
+  return {
+    type: "narration",
+    text,
+  };
+}
+
+export function thought(
+  text: string,
+  condition?: ThoughtCondition
+): StoryEntry {
+  return {
+    type: "thought",
+    text,
+    condition,
+  };
+}
 
 export function ethan(text: string): StoryEntry {
   return {
@@ -51,7 +61,10 @@ export function ethan(text: string): StoryEntry {
   };
 }
 
-export function npc(character: string, text: string): StoryEntry {
+export function npc(
+  character: string,
+  text: string
+): StoryEntry {
   return {
     type: "conversation",
     character,

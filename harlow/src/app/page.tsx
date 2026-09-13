@@ -2,11 +2,11 @@
 
 import GameStatus from "@/components/GameStatus/GameStatus";
 import ActionList from "@/components/ActionList/ActionList";
-import ActionButton from "@/components/ActionButton/ActionButton";
 import StatsWindow from "@/components/StatsWindow/StatsWindow";
 import StoryLog from "@/components/StoryLog/StoryLog";
 import CharacterLine from "@/components/CharacterLine/CharacterLine";
 import TravelOverlay from "@/components/TravelOverlay/TravelOverlay";
+import TravelWindow from "@/components/TravelWindow/TravelWindow";
 
 import { isNightTime } from "@/game/utils";
 import { useGame } from "@/game/useGame";
@@ -25,7 +25,9 @@ export default function Home() {
     setShowStats,
     handleChoice,
     wait,
-    travelingTo
+    travelingTo,
+    showTravel,
+    setShowTravel,
   } = useGame();
 
   return (
@@ -46,8 +48,8 @@ export default function Home() {
           src={
             activeCharacter?.image ??
             (isNightTime(gameState.time)
-            ? currentScene.image.night
-            : currentScene.image.day)
+              ? currentScene.image.night
+              : currentScene.image.day)
           }
           alt=""
           className="scene-image"
@@ -73,7 +75,8 @@ export default function Home() {
             effect={
               currentEffects[0]?.type === "effect"
                 ? {
-                    stat: currentEffects[0].stat,
+                    stat:
+                      currentEffects[0].stat,
                     amount:
                       currentEffects[0].amount,
                   }
@@ -95,38 +98,50 @@ export default function Home() {
           title="What do you want to do?"
           choices={activeChoices}
           onChoice={handleChoice}
+          onTravel={() =>
+            setShowTravel(true)
+          }
           playerMoney={playerState.money}
         />
+
+        {showTravel && (
+          <TravelWindow
+            onClose={() =>
+              setShowTravel(false)
+            }
+          />
+        )}
 
         {/* Temporary testing buttons */}
 
         <div>
-          <ActionButton
-            label="Wait 1 min"
-            onClick={() => wait(1)}
-          />
+          <button onClick={() => wait(1)}>
+            Wait 1 min
+          </button>
 
-          <ActionButton
-            label="Wait 5 min"
-            onClick={() => wait(5)}
-          />
+          <button onClick={() => wait(5)}>
+            Wait 5 min
+          </button>
 
-          <ActionButton
-            label="Wait 10 min"
-            onClick={() => wait(10)}
-          />
+          <button onClick={() => wait(10)}>
+            Wait 10 min
+          </button>
 
-          <ActionButton
-            label="Wait 30 min"
-            onClick={() => wait(30)}
-          />
+          <button onClick={() => wait(30)}>
+            Wait 30 min
+          </button>
 
-          <ActionButton
-            label="Wait 1 hour"
-            onClick={() => wait(60)}
-          />
+          <button onClick={() => wait(60)}>
+            Wait 1 hour
+          </button>
         </div>
-        {travelingTo && ( <TravelOverlay location={travelingTo}/>)}
+
+        {travelingTo && (
+          <TravelOverlay
+            location={travelingTo}
+          />
+        )}
+
       </div>
     </main>
   );

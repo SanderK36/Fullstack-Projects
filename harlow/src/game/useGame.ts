@@ -34,6 +34,8 @@ export function useGame() {
   const [showStats, setShowStats] =
     useState(false);
 
+  const [showTravel, setShowTravel] = useState(false);
+
   const [conversation, setConversation] =
     useState<StoryEntry[]>([]);
 
@@ -313,10 +315,7 @@ export function useGame() {
   const conversationChoices =
     currentScene.conversation?.choices ?? [];
 
-  const activeChoices =
-    conversationActive
-      ? conversationChoices
-      : choices;
+  const activeChoices = choices;
 
   return {
     gameState,
@@ -333,6 +332,12 @@ export function useGame() {
     setShowStats,
 
     handleChoice,
+
+    showTravel,
+    setShowTravel,
+    
+    conversationChoices,
+    conversationActive,
 
     wait: handleAdvanceTime,
   };

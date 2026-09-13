@@ -1,0 +1,32 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.window {
+  width: min(420px, calc(100% - 40px));
+
+  padding: 30px;
+
+  background: #111111;
+  border: 1px solid #292929;
+  border-radius: 4px;
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.window h2 {
+  margin: 0 0 25px;
+
+  color: #d8d5d0;
+  font-size: 18px;
+  letter-spacing: 3px;
+  font-weight: normal;
+}

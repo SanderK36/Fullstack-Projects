@@ -236,6 +236,12 @@ export const frontYard: Scene = {
       nextScene: "police-station",
       timeCost: 10,
       travel: true,
+      effects: {
+        money: -7,
+      },
+      requirements: {
+        money: 7,
+      }
     },
     {
       label: "Walk to the hospital (35min)",
@@ -245,11 +251,17 @@ export const frontYard: Scene = {
       travel: true,
     },
     {
-      label: "Drive to the hospital (15min)",
+      label: "Take the bus to the hospital (15min)",
       action: "driveToHospital",
       nextScene: "hospital",
       timeCost: 15,
       travel: true,
+      effects: {
+        money: -7,
+      },
+      requirements: {
+        money: 7,
+      }
     },
   ],
 };
@@ -296,7 +308,7 @@ export const backYard: Scene = {
 
 
 // ----------------------------------------
-// MOM CONVERSATION
+// CONVERSATIONS
 // ----------------------------------------
 
 export const momConversation: Conversation = {
@@ -363,6 +375,94 @@ export const momConversation: Conversation = {
         ),
       ],
 
+      endsConversation: true,
+    },
+  ],
+};
+
+export const johnnyConversation: Conversation = {
+  opening: [
+    npc(
+      "Johnny",
+      "Hey. Looking for something?"
+    ),
+  ],
+  choices: [
+    {
+      label: "Just browsing.",
+      response: [
+        ethan("Yeah. Just looking around."),
+        npc(
+          "Johnny",
+          "Take your time."
+        ),
+      ],
+    },
+    {
+      label: "Do you own this place?",
+      response: [
+        ethan("You own the shop?"),
+        npc(
+          "Johnny",
+          "Sure do. Been running it for a few years now."
+        ),
+      ],
+    },
+    {
+      label: "Nevermind.",
+      response: [
+        ethan("Nevermind."),
+        npc(
+          "Johnny",
+          "Alright."
+        ),
+      ],
+      endsConversation: true,
+    },
+  ],
+};
+
+export const walterConversation: Conversation = {
+  opening: [
+    npc(
+      "Walter",
+      "Can I help you?"
+    ),
+  ],
+  choices: [
+    {
+      label: "I'm looking for some information.",
+      response: [
+        ethan(
+          "I'm looking for some information."
+        ),
+        npc(
+          "Walter",
+          "What kind of information?"
+        ),
+      ],
+    },
+    {
+      label: "Has anything happened around town?",
+      response: [
+        ethan(
+          "Has anything happened around town lately?"
+        ),
+        npc(
+          "Walter",
+          "Nothing you need to concern yourself with."
+        ),
+      ],
+    },
+    {
+      label: "Nevermind.",
+      response: [
+        ethan("Nevermind."),
+        npc(
+          "Walter",
+          "Alright."
+        ),
+      ],
       endsConversation: true,
     },
   ],
@@ -535,8 +635,8 @@ export const bathroom: Scene = {
 export const needleAndGroove: Scene = {
   id: "needle-and-groove",
   story: [
-    narration("You arrive at Needle & Groove."),
-    thought("This place sells the best music in town."),
+    narration("You make your way to Needle & Groove."),
+    thought("The record store is just down the street."),
   ],
   location: "Needle & Groove",
   image: {
@@ -545,31 +645,87 @@ export const needleAndGroove: Scene = {
   },
   choices: [
     {
-      label: "Take the back home ($7 & 10min)",
-      action: "takeBusHome",
-      nextScene: "front-yard",
-      timeCost: 10,
-      travel: true,
-      effects: {
-        money: -7,
-      },
-      requirements: {
-        money: 7,
-      }
+      label: "Go inside",
+      action: "enterNeedleAndGroove",
+      nextScene: "needle-and-groove-inside",
+      timeCost: 2,
     },
     {
-      label: "Walk back home (45min)",
+      label: "Walk back home",
       action: "walkBackHome",
       nextScene: "front-yard",
-      timeCost: 45,
+      timeCost: 20,
       travel: true,
     },
+  ],
+};
+
+export const needleAndGrooveInside: Scene = {
+  id: "needle-and-groove-inside",
+  story: [
+    narration("You step inside Needle & Groove."),
+    thought("The smell of old records fills the shop."),
+  ],
+  location: "Needle & Groove",
+  image: {
+    day: "./images/locations/NeedleGroove/needleGrooveEmpty.png",
+    night: "./images/locations/NeedleGroove/needleGrooveEmpty.png",
+  },
+  characters: [
     {
-      label: "Walk to the gas station (1h)",
-      action: "walkToGasStation",
-      nextScene: "gas-station",
-      timeCost: 60,
-      travel: true,
+      name: "Johnny Dalton",
+      from: 480,
+      until: 840,
+      image: "./images/locations/NeedleGroove/johnnyDaltonCounter.png",
+    },
+  ],
+  choices: [
+    {
+      label: "Talk to Johnny",
+      action: "talkToJohnny",
+      nextScene: "needle-and-groove-inside",
+      timeCost: 0,
+    },
+    {
+      label: "Enter the backroom",
+      action: "enterNeedleAndGrooveBackroom",
+      nextScene: "needle-and-groove-backroom",
+      timeCost: 1,
+    },
+    {
+      label: "Go outside",
+      action: "leaveNeedleAndGroove",
+      nextScene: "needle-and-groove",
+      timeCost: 0,
+    },
+  ],
+  conversation: johnnyConversation,
+};
+
+export const needleAndGrooveBackroom: Scene = {
+  id: "needle-and-groove-backroom",
+  story: [
+    narration("You step into the backroom."),
+    thought("Boxes of records are stacked against the walls."),
+  ],
+  location: "Needle & Groove",
+  image: {
+    day: "./images/locations/NeedleGroove/vinylShopBackroom.png",
+    night: "./images/locations/NeedleGroove/vinylShopBackroom.png",
+  },
+  characters: [
+    {
+      name: "Johnny Dalton",
+      from: 840,
+      image: "./images/locations/NeedleGroove/JohnnyBackroom.png",
+    },
+  ],
+  choices: [
+    {
+      label: "Go back to the shop",
+      action: "leaveNeedleAndGrooveBackroom",
+      nextScene: "needle-and-groove-inside",
+      timeCost: 0,
     },
   ],
 };
@@ -613,10 +769,6 @@ export const gasStation: Scene = {
     },
   ],
 };
-
-// ----------------------------------------
-// GAS STATION INSIDE
-// ----------------------------------------
 
 export const gasStationInside: Scene = {
   id: "gas-station-inside",
@@ -688,6 +840,12 @@ export const policeStation: Scene = {
       nextScene: "front-yard",
       timeCost: 10,
       travel: true,
+      effects: {
+        money: -7,
+      },
+      requirements: {
+        money: 7,
+      }
     },
   ],
 };
@@ -755,12 +913,18 @@ export const sheriffOffice: Scene = {
       image: "./images/locations/police_station/walterOfficeNight.png",
     },
   ],
-
+  conversation: walterConversation,
   choices: [
     {
       label: "Go back to the station",
       action: "leaveSheriffOffice",
       nextScene: "police-station-inside",
+      timeCost: 0,
+    },
+    {
+      label: "Talk to Walter",
+      action: "talkToWalter",
+      nextScene: "sheriff-office",
       timeCost: 0,
     },
   ],
@@ -889,6 +1053,8 @@ export const scenes = {
   kitchen,
   bathroom,
   "needle-and-groove": needleAndGroove,
+  "needle-and-groove-inside": needleAndGrooveInside,
+  "needle-and-groove-backroom": needleAndGrooveBackroom,
   "gas-station": gasStation,
   "gas-station-inside": gasStationInside,
   "police-station": policeStation,

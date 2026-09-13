@@ -3,22 +3,23 @@ import styles from "./ConversationLine.module.css";
 type ConversationLineProps = {
   character: string;
   text: string;
+  portrait: string;
 };
 
 export default function ConversationLine({
   character,
   text,
+  portrait,
 }: ConversationLineProps) {
-  const isEthan = character.toLowerCase() === "ethan";
-
-  const portrait = isEthan
-    ? "/images/characters/EthanParker/EthanParker.jpg"
-    : "./images/characters/LindaParker/LindaParker.png";
+  const isEthan =
+    character.toLowerCase() === "ethan";
 
   return (
     <div
       className={`${styles.conversationLine} ${
-        isEthan ? styles.ethan : styles.other
+        isEthan
+          ? styles.ethan
+          : styles.other
       }`}
     >
       <img

@@ -9,6 +9,8 @@ import {
   scenes,
   hallway,
   momConversation,
+  johnnyConversation,
+  walterConversation,
   getSceneThought,
 } from "@/game/scenes";
 
@@ -198,10 +200,18 @@ export function useGame() {
     }
 
     // Talk to Marlene
-    if (
-      choice.action === "talkToMarlene"
-    ) {
+    if (choice.action === "talkToMarlene") {
       setMarleneActive(true);
+    }
+
+    if (choice.action === "talkToJohnny") {
+      setConversation(johnnyConversation.opening);
+      setConversationActive(true);
+    }
+    
+    if (choice.action === "talkToWalter") {
+      setConversation(walterConversation.opening);
+      setConversationActive(true);
     }
 
     // Resolve special action logic
@@ -284,13 +294,18 @@ export function useGame() {
   const choices =
     currentScene.choices.filter(
       (choice) => {
-        if (
-          choice.action === "talkToMom" &&
-          gameState.time >= 1080
-        ) {
+        if ( choice.action === "talkToMom" && gameState.time >= 1080) {
+
           return false;
         }
 
+        if ( choice.action === "talkToJohnny" && ( gameState.time < 480 || gameState.time >= 840 )) {
+          return false;
+        }
+         if ( choice.action === "talkToWalter" && ( gameState.time < 480 || gameState.time >= 1080)) {
+          return false;
+        }
+        
         return true;
       }
     );

@@ -80,6 +80,42 @@ export const hallway: Scene = {
       timeCost: 0,
     },
     {
+      label: "Go to your room",
+      action: "goEthanRoom",
+      nextScene: "ethan-room",
+      timeCost: 0,
+    },
+    {
+      label: "Go to Mom's room",
+      action: "goMomRoom",
+      nextScene: "mom-room",
+      timeCost: 0,
+    },
+    {
+      label: "Go to Emily's room",
+      action: "goEmilyRoom",
+      nextScene: "emily-room",
+      timeCost: 0,
+    },
+    {
+      label: "Go to the attic",
+      action: "goAttic",
+      nextScene: "attic",
+      timeCost: 0,
+    },
+    {
+      label: "Go to the basement",
+      action: "goBasement",
+      nextScene: "basement",
+      timeCost: 0,
+    },
+    {
+      label: "Go to the garage",
+      action: "goGarage",
+      nextScene: "garage",
+      timeCost: 0,
+    },
+    {
       label: "Go outside",
       action: "leaveHouse",
       nextScene: "front-yard",
@@ -624,6 +660,101 @@ export const bathroom: Scene = {
   ],
 };
 // ----------------------------------------
+// OTHER ROOMS
+// ----------------------------------------
+
+const returnToHallway = {
+  label: "Go back to the hallway",
+  action: "goHallway",
+  nextScene: "hallway",
+  timeCost: 0,
+};
+
+export const ethanRoom: Scene = {
+  id: "ethan-room",
+  story: [
+    narration("You step into your room."),
+    thought("I should keep this place organized."),
+  ],
+  location: "Ethan's room",
+  image: {
+    day: "./images/locations/home/ethanRoomDay.png",
+    night: "./images/locations/home/ethanRoomNight.png",
+  },
+  choices: [returnToHallway],
+};
+
+export const momRoom: Scene = {
+  id: "mom-room",
+  story: [
+    narration("You enter Mom's room."),
+    thought("It feels strange being in here."),
+  ],
+  location: "Mom's room",
+  image: {
+    day: "./images/locations/home/motherRoomDay.png",
+    night: "./images/locations/home/MotherRoomNight.png",
+  },
+  choices: [returnToHallway],
+};
+
+export const emilyRoom: Scene = {
+  id: "emily-room",
+  story: [
+    narration("You enter Emily's room."),
+    thought("Everything is exactly where she left it."),
+  ],
+  location: "Emily's room",
+  image: {
+    day: "./images/locations/home/sisterRoomDay.png",
+    night: "./images/locations/home/sisterRoomNight.png",
+  },
+  choices: [returnToHallway],
+};
+
+export const attic: Scene = {
+  id: "attic",
+  story: [
+    narration("You climb up into the attic."),
+    thought("The air is stale up here."),
+  ],
+  location: "Attic",
+  image: {
+    day: "./images/locations/home/atticDay.png",
+    night: "./images/locations/home/AtticNight.png",
+  },
+  choices: [returnToHallway],
+};
+
+export const basement: Scene = {
+  id: "basement",
+  story: [
+    narration("You head down into the basement."),
+    thought("It's darker down here than it should be."),
+  ],
+  location: "Basement",
+  image: {
+    day: "./images/locations/home/basementDay.png",
+    night: "./images/locations/home/basementNight.png",
+  },
+  choices: [returnToHallway],
+};
+
+export const garage: Scene = {
+  id: "garage",
+  story: [
+    narration("You walk into the garage."),
+    thought("It smells like oil and old wood."),
+  ],
+  location: "Garage",
+  image: {
+    day: "./images/locations/home/garage.png",
+    night: "./images/locations/home/garage.png",
+  },
+  choices: [returnToHallway],
+};
+
+// ----------------------------------------
 // SCENE THOUGHT
 // ----------------------------------------
 
@@ -1052,6 +1183,12 @@ export const scenes = {
   "living-room": livingRoom,
   kitchen,
   bathroom,
+  "ethan-room": ethanRoom,
+  "mom-room": momRoom,
+  "emily-room": emilyRoom,
+  attic,
+  basement,
+  garage,
   "needle-and-groove": needleAndGroove,
   "needle-and-groove-inside": needleAndGrooveInside,
   "needle-and-groove-backroom": needleAndGrooveBackroom,

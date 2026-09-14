@@ -20,7 +20,6 @@ const player: Player = {
 
     inventory: [
         "House key",
-        "Cigarettes",
         "Flashlight",
         "Knife",
         "Beer"

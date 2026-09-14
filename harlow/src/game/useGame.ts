@@ -281,6 +281,15 @@ export function useGame() {
 
     const effects = choice.effects;
 
+    if (choice.itemToAdd) {
+      setPlayerState((previousPlayer) => ({
+        ...previousPlayer,
+        inventory: previousPlayer.inventory.includes(choice.itemToAdd!)
+          ? previousPlayer.inventory
+          : [...previousPlayer.inventory, choice.itemToAdd!],
+      }));
+    }
+
     if (effects) {
       setPlayerState(
         (previousPlayer) =>
@@ -306,7 +315,13 @@ export function useGame() {
         if ( choice.action === "talkToJohnny" && ( gameState.time < 480 || gameState.time >= 840 )) {
           return false;
         }
-         if ( choice.action === "talkToWalter" && ( gameState.time < 480 || gameState.time >= 1080)) {
+        if ( choice.action === "talkToWalter" && ( gameState.time < 480 || gameState.time >= 1080)) {
+          return false;
+        }
+        if (
+          choice.itemToAdd &&
+          playerState.inventory.includes(choice.itemToAdd)
+        ) {
           return false;
         }
         return true;

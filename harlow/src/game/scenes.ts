@@ -681,7 +681,43 @@ export const ethanRoom: Scene = {
     day: "./images/locations/home/ethanRoomDay.png",
     night: "./images/locations/home/ethanRoomNight.png",
   },
-  choices: [returnToHallway],
+  choices: [
+    {
+      label: "Look at your desk",
+      action: "lookAtDesk",
+      nextScene: "ethan-room-desk",
+      timeCost: 0,
+    },
+    returnToHallway,
+  ],
+};
+
+export const ethanRoomDesk: Scene = {
+  id: "ethan-room-desk",
+  story: [
+    narration("You look over the clutter on your desk."),
+    thought("I left a pack of cigarettes here."),
+  ],
+  location: "Ethan's room",
+  image: {
+    day: "./images/locations/home/ethanRoomDay.png",
+    night: "./images/locations/home/ethanRoomNight.png",
+  },
+  choices: [
+    {
+      label: "Pick up cigarettes",
+      action: "pickUpCigarettes",
+      nextScene: "ethan-room",
+      timeCost: 0,
+      itemToAdd: "Cigarettes",
+    },
+    {
+      label: "Step away from the desk",
+      action: "leaveDesk",
+      nextScene: "ethan-room",
+      timeCost: 0,
+    },
+  ],
 };
 
 export const momRoom: Scene = {
@@ -1184,6 +1220,7 @@ export const scenes = {
   kitchen,
   bathroom,
   "ethan-room": ethanRoom,
+  "ethan-room-desk": ethanRoomDesk,
   "mom-room": momRoom,
   "emily-room": emilyRoom,
   attic,

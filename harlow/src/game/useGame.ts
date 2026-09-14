@@ -323,7 +323,9 @@ export function useGame() {
   const conversationChoices =
     currentScene.conversation?.choices ?? [];
 
-  const activeChoices = choices;
+  const activeChoices = conversationActive
+    ? conversationChoices
+    : choices;
 
   return {
     gameState,

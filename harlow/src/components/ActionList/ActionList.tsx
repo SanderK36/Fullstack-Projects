@@ -1,21 +1,11 @@
 import ActionButton from "@/components/ActionButton/ActionButton";
+import type { GameChoice } from "@/game/choices";
 import styles from "./ActionList.module.css";
-
-type Choice = {
-  label: string;
-  action: string;
-  nextScene: string;
-  timeCost: number;
-  travel?: boolean;
-  requirements?: {
-    money?: number;
-  };
-};
 
 type ActionListProps = {
   title: string;
-  choices: Choice[];
-  onChoice: (choice: Choice) => void;
+  choices: GameChoice[];
+  onChoice: (choice: GameChoice) => void;
   onTravel: () => void;
   playerMoney: number;
 };
@@ -28,11 +18,12 @@ export default function ActionList({
   playerMoney,
 }: ActionListProps) {
   const localChoices = choices.filter(
-    (choice) => !choice.travel
+    (choice) => "response" in choice || !choice.travel
   );
 
   const walkingChoices = choices.filter(
     (choice) =>
+      "action" in choice &&
       choice.travel &&
       choice.action
         .toLowerCase()
@@ -41,14 +32,16 @@ export default function ActionList({
 
   const busChoices = choices.filter(
     (choice) =>
+      "action" in choice &&
       choice.travel &&
       choice.action
         .toLowerCase()
         .includes("bus")
   );
 
-  function isDisabled(choice: Choice) {
+  function isDisabled(choice: GameChoice) {
     return (
+      "requirements" in choice &&
       choice.requirements?.money !== undefined &&
       playerMoney <
         choice.requirements.money
@@ -62,7 +55,7 @@ export default function ActionList({
       <div className={styles.actionButtons}>
         {localChoices.map((choice) => (
           <ActionButton
-            key={choice.action}
+            key={"response" in choice ? choice.label : choice.action}
             label={choice.label}
             onClick={() => onChoice(choice)}
             disabled={isDisabled(choice)}

@@ -9,6 +9,7 @@ import CharacterLine from "@/components/CharacterLine/CharacterLine";
 import TravelOverlay from "@/components/TravelOverlay/TravelOverlay";
 import TravelWindow from "@/components/TravelWindow/TravelWindow";
 import InventoryWindow from "@/components/InventoryWindow/InventoryWindow";
+import ShopWindow from "@/components/ShopWindow/ShopWindow";
 
 import { isNightTime } from "@/game/utils";
 import { useGame } from "@/game/useGame";
@@ -34,6 +35,9 @@ export default function Home() {
     setShowTravel,
     walkingChoices,
     busChoices,
+    activeShop,
+    setActiveShop,
+    buyItem,
   } = useGame();
 
   const homeSceneIds = [
@@ -121,6 +125,16 @@ export default function Home() {
           }
           />
           )}
+
+        {activeShop && (
+          <ShopWindow
+            shop={activeShop}
+            playerMoney={playerState.money}
+            inventory={playerState.inventory}
+            onPurchase={buyItem}
+            onClose={() => setActiveShop(null)}
+          />
+        )}
 
         <ActionList
           title="What do you want to do?"

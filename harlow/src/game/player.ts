@@ -21,8 +21,7 @@ const player: Player = {
     inventory: [
         "House key",
         "Flashlight",
-        "Knife",
-        "Beer"
+        "Knife"
     ],
 };
 

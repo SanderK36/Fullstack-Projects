@@ -39,6 +39,10 @@ export function useGame() {
 
   const [showTravel, setShowTravel] = useState(false);
 
+  const [activeShop, setActiveShop] = useState<
+    "gas-station" | "needle-groove" | null
+  >(null);
+
   const [conversation, setConversation] =
     useState<StoryEntry[]>([]);
 
@@ -219,6 +223,16 @@ export function useGame() {
       setConversationActive(true);
     }
 
+    if (choice.action === "openShop") {
+      setActiveShop("gas-station");
+      return;
+    }
+
+    if (choice.action === "openNeedleGrooveShop") {
+      setActiveShop("needle-groove");
+      return;
+    }
+
     // Resolve special action logic
     resolveAction(choice);
 
@@ -362,6 +376,26 @@ export function useGame() {
 
     showTravel,
     setShowTravel,
+
+    activeShop,
+    setActiveShop,
+
+    buyItem: (item: string, price: number) => {
+      setPlayerState((previousPlayer) => {
+        if (
+          previousPlayer.money < price ||
+          previousPlayer.inventory.includes(item)
+        ) {
+          return previousPlayer;
+        }
+
+        return {
+          ...previousPlayer,
+          money: previousPlayer.money - price,
+          inventory: [...previousPlayer.inventory, item],
+        };
+      });
+    },
     
     conversationChoices,
     conversationActive,

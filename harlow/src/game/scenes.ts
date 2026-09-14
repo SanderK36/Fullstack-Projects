@@ -37,6 +37,38 @@ export type Scene = {
   characters?: SceneCharacter[];
 };
 
+const exteriorDestinations = [
+  { id: "front-yard", label: "Home", walkMinutes: 30 },
+  { id: "needle-and-groove", label: "Needle & Groove", walkMinutes: 30 },
+  { id: "gas-station", label: "the gas station", walkMinutes: 30 },
+  { id: "police-station", label: "the police station", walkMinutes: 30 },
+  { id: "hospital", label: "the hospital", walkMinutes: 35 },
+  { id: "cementary", label: "the cemetery", walkMinutes: 35 },
+];
+
+function createTravelChoices(originId: string): Choice[] {
+  return exteriorDestinations
+    .filter((destination) => destination.id !== originId)
+    .flatMap((destination) => [
+      {
+        label: `Walk to ${destination.label} (${destination.walkMinutes}min)`,
+        action: `walkTo${destination.id}`,
+        nextScene: destination.id,
+        timeCost: destination.walkMinutes,
+        travel: true,
+      },
+      {
+        label: `Take the bus to ${destination.label} ($7 & 10min)`,
+        action: `takeBusTo${destination.id}`,
+        nextScene: destination.id,
+        timeCost: 10,
+        travel: true,
+        effects: { money: -7 },
+        requirements: { money: 7 },
+      },
+    ]);
+}
+
 // ----------------------------------------
 // HALLWAY
 // ----------------------------------------
@@ -232,73 +264,7 @@ export const frontYard: Scene = {
       nextScene: "hallway",
       timeCost: 5,
     },
-    {
-      label: "Take the bus to Needle & Groove ($7 & 10min)",
-      action: "takeBus",
-      nextScene: "needle-and-groove",
-      timeCost: 10,
-      travel: true,
-      effects: {
-        money: -7,
-      },
-      requirements: {
-        money: 7,
-      }
-    },
-    {
-      label: "Walk to Needle & Groove (45min)",
-      action: "walkToNeedleAndGroove",
-      nextScene: "needle-and-groove",
-      timeCost: 45,
-      travel: true,
-    },
-    {
-      label: "Walk to the gas station (30min)",
-      action: "walkToGasStation",
-      nextScene: "gas-station",
-      timeCost: 30,
-      travel: true,
-    },
-    {
-      label: "Walk to the police station (30min)",
-      action: "walkToPoliceStation",
-      nextScene: "police-station",
-      timeCost: 30,
-      travel: true,
-    },
-    {
-      label: "Take the bus to the police station ($7 & 10min)",
-      action: "takeBusToPoliceStation",
-      nextScene: "police-station",
-      timeCost: 10,
-      travel: true,
-      effects: {
-        money: -7,
-      },
-      requirements: {
-        money: 7,
-      }
-    },
-    {
-      label: "Walk to the hospital (35min)",
-      action: "walkToHospital",
-      nextScene: "hospital",
-      timeCost: 35,
-      travel: true,
-    },
-    {
-      label: "Take the bus to the hospital (15min)",
-      action: "driveToHospital",
-      nextScene: "hospital",
-      timeCost: 15,
-      travel: true,
-      effects: {
-        money: -7,
-      },
-      requirements: {
-        money: 7,
-      }
-    },
+    ...createTravelChoices("front-yard"),
   ],
 };
 
@@ -817,13 +783,7 @@ export const needleAndGroove: Scene = {
       nextScene: "needle-and-groove-inside",
       timeCost: 2,
     },
-    {
-      label: "Walk back home",
-      action: "walkBackHome",
-      nextScene: "front-yard",
-      timeCost: 20,
-      travel: true,
-    },
+    ...createTravelChoices("needle-and-groove"),
   ],
 };
 
@@ -847,6 +807,12 @@ export const needleAndGrooveInside: Scene = {
     },
   ],
   choices: [
+    {
+      label: "Shop",
+      action: "openNeedleGrooveShop",
+      nextScene: "needle-and-groove-inside",
+      timeCost: 0,
+    },
     {
       label: "Talk to Johnny",
       action: "talkToJohnny",
@@ -927,13 +893,7 @@ export const gasStation: Scene = {
       nextScene: "gas-station-inside",
       timeCost: 2,
     },
-    {
-      label: "Walk back home",
-      action: "walkBackHome",
-      nextScene: "front-yard",
-      timeCost: 20,
-      travel: true,
-    },
+    ...createTravelChoices("gas-station"),
   ],
 };
 
@@ -963,6 +923,12 @@ export const gasStationInside: Scene = {
   ],
 
   choices: [
+    {
+      label: "Shop",
+      action: "openShop",
+      nextScene: "gas-station-inside",
+      timeCost: 0,
+    },
     {
       label: "Go outside",
       action: "leaveGasStation",
@@ -994,26 +960,7 @@ export const policeStation: Scene = {
       nextScene: "police-station-inside",
       timeCost: 2,
     },
-    {
-      label: "Walk back home (30min)",
-      action: "walkBackHome",
-      nextScene: "front-yard",
-      timeCost: 30,
-      travel: true,
-    },
-    {
-      label: "Take the bus back home (10min)",
-      action: "takeBusHome",
-      nextScene: "front-yard",
-      timeCost: 10,
-      travel: true,
-      effects: {
-        money: -7,
-      },
-      requirements: {
-        money: 7,
-      }
-    },
+    ...createTravelChoices("police-station"),
   ],
 };
 
@@ -1098,6 +1045,80 @@ export const sheriffOffice: Scene = {
 };
 
 // ----------------------------------------
+// CEMETERY
+// ----------------------------------------
+
+export const cementary: Scene = {
+  id: "cementary",
+  story: [
+    narration("You arrive at the cemetery."),
+    thought("The gate creaks softly in the wind."),
+  ],
+  location: "Cementary",
+  image: {
+    day: "./images/locations/cementary/cementaryDay.png",
+    night: "./images/locations/cementary/cementaryNight.png",
+  },
+  choices: [
+    {
+      label: "Enter the cemetery",
+      action: "enterCemetery",
+      nextScene: "cementary-inside",
+      timeCost: 1,
+    },
+    ...createTravelChoices("cementary"),
+  ],
+};
+
+export const cementaryInside: Scene = {
+  id: "cementary-inside",
+  story: [
+    narration("You walk between the old headstones."),
+    thought("It is quieter here than anywhere else in town."),
+  ],
+  location: "Cementary",
+  image: {
+    day: "./images/locations/cementary/cementaryInsideDay.png",
+    night: "./images/locations/cementary/cementaryInsideNight.png",
+  },
+  choices: [
+    {
+      label: "Walk toward the back",
+      action: "goCemeteryBackside",
+      nextScene: "cementary-backside",
+      timeCost: 2,
+    },
+    {
+      label: "Go back to the entrance",
+      action: "leaveCemetery",
+      nextScene: "cementary",
+      timeCost: 1,
+    },
+  ],
+};
+
+export const cementaryBackside: Scene = {
+  id: "cementary-backside",
+  story: [
+    narration("You reach the back of the cemetery."),
+    thought("Something about this place makes you uneasy."),
+  ],
+  location: "Cementary",
+  image: {
+    day: "./images/locations/cementary/cementaryBacksideDay.png",
+    night: "./images/locations/cementary/cementaryBacksideNight.png",
+  },
+  choices: [
+    {
+      label: "Go back inside",
+      action: "leaveCemeteryBackside",
+      nextScene: "cementary-inside",
+      timeCost: 2,
+    },
+  ],
+};
+
+// ----------------------------------------
 // HOSPITAL
 // ----------------------------------------
 
@@ -1119,13 +1140,7 @@ export const hospital: Scene = {
       nextScene: "hospital-reception",
       timeCost: 2,
     },
-    {
-      label: "Walk back home",
-      action: "walkBackHome",
-      nextScene: "front-yard",
-      timeCost: 30,
-      travel: true,
-    },
+    ...createTravelChoices("hospital"),
   ],
 };
 
@@ -1234,6 +1249,9 @@ export const scenes = {
   "police-station": policeStation,
   "police-station-inside": policeStationInside,
   "sheriff-office": sheriffOffice,
+  cementary,
+  "cementary-inside": cementaryInside,
+  "cementary-backside": cementaryBackside,
   hospital,
   "hospital-reception": hospitalReception,
 };

@@ -21,7 +21,10 @@ function getItemImage(item: string) {
       return "/images/items/Knife.png";
 
     case "beer":
-      return "/images/items/Beer.png";
+      return "/images/items/beer.png";
+
+    case "steel maiden":
+      return "/images/locations/NeedleGroove/shop/SteelMaiden.png";
 
     default:
       return null;

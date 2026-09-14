@@ -8,6 +8,7 @@ type ActionListProps = {
   onChoice: (choice: GameChoice) => void;
   onTravel: () => void;
   playerMoney: number;
+  layout?: "default" | "home";
 };
 
 export default function ActionList({
@@ -16,6 +17,7 @@ export default function ActionList({
   onChoice,
   onTravel,
   playerMoney,
+  layout = "default",
 }: ActionListProps) {
   const localChoices = choices.filter(
     (choice) => "response" in choice || !choice.travel
@@ -52,7 +54,11 @@ export default function ActionList({
     <div className={styles.actionList}>
       <h2>{title}</h2>
 
-      <div className={styles.actionButtons}>
+      <div
+        className={`${styles.actionButtons} ${
+          layout === "home" ? styles.homeActionButtons : ""
+        }`}
+      >
         {localChoices.map((choice) => (
           <ActionButton
             key={"response" in choice ? choice.label : choice.action}

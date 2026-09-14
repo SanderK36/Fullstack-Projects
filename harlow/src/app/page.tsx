@@ -36,6 +36,21 @@ export default function Home() {
     busChoices,
   } = useGame();
 
+  const homeSceneIds = [
+    "hallway",
+    "living-room",
+    "kitchen",
+    "bathroom",
+    "ethan-room",
+    "mom-room",
+    "emily-room",
+    "attic",
+    "basement",
+    "garage",
+  ];
+
+  const isInsideHome = homeSceneIds.includes(currentScene.id);
+
   return (
     <main className="game">
       <div className="game-panel">
@@ -115,6 +130,7 @@ export default function Home() {
             setShowTravel(true)
           }
           playerMoney={playerState.money}
+          layout={isInsideHome ? "home" : "default"}
         />
 
         {showTravel && (

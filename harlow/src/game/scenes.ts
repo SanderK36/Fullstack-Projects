@@ -231,7 +231,7 @@ export const frontYard: Scene = {
       travel: true,
     },
     {
-      label: "Take the bus to the police station (10min)",
+      label: "Take the bus to the police station ($7 & 10min)",
       action: "takeBusToPoliceStation",
       nextScene: "police-station",
       timeCost: 10,

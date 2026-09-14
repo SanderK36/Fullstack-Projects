@@ -2,11 +2,13 @@
 
 import GameStatus from "@/components/GameStatus/GameStatus";
 import ActionList from "@/components/ActionList/ActionList";
+import ActionButton from "@/components/ActionButton/ActionButton";
 import StatsWindow from "@/components/StatsWindow/StatsWindow";
 import StoryLog from "@/components/StoryLog/StoryLog";
 import CharacterLine from "@/components/CharacterLine/CharacterLine";
 import TravelOverlay from "@/components/TravelOverlay/TravelOverlay";
 import TravelWindow from "@/components/TravelWindow/TravelWindow";
+import InventoryWindow from "@/components/InventoryWindow/InventoryWindow";
 
 import { isNightTime } from "@/game/utils";
 import { useGame } from "@/game/useGame";
@@ -23,11 +25,15 @@ export default function Home() {
     activeCharacter,
     showStats,
     setShowStats,
+    showInventory,
+    setShowInventory,
     handleChoice,
     wait,
     travelingTo,
     showTravel,
     setShowTravel,
+    walkingChoices,
+    busChoices,
   } = useGame();
 
   return (
@@ -35,13 +41,12 @@ export default function Home() {
       <div className="game-panel">
 
         <h1>HARLOW</h1>
-
+        
         <GameStatus
           player={playerState}
           gameState={gameState}
-          onStatsClick={() =>
-            setShowStats(true)
-          }
+          onStatsClick={() => setShowStats(true)}
+          onInventoryClick={() => setShowInventory(true)}
         />
 
         <img
@@ -93,6 +98,14 @@ export default function Home() {
             }
           />
         )}
+        {showInventory && (
+          <InventoryWindow
+          inventory={playerState.inventory}
+          onClose={() =>
+            setShowInventory(false)
+          }
+          />
+          )}
 
         <ActionList
           title="What do you want to do?"
@@ -106,34 +119,46 @@ export default function Home() {
 
         {showTravel && (
           <TravelWindow
+            walkingChoices={walkingChoices}
+            busChoices={busChoices}
+            onChoice={handleChoice}
             onClose={() =>
               setShowTravel(false)
             }
+            onTravelStart={() =>
+              setShowTravel(false)
+            }
+            playerMoney={playerState.money}
           />
         )}
 
         {/* Temporary testing buttons */}
 
         <div>
-          <button onClick={() => wait(1)}>
-            Wait 1 min
-          </button>
+          <ActionButton
+            label="Wait 1 min"
+            onClick={() => wait(1)}
+          />
 
-          <button onClick={() => wait(5)}>
-            Wait 5 min
-          </button>
+          <ActionButton
+            label="Wait 5 min"
+            onClick={() => wait(5)}
+          />
 
-          <button onClick={() => wait(10)}>
-            Wait 10 min
-          </button>
+          <ActionButton
+            label="Wait 10 min"
+            onClick={() => wait(10)}
+          />
 
-          <button onClick={() => wait(30)}>
-            Wait 30 min
-          </button>
+          <ActionButton
+            label="Wait 30 min"
+            onClick={() => wait(30)}
+          />
 
-          <button onClick={() => wait(60)}>
-            Wait 1 hour
-          </button>
+          <ActionButton
+            label="Wait 1 hour"
+            onClick={() => wait(60)}
+          />
         </div>
 
         {travelingTo && (

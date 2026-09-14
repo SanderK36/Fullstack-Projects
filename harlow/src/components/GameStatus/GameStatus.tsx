@@ -6,12 +6,14 @@ type GameStatusProps = {
   player: Player;
   gameState: GameState;
   onStatsClick: () => void;
+  onInventoryClick: () => void;
 };
 
 export default function GameStatus({
   player,
   gameState,
   onStatsClick,
+  onInventoryClick,
 }: GameStatusProps) {
   return (
     <div className={styles.status}>
@@ -31,6 +33,13 @@ export default function GameStatus({
             onClick={onStatsClick}
           >
             STATS
+          </button>
+
+          <button
+            className={styles.statsButton}
+            onClick={onInventoryClick}
+          >
+            INVENTORY
           </button>
         </div>
 

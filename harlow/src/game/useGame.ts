@@ -34,6 +34,9 @@ export function useGame() {
   const [showStats, setShowStats] =
     useState(false);
 
+  const [showInventory, setShowInventory] =
+  useState(false);
+
   const [showTravel, setShowTravel] = useState(false);
 
   const [conversation, setConversation] =
@@ -297,7 +300,6 @@ export function useGame() {
     currentScene.choices.filter(
       (choice) => {
         if ( choice.action === "talkToMom" && gameState.time >= 1080) {
-
           return false;
         }
 
@@ -307,10 +309,16 @@ export function useGame() {
          if ( choice.action === "talkToWalter" && ( gameState.time < 480 || gameState.time >= 1080)) {
           return false;
         }
-        
         return true;
       }
     );
+    const walkingChoices = choices.filter((choice) =>
+      choice.travel && choice.action.toLowerCase().includes("walk")
+  );
+  
+  const busChoices = choices.filter((choice) =>
+    choice.travel && choice.action.toLowerCase().includes("bus")
+);
 
   const conversationChoices =
     currentScene.conversation?.choices ?? [];
@@ -324,12 +332,14 @@ export function useGame() {
     currentThought,
     currentEffects,
     conversation,
-    activeChoices,
     travelingTo,
     activeCharacter,
 
     showStats,
     setShowStats,
+    
+    showInventory,
+    setShowInventory,
 
     handleChoice,
 
@@ -338,6 +348,10 @@ export function useGame() {
     
     conversationChoices,
     conversationActive,
+
+    activeChoices,
+    walkingChoices,
+    busChoices,
 
     wait: handleAdvanceTime,
   };

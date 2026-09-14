@@ -6,7 +6,10 @@ type ActionListProps = {
   title: string;
   choices: GameChoice[];
   onChoice: (choice: GameChoice) => void;
-  onTravel: () => void;
+  onWalk: () => void;
+  onBus: () => void;
+  onGoToBusStop: () => void;
+  isBusStop: boolean;
   playerMoney: number;
   layout?: "default" | "home";
 };
@@ -15,30 +18,18 @@ export default function ActionList({
   title,
   choices,
   onChoice,
-  onTravel,
+  onWalk,
+  onBus,
+  onGoToBusStop,
+  isBusStop,
   playerMoney,
   layout = "default",
 }: ActionListProps) {
   const localChoices = choices.filter(
     (choice) => "response" in choice || !choice.travel
   );
-
-  const walkingChoices = choices.filter(
-    (choice) =>
-      "action" in choice &&
-      choice.travel &&
-      choice.action
-        .toLowerCase()
-        .includes("walk")
-  );
-
-  const busChoices = choices.filter(
-    (choice) =>
-      "action" in choice &&
-      choice.travel &&
-      choice.action
-        .toLowerCase()
-        .includes("bus")
+  const isConversation = choices.some(
+    (choice) => "response" in choice
   );
 
   function isDisabled(choice: GameChoice) {
@@ -68,13 +59,20 @@ export default function ActionList({
           />
         ))}
 
-        {(walkingChoices.length > 0 ||
-          busChoices.length > 0) && (
+        {!isConversation && isBusStop ? (
           <ActionButton
-            label="Travel"
-            onClick={onTravel}
+            label="Take the bus"
+            onClick={onBus}
           />
-        )}
+        ) : !isConversation ? (
+          <>
+            <ActionButton label="Walk" onClick={onWalk} />
+            <ActionButton
+              label="Go to bus stop"
+              onClick={onGoToBusStop}
+            />
+          </>
+        ) : null}
       </div>
     </div>
   );

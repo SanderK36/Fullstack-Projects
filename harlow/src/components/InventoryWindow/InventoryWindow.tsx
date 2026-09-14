@@ -35,6 +35,16 @@ export default function InventoryWindow({
   inventory,
   onClose,
 }: InventoryWindowProps) {
+  const items = Object.entries(
+    inventory.reduce<Record<string, number>>(
+      (counts, item) => ({
+        ...counts,
+        [item]: (counts[item] ?? 0) + 1,
+      }),
+      {}
+    )
+  );
+
   return (
     <div className={styles.overlay}>
       <div className={styles.window}>
@@ -42,21 +52,24 @@ export default function InventoryWindow({
         <h2>INVENTORY</h2>
 
         <div className={styles.grid}>
-          {inventory.map((item, index) => {
+          {items.map(([item, quantity]) => {
             const image = getItemImage(item);
 
             return (
               <div
                 className={styles.slot}
-                key={`${item}-${index}`}
+                key={item}
               >
-                {image && (
-                  <img
-                    src={image}
-                    alt={item}
-                    className={styles.itemImage}
-                  />
-                )}
+                <div className={styles.itemVisual}>
+                  {image && (
+                    <img
+                      src={image}
+                      alt={item}
+                      className={styles.itemImage}
+                    />
+                  )}
+                  <span className={styles.quantity}>{quantity}</span>
+                </div>
                 <span className={styles.itemName}>{item}</span>
               </div>
             );

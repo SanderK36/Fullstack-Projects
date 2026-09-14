@@ -45,6 +45,11 @@
 
 }
 
+.itemVisual {
+  position: relative;
+  width: 100%;
+}
+
 .itemImage {
   width: 100%;
   aspect-ratio: 1;
@@ -52,6 +57,24 @@
   object-fit: cover;
   background: #181818;
   border: 1px solid #292929;
+}
+
+.quantity {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  display: grid;
+  min-width: 20px;
+  min-height: 20px;
+  place-items: center;
+  padding: 2px;
+  color: #f5eee5;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid #8f6a42;
+  border-radius: 50%;
 }
 
 .itemName {

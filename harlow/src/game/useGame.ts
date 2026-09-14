@@ -4,6 +4,7 @@ import player from "@/game/player";
 import initialGameState from "@/game/gameState";
 
 import { advanceGameTime } from "@/game/time";
+import { isNightTime } from "@/game/utils";
 
 import {
   scenes,
@@ -11,7 +12,10 @@ import {
   momConversation,
   johnnyConversation,
   walterConversation,
+  margaretConversation,
   getSceneThought,
+  createWalkingChoices,
+  createBusChoices,
 } from "@/game/scenes";
 
 import { resolveAction } from "@/game/actions";
@@ -71,7 +75,14 @@ export function useGame() {
     useState<StoryEntry[]>([]);
 
   const [travelingTo, setTravelingTo] =
-    useState<string | null>(null);
+    useState<{
+      location: string;
+      method: "walk" | "bus";
+      isNight: boolean;
+    } | null>(null);
+
+  const [busStopReturnSceneId, setBusStopReturnSceneId] =
+    useState("front-yard");
 
   const [marleneActive, setMarleneActive] =
     useState(false);
@@ -223,6 +234,11 @@ export function useGame() {
       setConversationActive(true);
     }
 
+    if (choice.action === "talkToMargaret") {
+      setConversation(margaretConversation.opening);
+      setConversationActive(true);
+    }
+
     if (choice.action === "openShop") {
       setActiveShop("gas-station");
       return;
@@ -230,6 +246,12 @@ export function useGame() {
 
     if (choice.action === "openNeedleGrooveShop") {
       setActiveShop("needle-groove");
+      return;
+    }
+
+    if (choice.action === "leaveBusStop") {
+      const newGameState = handleAdvanceTime(choice.timeCost);
+      setCurrentSceneById(busStopReturnSceneId, newGameState.time);
       return;
     }
 
@@ -247,7 +269,13 @@ export function useGame() {
         destinationScene?.location ??
         "Unknown";
 
-      setTravelingTo(destination);
+      setTravelingTo({
+        location: destination,
+        method: choice.action.toLowerCase().includes("bus")
+          ? "bus"
+          : "walk",
+        isNight: isNightTime(gameState.time),
+      });
 
       setTimeout(() => {
         const newGameState =
@@ -294,13 +322,12 @@ export function useGame() {
     );
 
     const effects = choice.effects;
+    const itemToAdd = choice.itemToAdd;
 
-    if (choice.itemToAdd) {
+    if (itemToAdd) {
       setPlayerState((previousPlayer) => ({
         ...previousPlayer,
-        inventory: previousPlayer.inventory.includes(choice.itemToAdd!)
-          ? previousPlayer.inventory
-          : [...previousPlayer.inventory, choice.itemToAdd!],
+        inventory: [...previousPlayer.inventory, itemToAdd],
       }));
     }
 
@@ -319,6 +346,12 @@ export function useGame() {
     }
   }
 
+  function goToBusStop() {
+    setBusStopReturnSceneId(currentScene.id);
+    const newGameState = handleAdvanceTime(0);
+    setCurrentSceneById("bus-stop", newGameState.time);
+  }
+
   const choices =
     currentScene.choices.filter(
       (choice) => {
@@ -332,22 +365,14 @@ export function useGame() {
         if ( choice.action === "talkToWalter" && ( gameState.time < 480 || gameState.time >= 1080)) {
           return false;
         }
-        if (
-          choice.itemToAdd &&
-          playerState.inventory.includes(choice.itemToAdd)
-        ) {
+        if (choice.action === "talkToMargaret" && (gameState.time < 660 || gameState.time >= 900)) {
           return false;
         }
         return true;
       }
     );
-    const walkingChoices = choices.filter((choice) =>
-      choice.travel && choice.action.toLowerCase().includes("walk")
-  );
-  
-  const busChoices = choices.filter((choice) =>
-    choice.travel && choice.action.toLowerCase().includes("bus")
-);
+  const walkingChoices = createWalkingChoices(currentScene.id);
+  const busChoices = createBusChoices();
 
   const conversationChoices =
     currentScene.conversation?.choices ?? [];
@@ -373,6 +398,7 @@ export function useGame() {
     setShowInventory,
 
     handleChoice,
+    goToBusStop,
 
     showTravel,
     setShowTravel,
@@ -382,10 +408,7 @@ export function useGame() {
 
     buyItem: (item: string, price: number) => {
       setPlayerState((previousPlayer) => {
-        if (
-          previousPlayer.money < price ||
-          previousPlayer.inventory.includes(item)
-        ) {
+        if (previousPlayer.money < price) {
           return previousPlayer;
         }
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import GameStatus from "@/components/GameStatus/GameStatus";
 import ActionList from "@/components/ActionList/ActionList";
 import ActionButton from "@/components/ActionButton/ActionButton";
@@ -35,10 +37,12 @@ export default function Home() {
     setShowTravel,
     walkingChoices,
     busChoices,
+    goToBusStop,
     activeShop,
     setActiveShop,
     buyItem,
   } = useGame();
+  const [travelMode, setTravelMode] = useState<"walk" | "bus">("walk");
 
   const homeSceneIds = [
     "hallway",
@@ -130,7 +134,6 @@ export default function Home() {
           <ShopWindow
             shop={activeShop}
             playerMoney={playerState.money}
-            inventory={playerState.inventory}
             onPurchase={buyItem}
             onClose={() => setActiveShop(null)}
           />
@@ -140,9 +143,16 @@ export default function Home() {
           title="What do you want to do?"
           choices={activeChoices}
           onChoice={handleChoice}
-          onTravel={() =>
-            setShowTravel(true)
-          }
+          onWalk={() => {
+            setTravelMode("walk");
+            setShowTravel(true);
+          }}
+          onBus={() => {
+            setTravelMode("bus");
+            setShowTravel(true);
+          }}
+          onGoToBusStop={goToBusStop}
+          isBusStop={currentScene.id === "bus-stop"}
           playerMoney={playerState.money}
           layout={isInsideHome ? "home" : "default"}
         />
@@ -159,6 +169,7 @@ export default function Home() {
               setShowTravel(false)
             }
             playerMoney={playerState.money}
+            initialMenu={travelMode}
           />
         )}
 
@@ -193,7 +204,9 @@ export default function Home() {
 
         {travelingTo && (
           <TravelOverlay
-            location={travelingTo}
+            location={travelingTo.location}
+            method={travelingTo.method}
+            isNight={travelingTo.isNight}
           />
         )}
 

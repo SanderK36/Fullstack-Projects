@@ -44,29 +44,31 @@ const exteriorDestinations = [
   { id: "police-station", label: "the police station", walkMinutes: 30 },
   { id: "hospital", label: "the hospital", walkMinutes: 35 },
   { id: "cementary", label: "the cemetery", walkMinutes: 35 },
+  { id: "diner", label: "the diner", walkMinutes: 25 },
 ];
 
-function createTravelChoices(originId: string): Choice[] {
+export function createWalkingChoices(originId: string): Choice[] {
   return exteriorDestinations
     .filter((destination) => destination.id !== originId)
-    .flatMap((destination) => [
-      {
-        label: `Walk to ${destination.label} (${destination.walkMinutes}min)`,
-        action: `walkTo${destination.id}`,
-        nextScene: destination.id,
-        timeCost: destination.walkMinutes,
-        travel: true,
-      },
-      {
-        label: `Take the bus to ${destination.label} ($7 & 10min)`,
-        action: `takeBusTo${destination.id}`,
-        nextScene: destination.id,
-        timeCost: 10,
-        travel: true,
-        effects: { money: -7 },
-        requirements: { money: 7 },
-      },
-    ]);
+    .map((destination) => ({
+      label: `Walk to ${destination.label} (${destination.walkMinutes}min)`,
+      action: `walkTo${destination.id}`,
+      nextScene: destination.id,
+      timeCost: destination.walkMinutes,
+      travel: true,
+    }));
+}
+
+export function createBusChoices(): Choice[] {
+  return exteriorDestinations.map((destination) => ({
+    label: `Take the bus to ${destination.label} ($7 & 10min)`,
+    action: `takeBusTo${destination.id}`,
+    nextScene: destination.id,
+    timeCost: 10,
+    travel: true,
+    effects: { money: -7 },
+    requirements: { money: 7 },
+  }));
 }
 
 // ----------------------------------------
@@ -264,7 +266,6 @@ export const frontYard: Scene = {
       nextScene: "hallway",
       timeCost: 5,
     },
-    ...createTravelChoices("front-yard"),
   ],
 };
 
@@ -549,6 +550,12 @@ export const kitchen: Scene = {
 
   choices: [
     {
+      label: "Check the fridge",
+      action: "checkFridge",
+      nextScene: "fridge",
+      timeCost: 0,
+    },
+    {
       label: "Go to the hallway",
       action: "goHome",
       nextScene: "hallway",
@@ -571,6 +578,64 @@ export const kitchen: Scene = {
       action: "leaveHouse",
       nextScene: "front-yard",
       timeCost: 5,
+    },
+  ],
+};
+
+export const margaretConversation: Conversation = {
+  opening: [
+    npc("Margaret", "Take a seat anywhere you like, hon."),
+  ],
+  choices: [
+    {
+      label: "How's business today?",
+      response: [
+        ethan("How's business today?"),
+        npc("Margaret", "Quiet so far. That usually means the coffee gets cold before it gets poured."),
+      ],
+    },
+    {
+      label: "Anything happening around town?",
+      response: [
+        ethan("Anything happening around town?"),
+        npc("Margaret", "Folks have been talking, but nobody's saying much worth repeating."),
+      ],
+    },
+    {
+      label: "See you later.",
+      response: [
+        ethan("See you later."),
+        npc("Margaret", "You take care now."),
+      ],
+      endsConversation: true,
+    },
+  ],
+};
+
+export const fridge: Scene = {
+  id: "fridge",
+  story: [
+    narration("You open the fridge. A few bottles are still cold."),
+    thought("A beer wouldn't hurt."),
+  ],
+  location: "Kitchen",
+  image: {
+    day: "./images/locations/home/fridge.png",
+    night: "./images/locations/home/fridge.png",
+  },
+  choices: [
+    {
+      label: "Take a beer",
+      action: "takeBeer",
+      nextScene: "fridge",
+      timeCost: 0,
+      itemToAdd: "Beer",
+    },
+    {
+      label: "Close the fridge",
+      action: "closeFridge",
+      nextScene: "kitchen",
+      timeCost: 0,
     },
   ],
 };
@@ -783,7 +848,6 @@ export const needleAndGroove: Scene = {
       nextScene: "needle-and-groove-inside",
       timeCost: 2,
     },
-    ...createTravelChoices("needle-and-groove"),
   ],
 };
 
@@ -893,7 +957,6 @@ export const gasStation: Scene = {
       nextScene: "gas-station-inside",
       timeCost: 2,
     },
-    ...createTravelChoices("gas-station"),
   ],
 };
 
@@ -960,7 +1023,6 @@ export const policeStation: Scene = {
       nextScene: "police-station-inside",
       timeCost: 2,
     },
-    ...createTravelChoices("police-station"),
   ],
 };
 
@@ -1066,7 +1128,6 @@ export const cementary: Scene = {
       nextScene: "cementary-inside",
       timeCost: 1,
     },
-    ...createTravelChoices("cementary"),
   ],
 };
 
@@ -1140,7 +1201,6 @@ export const hospital: Scene = {
       nextScene: "hospital-reception",
       timeCost: 2,
     },
-    ...createTravelChoices("hospital"),
   ],
 };
 
@@ -1175,6 +1235,89 @@ export const hospitalReception: Scene = {
       timeCost: 0,
     },
   ],
+};
+
+export const busStop: Scene = {
+  id: "bus-stop",
+  story: [
+    narration("You wait at the bus stop, watching the road for headlights."),
+    thought("The next bus should be here soon."),
+  ],
+  location: "Bus Stop",
+  image: {
+    day: "./images/Travel/busStop.png",
+    night: "./images/Travel/busStopNight.png",
+  },
+  choices: [
+    {
+      label: "Leave the bus stop",
+      action: "leaveBusStop",
+      nextScene: "front-yard",
+      timeCost: 0,
+    },
+  ],
+};
+
+// ----------------------------------------
+// DINER
+// ----------------------------------------
+
+export const diner: Scene = {
+  id: "diner",
+  story: [
+    narration("You arrive at the diner. The neon sign hums above the door."),
+    thought("A warm meal sounds good right now."),
+  ],
+  location: "Diner",
+  image: {
+    day: "./images/locations/diner/dinerDay.png",
+    night: "./images/locations/diner/dinerNight.png",
+  },
+  choices: [
+    {
+      label: "Go inside",
+      action: "enterDiner",
+      nextScene: "diner-inside",
+      timeCost: 1,
+    },
+  ],
+};
+
+export const dinerInside: Scene = {
+  id: "diner-inside",
+  story: [
+    narration("You step into the diner. The air smells of coffee and fried food."),
+    thought("Margaret is working the floor.", { from: 660, until: 900 }),
+    thought("The diner is quiet at this hour."),
+  ],
+  location: "Diner",
+  image: {
+    day: "./images/locations/diner/dinerInsideDay.png",
+    night: "./images/locations/diner/dinerInsideNight.png",
+  },
+  characters: [
+    {
+      name: "Margaret Sullivan",
+      from: 660,
+      until: 900,
+      image: "./images/locations/diner/maragetSullivanAtWork.png",
+    },
+  ],
+  choices: [
+    {
+      label: "Talk to Margaret",
+      action: "talkToMargaret",
+      nextScene: "diner-inside",
+      timeCost: 0,
+    },
+    {
+      label: "Go outside",
+      action: "leaveDiner",
+      nextScene: "diner",
+      timeCost: 0,
+    },
+  ],
+  conversation: margaretConversation,
 };
 
 export function getSceneThought(
@@ -1233,6 +1376,7 @@ export const scenes = {
   "back-yard": backYard,
   "living-room": livingRoom,
   kitchen,
+  fridge,
   bathroom,
   "ethan-room": ethanRoom,
   "ethan-room-desk": ethanRoomDesk,
@@ -1254,4 +1398,7 @@ export const scenes = {
   "cementary-backside": cementaryBackside,
   hospital,
   "hospital-reception": hospitalReception,
+  "bus-stop": busStop,
+  diner,
+  "diner-inside": dinerInside,
 };

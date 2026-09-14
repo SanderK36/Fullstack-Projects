@@ -4,7 +4,6 @@ import styles from "./ShopWindow.module.css";
 type ShopWindowProps = {
   shop: "gas-station" | "needle-groove";
   playerMoney: number;
-  inventory: string[];
   onPurchase: (item: string, price: number) => void;
   onClose: () => void;
 };
@@ -40,7 +39,6 @@ const shops = {
 export default function ShopWindow({
   shop,
   playerMoney,
-  inventory,
   onPurchase,
   onClose,
 }: ShopWindowProps) {
@@ -56,7 +54,6 @@ export default function ShopWindow({
 
         <div className={styles.items}>
           {currentShop.items.map((item) => {
-            const owned = inventory.includes(item.name);
             const canAfford = playerMoney >= item.price;
 
             return (
@@ -67,9 +64,9 @@ export default function ShopWindow({
                   <span>${item.price}</span>
                 </div>
                 <ActionButton
-                  label={owned ? "Owned" : `Buy for $${item.price}`}
+                  label={`Buy for $${item.price}`}
                   onClick={() => onPurchase(item.name, item.price)}
-                  disabled={owned || !canAfford}
+                  disabled={!canAfford}
                 />
               </div>
             );

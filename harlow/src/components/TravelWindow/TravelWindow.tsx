@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import ActionButton from "@/components/ActionButton/ActionButton";
 import styles from "./TravelWindow.module.css";
 
@@ -21,9 +19,10 @@ type TravelWindowProps = {
   onClose: () => void;
   onTravelStart: () => void;
   playerMoney: number;
+  initialMenu: Menu;
 };
 
-type Menu = "travel" | "bus" | "walk";
+type Menu = "bus" | "walk";
 
 export default function TravelWindow({
   walkingChoices,
@@ -32,9 +31,9 @@ export default function TravelWindow({
   onClose,
   onTravelStart,
   playerMoney,
+  initialMenu,
 }: TravelWindowProps) {
-  const [menu, setMenu] =
-    useState<Menu>("travel");
+  const menu = initialMenu;
 
   function isDisabled(choice: Choice) {
     return (
@@ -68,9 +67,7 @@ export default function TravelWindow({
 
             <ActionButton
               label="Back"
-              onClick={() =>
-                setMenu("travel")
-              }
+              onClick={onClose}
             />
           </div>
         </div>
@@ -98,9 +95,7 @@ export default function TravelWindow({
 
             <ActionButton
               label="Back"
-              onClick={() =>
-                setMenu("travel")
-              }
+              onClick={onClose}
             />
           </div>
         </div>
@@ -108,28 +103,4 @@ export default function TravelWindow({
     );
   }
 
-  return (
-    <div className={styles.overlay}>
-      <div className={styles.window}>
-        <h2>TRAVEL</h2>
-
-        <div className={styles.buttons}>
-          <ActionButton
-            label="Bus"
-            onClick={() => setMenu("bus")}
-          />
-
-          <ActionButton
-            label="Walk"
-            onClick={() => setMenu("walk")}
-          />
-
-          <ActionButton
-            label="Close"
-            onClick={onClose}
-          />
-        </div>
-      </div>
-    </div>
-  );
 }

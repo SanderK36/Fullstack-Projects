@@ -5,6 +5,32 @@ import {
   getNextMonth,
 } from "./utils";
 
+const weatherChances: Array<{
+  weather: GameState["weather"];
+  weight: number;
+}> = [
+  { weather: "Sunny", weight: 35 },
+  { weather: "Cloudy", weight: 30 },
+  { weather: "Rainy", weight: 18 },
+  { weather: "Heavy rain", weight: 11 },
+  { weather: "Thunderstorm", weight: 6 },
+];
+
+export function rollDailyWeather(): GameState["weather"] {
+  const roll = Math.random() * 100;
+  let threshold = 0;
+
+  for (const chance of weatherChances) {
+    threshold += chance.weight;
+
+    if (roll < threshold) {
+      return chance.weather;
+    }
+  }
+
+  return "Sunny";
+}
+
 export function advanceTime(
   currentTime: number,
   minutes: number
@@ -58,6 +84,7 @@ export function advanceGameTime(
       currentMonth: getNextMonth(
         gameState.currentMonth
       ),
+      weather: rollDailyWeather(),
     };
   }
 
@@ -68,5 +95,6 @@ export function advanceGameTime(
     dayOfWeek: getNextDay(
       gameState.dayOfWeek
     ),
+    weather: rollDailyWeather(),
   };
 }

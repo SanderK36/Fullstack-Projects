@@ -13,6 +13,7 @@ import {
   johnnyConversation,
   walterConversation,
   margaretConversation,
+  marleneConversation,
   getSceneThought,
   createWalkingChoices,
   createBusChoices,
@@ -234,9 +235,18 @@ export function useGame() {
       setConversationActive(true);
     }
 
-    // Talk to Marlene
-    if (choice.action === "talkToMarlene") {
+    if (choice.action === "goToMarleneCounter") {
       setMarleneActive(true);
+    }
+
+    if (choice.action === "leaveMarleneCounter") {
+      setMarleneActive(false);
+    }
+
+    if (choice.action === "talkToMarlene") {
+      setUsedConversationChoices([]);
+      setConversation(marleneConversation.opening);
+      setConversationActive(true);
     }
 
     if (choice.action === "talkToJohnny") {
@@ -390,6 +400,22 @@ export function useGame() {
           return false;
         }
         if ( choice.action === "talkToWalter" && ( gameState.time < 480 || gameState.time >= 1080)) {
+          return false;
+        }
+        if (choice.action === "goToMarleneCounter" && marleneActive) {
+          return false;
+        }
+        if (choice.action === "talkToMarlene" && !marleneActive) {
+          return false;
+        }
+        if (choice.action === "leaveMarleneCounter" && !marleneActive) {
+          return false;
+        }
+        if (
+          marleneActive &&
+          (choice.action === "leaveHospital" ||
+            choice.action === "goToHospitalRoom")
+        ) {
           return false;
         }
         if (choice.action === "talkToMargaret" && (gameState.time < 660 || gameState.time >= 900)) {

@@ -1,4 +1,4 @@
-import type { Location } from "./types";
+import type { Location, Weather } from "./types";
 import type { Choice } from "./choices";
 
 import {
@@ -31,6 +31,7 @@ export type Scene = {
   image: {
     day: string;
     night: string;
+    weather?: Partial<Record<Weather, string>>;
   };
   choices: Choice[];
   conversation?: Conversation;
@@ -621,6 +622,29 @@ export const margaretConversation: Conversation = {
   ],
 };
 
+export const marleneConversation: Conversation = {
+  opening: [
+    npc("Marlene", "Hey, Ethan. What can I do for you?"),
+  ],
+  choices: [
+    {
+      label: "How's your shift going?",
+      response: [
+        ethan("How's your shift going?"),
+        npc("Marlene", "Quiet for now. Let's hope it stays that way."),
+      ],
+    },
+    {
+      label: "Nevermind.",
+      response: [
+        ethan("Nevermind."),
+        npc("Marlene", "Alright. Let me know if you need anything."),
+      ],
+      endsConversation: true,
+    },
+  ],
+};
+
 export const fridge: Scene = {
   id: "fridge",
   story: [
@@ -849,6 +873,11 @@ export const needleAndGroove: Scene = {
   image: {
     day: "./images/locations/NeedleGroove/vinylShopDay.jpg",
     night: "./images/locations/NeedleGroove/vinylShopNight.jpg",
+    weather: {
+      "Rainy": "./images/locations/NeedleGroove/vinylShopRainy.png",
+      "Heavy rain": "./images/locations/NeedleGroove/vinylShopRainy.png",
+      "Thunderstorm": "./images/locations/NeedleGroove/vinylShopRainy.png",
+    },
   },
   choices: [
     {
@@ -1024,6 +1053,11 @@ export const policeStation: Scene = {
   image: {
     day: "./images/locations/police_station/police_station_day.jpg",
     night: "./images/locations/police_station/police_station_night.jpg",
+    weather: {
+      "Rainy": "./images/locations/police_station/policeStationOutsideRainy.png",
+      "Heavy rain": "./images/locations/police_station/policeStationOutsideRainy.png",
+      "Thunderstorm": "./images/locations/police_station/policeStationOutsideRainy.png",
+    },
   },
   choices: [
     {
@@ -1129,6 +1163,11 @@ export const cementary: Scene = {
   image: {
     day: "./images/locations/cementary/cementaryDay.png",
     night: "./images/locations/cementary/cementaryNight.png",
+    weather: {
+      "Rainy": "./images/locations/Cementary/cementaryRain.png",
+      "Heavy rain": "./images/locations/Cementary/cementaryRain.png",
+      "Thunderstorm": "./images/locations/Cementary/cementaryLightning.png",
+    },
   },
   choices: [
     {
@@ -1177,6 +1216,11 @@ export const cementaryBackside: Scene = {
   image: {
     day: "./images/locations/cementary/cementaryBacksideDay.png",
     night: "./images/locations/cementary/cementaryBacksideNight.png",
+    weather: {
+      "Rainy": "./images/locations/Cementary/cementaryBacksideRain.png",
+      "Heavy rain": "./images/locations/Cementary/cementaryBacksideRain.png",
+      "Thunderstorm": "./images/locations/Cementary/cementaryBacksideLightning.png",
+    },
   },
   choices: [
     {
@@ -1230,7 +1274,14 @@ export const hospitalReception: Scene = {
       image: "./images/locations/hospital/marleneWorking.png",
     },
   ],
+  conversation: marleneConversation,
   choices: [
+    {
+      label: "Go to the counter",
+      action: "goToMarleneCounter",
+      nextScene: "hospital-reception",
+      timeCost: 0,
+    },
     {
       label: "Talk to Marlene",
       action: "talkToMarlene",
@@ -1238,10 +1289,43 @@ export const hospitalReception: Scene = {
       timeCost: 0,
     },
     {
+      label: "Go back",
+      action: "leaveMarleneCounter",
+      nextScene: "hospital-reception",
+      timeCost: 0,
+    },
+    {
+      label: "Go to Room 312",
+      action: "goToHospitalRoom",
+      nextScene: "hospital-room-312",
+      timeCost: 1,
+    },
+    {
       label: "Go outside",
       action: "leaveHospital",
       nextScene: "hospital",
       timeCost: 0,
+    },
+  ],
+};
+
+export const hospitalRoom312: Scene = {
+  id: "hospital-room-312",
+  story: [
+    narration("You step into Room 312."),
+    thought("The room is still and quiet."),
+  ],
+  location: "Hospital",
+  image: {
+    day: "./images/locations/hospital/hospitalRoomDay.png",
+    night: "./images/locations/hospital/hospitalRoomNight.png",
+  },
+  choices: [
+    {
+      label: "Go back to reception",
+      action: "returnToHospitalReception",
+      nextScene: "hospital-reception",
+      timeCost: 1,
     },
   ],
 };
@@ -1428,6 +1512,7 @@ export const scenes = {
   "cementary-backside": cementaryBackside,
   hospital,
   "hospital-reception": hospitalReception,
+  "hospital-room-312": hospitalRoom312,
   "bus-stop": busStop,
   diner,
   "diner-inside": dinerInside,

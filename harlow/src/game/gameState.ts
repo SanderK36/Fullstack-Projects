@@ -5,7 +5,7 @@ const gameState: GameState = {
     dayOfWeek: "Monday",
     time: 600, // Minutter siden midnatt
     location: "Home",
-    weather: "Sunny",
+    weather: "Rainy",
     currentMonth: "October",
 };
 

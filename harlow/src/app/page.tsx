@@ -62,6 +62,12 @@ export default function Home() {
   ];
 
   const isInsideHome = homeSceneIds.includes(currentScene.id);
+  const sceneImage =
+    activeCharacter?.image ??
+    currentScene.image.weather?.[gameState.weather] ??
+    (isNightTime(gameState.time)
+      ? currentScene.image.night
+      : currentScene.image.day);
 
   return (
     <main className="game">
@@ -77,12 +83,8 @@ export default function Home() {
         />
 
         <img
-          src={
-            activeCharacter?.image ??
-            (isNightTime(gameState.time)
-              ? currentScene.image.night
-              : currentScene.image.day)
-          }
+          key={sceneImage}
+          src={sceneImage}
           alt=""
           className="scene-image"
         />
@@ -92,6 +94,8 @@ export default function Home() {
             (entry) =>
               entry.type !== "thought"
           )}
+          title="Scene"
+          variant="narration"
         />
 
         {conversationActive && conversation.length > 0 && (
@@ -184,9 +188,8 @@ export default function Home() {
           />
         )}
 
-        {/* Temporary testing buttons */}
-
-        <div>
+        <div className="waitControls">
+          <span>Pass time</span>
           <ActionButton
             label="Wait 1 min"
             onClick={() => wait(1)}

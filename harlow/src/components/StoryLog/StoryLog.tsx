@@ -13,7 +13,7 @@ function getPortrait(character: string) {
       return "/images/characters/LindaParker/LindaParker.png";
 
     case "marlene":
-      return "/images/characters/Marlene/marlene.png";
+      return "/images/characters/MarleneWhitaker/marleneWhitaker.png";
 
     case "johnny":
       return "/images/characters/johnnyDalton/johnnyDalton.png";
@@ -32,13 +32,13 @@ function getPortrait(character: string) {
 type StoryLogProps = {
   entries: StoryEntry[];
   title?: string;
-  variant?: "story" | "conversation";
+  variant?: "narration" | "conversation";
 };
 
 export default function StoryLog({
   entries,
   title,
-  variant = "story",
+  variant = "narration",
 }: StoryLogProps) {
   const logRef = useRef<HTMLElement>(null);
 
@@ -57,7 +57,9 @@ export default function StoryLog({
     <section
       ref={logRef}
       className={`${styles.storyLog} ${
-        variant === "conversation" ? styles.conversationLog : ""
+        variant === "conversation"
+          ? styles.conversationLog
+          : styles.narrationLog
       }`}
       aria-live={variant === "conversation" ? "polite" : undefined}
     >

@@ -1,28 +1,139 @@
-body {
-  margin: 0;
-  background: #080808;
-  color: #d8d5d0;
-  font-family: Arial, Helvetica, sans-serif;
+:root {
+  --bg: #080808;
+  --surface: #151010;
+  --surface-raised: #211515;
+  --line: rgba(239, 221, 221, 0.14);
+  --line-strong: rgba(239, 221, 221, 0.28);
+  --text: #f5eeee;
+  --muted: #bba9a9;
+  --accent: #a91624;
+  --accent-bright: #ed5562;
+  --gold: #d93443;
 }
 
-.game {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 40px 20px;
+* { box-sizing: border-box; }
+
+body {
+  position: relative;
+  min-width: 320px;
+  margin: 0;
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(126, 12, 25, 0.2), transparent 31rem),
+    radial-gradient(circle at 88% 18%, rgba(78, 5, 12, 0.2), transparent 26rem),
+    var(--bg);
 }
+
+body::before,
+body::after {
+  position: fixed;
+  z-index: 0;
+  width: 110vw;
+  height: 70vw;
+  min-width: 520px;
+  min-height: 420px;
+  border-radius: 50%;
+  pointer-events: none;
+  content: "";
+  filter: blur(68px);
+  opacity: .54;
+}
+
+body::before {
+  top: 4vh;
+  left: -110vw;
+  background:
+    radial-gradient(ellipse at 23% 48%, rgba(190, 18, 37, .88), transparent 38%),
+    radial-gradient(ellipse at 74% 35%, rgba(128, 9, 23, .76), transparent 40%);
+  animation: fogCrossRight 32s linear infinite;
+}
+
+body::after {
+  right: -110vw;
+  bottom: -8vh;
+  background:
+    radial-gradient(ellipse at 28% 62%, rgba(105, 6, 18, .9), transparent 40%),
+    radial-gradient(ellipse at 78% 44%, rgba(166, 12, 29, .8), transparent 38%);
+  animation: fogCrossLeft 38s linear infinite;
+}
+
+button { font-family: inherit; }
+
+.game { position: relative; z-index: 1; width: min(1240px, 100%); margin: 0 auto; padding: clamp(16px, 3vw, 42px); }
 
 .game-panel {
-  background: #111111;
-  border: 1px solid #292929;
-  padding: 40px;
-  border-radius: 4px;
+  overflow: hidden;
+  padding: clamp(20px, 4vw, 48px);
+  background: linear-gradient(145deg, rgba(31, 17, 18, 0.97), rgba(12, 10, 10, 0.98));
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.35);
+}
+
+.game-panel > h1 {
+  margin: 0 0 2px;
+  color: var(--text);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(32px, 6vw, 54px);
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-shadow: 0 8px 24px rgba(0, 0, 0, 0.42);
 }
 
 .scene-image {
   display: block;
-  width: 85%;
+  width: min(100%, 900px);
   height: auto;
-  margin: 25px auto 0;
-  border: 1px solid #292929;
+  margin: 28px auto 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.32);
+  animation: sceneImageEnter 420ms ease-out;
 }
 
+.waitControls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  max-width: 760px;
+  margin: 14px auto 0;
+}
+
+.waitControls > span {
+  margin-right: 4px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.waitControls button {
+  min-height: 32px;
+  padding: 7px 11px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.waitControls button::after { display: none; }
+
+@keyframes sceneImageEnter { from { opacity: 0; transform: scale(0.985); } to { opacity: 1; transform: scale(1); } }
+@keyframes fogCrossRight { from { transform: translate3d(-4vw, -3vh, 0) scale(.92); } to { transform: translate3d(210vw, 8vh, 0) scale(1.08); } }
+@keyframes fogCrossLeft { from { transform: translate3d(5vw, 5vh, 0) scale(1.08); } to { transform: translate3d(-210vw, -7vh, 0) scale(.9); } }
+
+@media (max-width: 640px) {
+  .game { padding: 0; }
+  .game-panel { min-height: 100vh; border-radius: 0; }
+  .game-panel > h1 { font-size: 32px; }
+  .scene-image { margin-top: 20px; border-radius: 10px; }
+  .waitControls > span { width: 100%; margin-right: 0; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; }
+  .scene-image, body::before, body::after { animation: none; }
+}

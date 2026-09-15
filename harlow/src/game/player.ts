@@ -9,12 +9,12 @@ const player: Player = {
     athletics: 1,
     strength: 1,
 
-    health: 100,
+    health: 55,
     maxHealth: 100,
-    stamina: 150,
+    stamina: 86,
     maxStamina: 150,
 
-    fear: 0,
+    fear: 36,
 
     money: 10,
 

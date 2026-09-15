@@ -24,7 +24,10 @@ export default function CharacterLine({
       />
 
       <div className={styles.text}>
-        <strong>ETHAN</strong>
+        <strong>
+          <span>ETHAN</span>
+          <span className={styles.label}>Inner thought</span>
+        </strong>
 
         <div className={styles.thoughtRow}>
           <p>{text}</p>

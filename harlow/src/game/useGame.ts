@@ -14,6 +14,7 @@ import {
   walterConversation,
   margaretConversation,
   marleneConversation,
+  earlConversation,
   getSceneThought,
   createWalkingChoices,
   createBusChoices,
@@ -267,6 +268,12 @@ export function useGame() {
       setConversationActive(true);
     }
 
+    if (choice.action === "talkToEarl") {
+      setUsedConversationChoices([]);
+      setConversation(earlConversation.opening);
+      setConversationActive(true);
+    }
+
     if (choice.action === "openShop") {
       setActiveShop("gas-station");
       return;
@@ -419,6 +426,9 @@ export function useGame() {
           return false;
         }
         if (choice.action === "talkToMargaret" && (gameState.time < 660 || gameState.time >= 900)) {
+          return false;
+        }
+        if (choice.action === "talkToEarl" && (gameState.time < 480 || gameState.time >= 1020)) {
           return false;
         }
         if (choice.action === "pickUpCigarettes" && deskCigarettesPickedUp) {

@@ -24,6 +24,9 @@ function getPortrait(character: string) {
     case "margaret":
       return "/images/characters/MargaretSullivan/maragetSullivan.png";
 
+    case "earl":
+      return "/images/characters/EarlGivens/EarlGivens.png";
+
     default:
       return "/images/characters/EthanParker/EthanParker.jpg";
   }

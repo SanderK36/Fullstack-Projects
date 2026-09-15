@@ -44,6 +44,7 @@ const exteriorDestinations = [
   { id: "gas-station", label: "the gas station", walkMinutes: 30 },
   { id: "police-station", label: "the police station", walkMinutes: 30 },
   { id: "hospital", label: "the hospital", walkMinutes: 35 },
+  { id: "motel", label: "the motel", walkMinutes: 40 },
   { id: "cementary", label: "the cemetery", walkMinutes: 35 },
   { id: "diner", label: "the diner", walkMinutes: 25 },
 ];
@@ -1309,6 +1310,29 @@ export const hospitalReception: Scene = {
   ],
 };
 
+export const earlConversation: Conversation = {
+  opening: [
+    npc("Earl", "Afternoon. Looking for a room?"),
+  ],
+  choices: [
+    {
+      label: "Just looking around.",
+      response: [
+        ethan("Just looking around."),
+        npc("Earl", "No problem. Let me know if you need anything."),
+      ],
+    },
+    {
+      label: "Nevermind.",
+      response: [
+        ethan("Nevermind."),
+        npc("Earl", "Alright then."),
+      ],
+      endsConversation: true,
+    },
+  ],
+};
+
 export const hospitalRoom312: Scene = {
   id: "hospital-room-312",
   story: [
@@ -1366,6 +1390,71 @@ export const ethanRoomDeskEmpty: Scene = {
       label: "Step away from the desk",
       action: "leaveDesk",
       nextScene: "ethan-room",
+      timeCost: 0,
+    },
+  ],
+};
+
+// ----------------------------------------
+// MOTEL
+// ----------------------------------------
+
+export const motel: Scene = {
+  id: "motel",
+  story: [
+    narration("You arrive at the roadside motel."),
+    thought("The vacancy sign flickers above the office."),
+  ],
+  location: "Motel",
+  image: {
+    day: "./images/locations/motel/motelOutsideDay.png",
+    night: "./images/locations/motel/motelOutsideNight.png",
+    weather: {
+      "Thunderstorm": "./images/locations/motel/motelOutsideThunder.png",
+    },
+  },
+  choices: [
+    {
+      label: "Go inside",
+      action: "enterMotel",
+      nextScene: "motel-inside",
+      timeCost: 1,
+    },
+  ],
+};
+
+export const motelInside: Scene = {
+  id: "motel-inside",
+  story: [
+    narration("You step into the motel reception."),
+    thought("Earl is working the front desk.", { from: 480, until: 1020 }),
+    thought("The front desk is unattended."),
+  ],
+  location: "Motel",
+  image: {
+    day: "./images/locations/motel/motelInsideDay.png",
+    night: "./images/locations/motel/MotelInsideNight.png",
+  },
+  characters: [
+    {
+      name: "Earl",
+      from: 480,
+      until: 1020,
+      image: "./images/locations/motel/motelInsideEarlWorking.png",
+    },
+  ],
+  conversation: earlConversation,
+  choices: [
+    {
+      label: "Talk to Earl",
+      action: "talkToEarl",
+      nextScene: "motel-inside",
+      timeCost: 0,
+    },
+    {
+      label: "Go outside",
+      action: "leaveMotel",
+      nextScene: "motel",
       timeCost: 0,
     },
   ],
@@ -1514,6 +1603,8 @@ export const scenes = {
   "hospital-reception": hospitalReception,
   "hospital-room-312": hospitalRoom312,
   "bus-stop": busStop,
+  motel,
+  "motel-inside": motelInside,
   diner,
   "diner-inside": dinerInside,
 };

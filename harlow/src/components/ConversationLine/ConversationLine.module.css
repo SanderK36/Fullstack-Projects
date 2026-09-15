@@ -3,7 +3,7 @@
   align-items: flex-start;
   width: 100%;
   gap: 15px;
-  margin: 20px 0;
+  margin: 14px 0;
   animation: conversationAppear 0.4s ease-out;
 }
 
@@ -16,25 +16,28 @@
   flex-shrink: 0;
 }
 
-.text {
-  padding-top: 4px;
-  max-width: 600px;
+.bubble {
+  max-width: min(600px, calc(100% - 90px));
+  padding: 13px 16px;
+  border: 1px solid #353535;
+  background: #151515;
+  box-shadow: inset 3px 0 0 #8f1111;
 }
 
-.text strong {
+.bubble strong {
   display: block;
-  margin-bottom: 8px;
-  color: #777777;
+  margin-bottom: 6px;
+  color: #b7b1a9;
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 1.5px;
 }
 
-.text p {
+.bubble p {
   margin: 0;
   color: #d8d5d0;
   font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 /* ETHAN — LEFT */
@@ -43,25 +46,28 @@
   justify-content: flex-start;
 }
 
-.ethan .text {
+.ethan .bubble {
   text-align: left;
 }
 
 /* NPC — RIGHT */
 
 .other {
-  justify-content: flex-start;
+  justify-content: flex-end;
   flex-direction: row-reverse;
 }
 
-.other .text {
+.other .bubble {
+  margin-left: auto;
   text-align: right;
+  background: #101010;
+  box-shadow: inset -3px 0 0 #777777;
 }
 
 @keyframes conversationAppear {
   from {
     opacity: 0;
-    transform: translateX(-15px);
+    transform: translateY(8px);
   }
 
   to {

@@ -47,6 +47,15 @@ const exteriorDestinations = [
   { id: "diner", label: "the diner", walkMinutes: 25 },
 ];
 
+export function isExteriorScene(sceneId: string): boolean {
+  return (
+    sceneId === "bus-stop" ||
+    exteriorDestinations.some(
+      (destination) => destination.id === sceneId
+    )
+  );
+}
+
 export function createWalkingChoices(originId: string): Choice[] {
   return exteriorDestinations
     .filter((destination) => destination.id !== originId)
@@ -731,14 +740,14 @@ export const ethanRoomDesk: Scene = {
   ],
   location: "Ethan's room",
   image: {
-    day: "./images/locations/home/ethanRoomDay.png",
-    night: "./images/locations/home/ethanRoomNight.png",
+    day: "./images/locations/home/ethanDeskDay.png",
+    night: "./images/locations/home/ethanDeskNight.png",
   },
   choices: [
     {
       label: "Pick up cigarettes",
       action: "pickUpCigarettes",
-      nextScene: "ethan-room",
+      nextScene: "ethan-room-desk-empty",
       timeCost: 0,
       itemToAdd: "Cigarettes",
     },
@@ -1258,6 +1267,26 @@ export const busStop: Scene = {
   ],
 };
 
+export const ethanRoomDeskEmpty: Scene = {
+  id: "ethan-room-desk-empty",
+  story: [
+    narration("You pick up the pack of cigarettes from your desk."),
+  ],
+  location: "Ethan's room",
+  image: {
+    day: "./images/locations/home/ethanDeskEmptyDay.png",
+    night: "./images/locations/home/ethanDeskEmptyNight.png",
+  },
+  choices: [
+    {
+      label: "Step away from the desk",
+      action: "leaveDesk",
+      nextScene: "ethan-room",
+      timeCost: 0,
+    },
+  ],
+};
+
 // ----------------------------------------
 // DINER
 // ----------------------------------------
@@ -1380,6 +1409,7 @@ export const scenes = {
   bathroom,
   "ethan-room": ethanRoom,
   "ethan-room-desk": ethanRoomDesk,
+  "ethan-room-desk-empty": ethanRoomDeskEmpty,
   "mom-room": momRoom,
   "emily-room": emilyRoom,
   attic,

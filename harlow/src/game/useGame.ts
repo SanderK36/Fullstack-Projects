@@ -53,6 +53,9 @@ export function useGame() {
   const [conversationActive, setConversationActive] =
     useState(false);
 
+  const [usedConversationChoices, setUsedConversationChoices] =
+    useState<string[]>([]);
+
   const [storyText, setStoryText] =
     useState<StoryEntry[]>(
       hallway.story.filter(
@@ -85,6 +88,9 @@ export function useGame() {
     useState("front-yard");
 
   const [marleneActive, setMarleneActive] =
+    useState(false);
+
+  const [deskCigarettesPickedUp, setDeskCigarettesPickedUp] =
     useState(false);
 
   function handleAdvanceTime(minutes: number) {
@@ -191,11 +197,19 @@ export function useGame() {
         ]
       );
 
+      if (!choice.endsConversation) {
+        setUsedConversationChoices((previousChoices) => [
+          ...previousChoices,
+          choice.label,
+        ]);
+      }
+
       if (choice.endsConversation) {
         setTimeout(() => {
           setConversation([]);
           setConversationActive(false);
-        }, 2000);
+          setUsedConversationChoices([]);
+        }, 1200);
       }
 
       return;
@@ -212,6 +226,7 @@ export function useGame() {
 
     // Start a conversation with Mom
     if (choice.action === "talkToMom") {
+      setUsedConversationChoices([]);
       setConversation(
         momConversation.opening
       );
@@ -225,16 +240,19 @@ export function useGame() {
     }
 
     if (choice.action === "talkToJohnny") {
+      setUsedConversationChoices([]);
       setConversation(johnnyConversation.opening);
       setConversationActive(true);
     }
     
     if (choice.action === "talkToWalter") {
+      setUsedConversationChoices([]);
       setConversation(walterConversation.opening);
       setConversationActive(true);
     }
 
     if (choice.action === "talkToMargaret") {
+      setUsedConversationChoices([]);
       setConversation(margaretConversation.opening);
       setConversationActive(true);
     }
@@ -316,8 +334,17 @@ export function useGame() {
         choice.timeCost
       );
 
+    if (choice.action === "pickUpCigarettes") {
+      setDeskCigarettesPickedUp(true);
+    }
+
+    const nextSceneId =
+      choice.action === "lookAtDesk" && deskCigarettesPickedUp
+        ? "ethan-room-desk-empty"
+        : choice.nextScene;
+
     setCurrentSceneById(
-      choice.nextScene,
+      nextSceneId,
       newGameState.time
     );
 
@@ -368,6 +395,9 @@ export function useGame() {
         if (choice.action === "talkToMargaret" && (gameState.time < 660 || gameState.time >= 900)) {
           return false;
         }
+        if (choice.action === "pickUpCigarettes" && deskCigarettesPickedUp) {
+          return false;
+        }
         return true;
       }
     );
@@ -375,7 +405,11 @@ export function useGame() {
   const busChoices = createBusChoices();
 
   const conversationChoices =
-    currentScene.conversation?.choices ?? [];
+    (currentScene.conversation?.choices ?? []).filter(
+      (choice) =>
+        choice.endsConversation ||
+        !usedConversationChoices.includes(choice.label)
+    );
 
   const activeChoices = conversationActive
     ? conversationChoices

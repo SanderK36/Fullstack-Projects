@@ -10,6 +10,7 @@ type ActionListProps = {
   onBus: () => void;
   onGoToBusStop: () => void;
   isBusStop: boolean;
+  canTravel: boolean;
   playerMoney: number;
   layout?: "default" | "home";
 };
@@ -22,6 +23,7 @@ export default function ActionList({
   onBus,
   onGoToBusStop,
   isBusStop,
+  canTravel,
   playerMoney,
   layout = "default",
 }: ActionListProps) {
@@ -59,12 +61,12 @@ export default function ActionList({
           />
         ))}
 
-        {!isConversation && isBusStop ? (
+        {!isConversation && canTravel && isBusStop ? (
           <ActionButton
             label="Take the bus"
             onClick={onBus}
           />
-        ) : !isConversation ? (
+        ) : !isConversation && canTravel ? (
           <>
             <ActionButton label="Walk" onClick={onWalk} />
             <ActionButton

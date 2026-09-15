@@ -15,6 +15,7 @@ import ShopWindow from "@/components/ShopWindow/ShopWindow";
 
 import { isNightTime } from "@/game/utils";
 import { useGame } from "@/game/useGame";
+import { isExteriorScene } from "@/game/scenes";
 
 export default function Home() {
   const {
@@ -24,6 +25,7 @@ export default function Home() {
     currentThought,
     currentEffects,
     conversation,
+    conversationActive,
     activeChoices,
     activeCharacter,
     showStats,
@@ -50,6 +52,8 @@ export default function Home() {
     "kitchen",
     "bathroom",
     "ethan-room",
+    "ethan-room-desk",
+    "ethan-room-desk-empty",
     "mom-room",
     "emily-room",
     "attic",
@@ -90,9 +94,11 @@ export default function Home() {
           )}
         />
 
-        {conversation.length > 0 && (
+        {conversationActive && conversation.length > 0 && (
           <StoryLog
             entries={conversation}
+            title="Conversation"
+            variant="conversation"
           />
         )}
 
@@ -140,7 +146,11 @@ export default function Home() {
         )}
 
         <ActionList
-          title="What do you want to do?"
+          title={
+            conversationActive
+              ? "What do you say?"
+              : "What do you want to do?"
+          }
           choices={activeChoices}
           onChoice={handleChoice}
           onWalk={() => {
@@ -153,6 +163,7 @@ export default function Home() {
           }}
           onGoToBusStop={goToBusStop}
           isBusStop={currentScene.id === "bus-stop"}
+          canTravel={isExteriorScene(currentScene.id)}
           playerMoney={playerState.money}
           layout={isInsideHome ? "home" : "default"}
         />

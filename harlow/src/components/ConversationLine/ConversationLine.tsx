@@ -28,7 +28,7 @@ export default function ConversationLine({
         className={styles.portrait}
       />
 
-      <div className={styles.text}>
+      <div className={styles.bubble}>
         <strong>{character}</strong>
         <p>{text}</p>
       </div>

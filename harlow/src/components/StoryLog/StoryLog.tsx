@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 import styles from "./StoryLog.module.css";
 import type { StoryEntry } from "@/game/story";
 import ConversationLine from "@/components/ConversationLine/ConversationLine";
@@ -19,6 +21,9 @@ function getPortrait(character: string) {
     case "walter":
       return "/images/characters/WalterHarrington/WalterHarrington.jpg";
 
+    case "margaret":
+      return "/images/characters/MargaretSullivan/maragetSullivan.png";
+
     default:
       return "/images/characters/EthanParker/EthanParker.jpg";
   }
@@ -26,13 +31,37 @@ function getPortrait(character: string) {
 
 type StoryLogProps = {
   entries: StoryEntry[];
+  title?: string;
+  variant?: "story" | "conversation";
 };
 
 export default function StoryLog({
   entries,
+  title,
+  variant = "story",
 }: StoryLogProps) {
+  const logRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (variant !== "conversation" || !logRef.current) {
+      return;
+    }
+
+    logRef.current.scrollTo({
+      top: logRef.current.scrollHeight,
+      behavior: "smooth",
+    });
+  }, [entries, variant]);
+
   return (
-    <div className={styles.storyLog}>
+    <section
+      ref={logRef}
+      className={`${styles.storyLog} ${
+        variant === "conversation" ? styles.conversationLog : ""
+      }`}
+      aria-live={variant === "conversation" ? "polite" : undefined}
+    >
+      {title && <h2 className={styles.title}>{title}</h2>}
       {entries.map((entry, index) => {
         if (entry.type === "thought") {
           return null;
@@ -100,6 +129,6 @@ export default function StoryLog({
           </p>
         );
       })}
-    </div>
+    </section>
   );
 }

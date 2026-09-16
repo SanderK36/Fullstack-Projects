@@ -18,7 +18,7 @@ const player: Player = {
 
   money: 10,
 
-  inventory: ["House key", "Flashlight", "Knife"],
+  inventory: ["House key"],
 };
 
 export default player;

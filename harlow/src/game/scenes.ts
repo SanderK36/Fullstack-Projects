@@ -11,12 +11,14 @@ import {
 } from "./story";
 
 export type SceneThought = {
+  /** Show this thought only while game time is within this range (in minutes). */
   from?: number;
   until?: number;
   text: string;
 };
 
 export type SceneCharacter = {
+  /** NPC overlay shown in this scene. Add their portrait path in `image`. */
   name: string;
   from?: number;
   until?: number;
@@ -24,6 +26,11 @@ export type SceneCharacter = {
 };
 
 export type Scene = {
+  /**
+   * Blueprint for one playable location/state.
+   * To add a scene: create a Scene object, add it to `scenes` below, then point
+   * another choice's `nextScene` at its id. Use image day/night paths from /public.
+   */
   id: string;
   story: StoryEntry[];
   thoughts?: SceneThought[];
@@ -38,6 +45,8 @@ export type Scene = {
   characters?: SceneCharacter[];
 };
 
+// Destinations listed here automatically appear in the walk and bus menus.
+// Add an exterior scene here after it has been added to `scenes` below.
 const exteriorDestinations = [
   { id: "front-yard", label: "Home", walkMinutes: 30 },
   { id: "needle-and-groove", label: "Needle & Groove", walkMinutes: 30 },
@@ -47,9 +56,11 @@ const exteriorDestinations = [
   { id: "motel", label: "the motel", walkMinutes: 40 },
   { id: "cementary", label: "the cemetery", walkMinutes: 35 },
   { id: "diner", label: "the diner", walkMinutes: 25 },
+  { id: "scrapyard", label: "the scrapyard", walkMinutes: 40 },
 ];
 
 export function isExteriorScene(sceneId: string): boolean {
+  // Used by the page to decide whether to show travel controls.
   return (
     sceneId === "bus-stop" ||
     exteriorDestinations.some(
@@ -59,6 +70,7 @@ export function isExteriorScene(sceneId: string): boolean {
 }
 
 export function createWalkingChoices(originId: string): Choice[] {
+  // Generates choices instead of repeating travel links in every exterior scene.
   return exteriorDestinations
     .filter((destination) => destination.id !== originId)
     .map((destination) => ({
@@ -71,6 +83,7 @@ export function createWalkingChoices(originId: string): Choice[] {
 }
 
 export function createBusChoices(): Choice[] {
+  // Bus pricing and travel time are defined here for every destination.
   return exteriorDestinations.map((destination) => ({
     label: `Take the bus to ${destination.label} ($7 & 10min)`,
     action: `takeBusTo${destination.id}`,
@@ -87,6 +100,8 @@ export function createBusChoices(): Choice[] {
 // ----------------------------------------
 
 export const hallway: Scene = {
+  // Scene objects are data first: narration, art, available choices, and optional
+  // conversations/NPCs. Copy this shape when creating a new location.
   id: "hallway",
 
   story: [
@@ -502,6 +517,13 @@ export const livingRoom: Scene = {
 
   choices: [
     {
+      label: "Relax on the couch",
+      action: "relaxOnCouch",
+      nextScene: "living-room-relaxing",
+      timeCost: 15,
+      effects: { stamina: 15 },
+    },
+    {
       label: "Talk to mom",
       action: "talkToMom",
       nextScene: "living-room",
@@ -534,6 +556,27 @@ export const livingRoom: Scene = {
   ],
 
   conversation: momConversation,
+};
+
+export const livingRoomRelaxing: Scene = {
+  id: "living-room-relaxing",
+  story: [
+    narration("You sink into the couch and let the noise of the day fade away."),
+    thought("I needed that."),
+  ],
+  location: "Living room",
+  image: {
+    day: "./images/characters/EthanParker/EthanRelaxing.png",
+    night: "./images/characters/EthanParker/EthanRelaxing.png",
+  },
+  choices: [
+    {
+      label: "Get up",
+      action: "stopRelaxing",
+      nextScene: "living-room",
+      timeCost: 0,
+    },
+  ],
 };
 
 // ----------------------------------------
@@ -625,21 +668,21 @@ export const margaretConversation: Conversation = {
 
 export const marleneConversation: Conversation = {
   opening: [
-    npc("Marlene", "Hey, Ethan. What can I do for you?"),
+    npc("Marlene", "Ethan. Make it quick, I'm in the middle of a shift."),
   ],
   choices: [
     {
       label: "How's your shift going?",
       response: [
         ethan("How's your shift going?"),
-        npc("Marlene", "Quiet for now. Let's hope it stays that way."),
+        npc("Marlene", "Busy enough. That's all you need to know."),
       ],
     },
     {
       label: "Nevermind.",
       response: [
         ethan("Nevermind."),
-        npc("Marlene", "Alright. Let me know if you need anything."),
+        npc("Marlene", "Fine. Try not to make more work for me."),
       ],
       endsConversation: true,
     },
@@ -852,7 +895,63 @@ export const garage: Scene = {
     day: "./images/locations/home/garage.png",
     night: "./images/locations/home/garage.png",
   },
-  choices: [returnToHallway],
+  choices: [
+    {
+      label: "Look at the bench",
+      action: "lookAtGarageBench",
+      nextScene: "garage-bench",
+      timeCost: 0,
+    },
+    returnToHallway,
+  ],
+};
+
+export const garageBench: Scene = {
+  id: "garage-bench",
+  story: [
+    narration("The workbench is covered in old tools and loose bolts."),
+    thought("A flashlight is sitting near the edge."),
+  ],
+  location: "Garage",
+  image: {
+    day: "./images/locations/home/garageBenchFlashlight.png",
+    night: "./images/locations/home/garageBenchFlashlight.png",
+  },
+  choices: [
+    {
+      label: "Pick up flashlight",
+      action: "pickUpGarageFlashlight",
+      nextScene: "garage-bench-empty",
+      timeCost: 0,
+      itemToAdd: "Flashlight",
+    },
+    {
+      label: "Leave it",
+      action: "leaveGarageBench",
+      nextScene: "garage",
+      timeCost: 0,
+    },
+  ],
+};
+
+export const garageBenchEmpty: Scene = {
+  id: "garage-bench-empty",
+  story: [
+    narration("The workbench is still cluttered, but the flashlight is gone."),
+  ],
+  location: "Garage",
+  image: {
+    day: "./images/locations/home/garageBench.png",
+    night: "./images/locations/home/garageBench.png",
+  },
+  choices: [
+    {
+      label: "Step away from the bench",
+      action: "leaveGarageBench",
+      nextScene: "garage",
+      timeCost: 0,
+    },
+  ],
 };
 
 // ----------------------------------------
@@ -1035,6 +1134,106 @@ export const gasStationInside: Scene = {
       label: "Go outside",
       action: "leaveGasStation",
       nextScene: "gas-station",
+      timeCost: 0,
+    },
+  ],
+};
+
+// ----------------------------------------
+// SCRAPYARD
+// ----------------------------------------
+
+export const scrapyard: Scene = {
+  id: "scrapyard",
+  story: [
+    narration("You arrive at the scrapyard on the edge of town."),
+    thought("The piles of rusted metal seem to go on forever."),
+  ],
+  location: "Scrapyard",
+  image: {
+    day: "./images/locations/scrapyard/ScrapyardDay.png",
+    night: "./images/locations/scrapyard/Scrapyardnight.png",
+  },
+  choices: [
+    {
+      label: "Enter the scrapyard",
+      action: "enterScrapyard",
+      nextScene: "scrapyard-inside",
+      timeCost: 2,
+    },
+  ],
+};
+
+export const scrapyardInside: Scene = {
+  id: "scrapyard-inside",
+  story: [
+    narration("You step between the wrecked cars and twisted sheets of metal."),
+    thought("Every sound carries farther than it should."),
+  ],
+  location: "Scrapyard",
+  image: {
+    day: "./images/locations/scrapyard/ScrapyardInsideDay.png",
+    night: "./images/locations/scrapyard/ScrapyardInsideNight.png",
+  },
+  choices: [
+    {
+      label: "Look at the desk",
+      action: "lookAtScrapyardDesk",
+      nextScene: "scrapyard-desk",
+      timeCost: 0,
+    },
+    {
+      label: "Go back outside",
+      action: "leaveScrapyard",
+      nextScene: "scrapyard",
+      timeCost: 1,
+    },
+  ],
+};
+
+export const scrapyardDesk: Scene = {
+  id: "scrapyard-desk",
+  story: [
+    narration("An old desk sits beneath a cracked window."),
+    thought("Someone left a knife here."),
+  ],
+  location: "Scrapyard",
+  image: {
+    day: "./images/locations/scrapyard/scrapyardKnifeOnDesk.png",
+    night: "./images/locations/scrapyard/scrapyardKnifeOnDeskNight.png",
+  },
+  choices: [
+    {
+      label: "Take the knife",
+      action: "takeScrapyardKnife",
+      nextScene: "scrapyard-desk-empty",
+      timeCost: 0,
+      itemToAdd: "Knife",
+    },
+    {
+      label: "Leave it",
+      action: "leaveScrapyardDesk",
+      nextScene: "scrapyard-inside",
+      timeCost: 0,
+    },
+  ],
+};
+
+export const scrapyardDeskEmpty: Scene = {
+  id: "scrapyard-desk-empty",
+  story: [
+    narration("The desk is bare now."),
+  ],
+  location: "Scrapyard",
+  image: {
+    day: "./images/locations/scrapyard/scrapyardDesk.png",
+    night: "./images/locations/scrapyard/scrapyardDeskNight.png",
+  },
+  choices: [
+    {
+      label: "Step away from the desk",
+      action: "leaveScrapyardDesk",
+      nextScene: "scrapyard-inside",
       timeCost: 0,
     },
   ],
@@ -1312,21 +1511,21 @@ export const hospitalReception: Scene = {
 
 export const earlConversation: Conversation = {
   opening: [
-    npc("Earl", "Afternoon. Looking for a room?"),
+    npc("Earl", "Yeah? You need a room, or are you just blocking my counter?"),
   ],
   choices: [
     {
       label: "Just looking around.",
       response: [
         ethan("Just looking around."),
-        npc("Earl", "No problem. Let me know if you need anything."),
+        npc("Earl", "Then look with your feet. I've got work to do."),
       ],
     },
     {
       label: "Nevermind.",
       response: [
         ethan("Nevermind."),
-        npc("Earl", "Alright then."),
+        npc("Earl", "That's what I thought."),
       ],
       endsConversation: true,
     },
@@ -1577,6 +1776,7 @@ export const scenes = {
   "front-yard": frontYard,
   "back-yard": backYard,
   "living-room": livingRoom,
+  "living-room-relaxing": livingRoomRelaxing,
   kitchen,
   fridge,
   bathroom,
@@ -1588,11 +1788,17 @@ export const scenes = {
   attic,
   basement,
   garage,
+  "garage-bench": garageBench,
+  "garage-bench-empty": garageBenchEmpty,
   "needle-and-groove": needleAndGroove,
   "needle-and-groove-inside": needleAndGrooveInside,
   "needle-and-groove-backroom": needleAndGrooveBackroom,
   "gas-station": gasStation,
   "gas-station-inside": gasStationInside,
+  scrapyard,
+  "scrapyard-inside": scrapyardInside,
+  "scrapyard-desk": scrapyardDesk,
+  "scrapyard-desk-empty": scrapyardDeskEmpty,
   "police-station": policeStation,
   "police-station-inside": policeStationInside,
   "sheriff-office": sheriffOffice,

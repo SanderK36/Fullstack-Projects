@@ -7,6 +7,8 @@ type InventoryWindowProps = {
 };
 
 function getItemImage(item: string) {
+  // Inventory uses item names as IDs. When adding an item, add its name/image
+  // mapping here (or return null to display it without an image).
   switch (item.toLowerCase()) {
     case "house key":
       return "/images/items/HouseKey.png";
@@ -25,6 +27,18 @@ function getItemImage(item: string) {
 
     case "steel maiden":
       return "/images/locations/NeedleGroove/shop/SteelMaiden.png";
+
+    case "high volts":
+      return "/images/locations/NeedleGroove/shop/HighVolts.png";
+
+    case "leopard hazard":
+      return "/images/locations/NeedleGroove/shop/LeopardHazard.png";
+
+    case "puppet masters":
+      return "/images/locations/NeedleGroove/shop/PuppetMasters.png";
+
+    case "ricky valentine":
+      return "/images/locations/NeedleGroove/shop/RickyValentine.png";
 
     default:
       return null;

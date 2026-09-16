@@ -5,6 +5,7 @@ import type { StoryEntry } from "@/game/story";
 import ConversationLine from "@/components/ConversationLine/ConversationLine";
 
 function getPortrait(character: string) {
+  // Add each new NPC name and portrait here so their dialogue has an image.
   switch (character.toLowerCase()) {
     case "ethan":
       return "/images/characters/EthanParker/EthanParker.jpg";

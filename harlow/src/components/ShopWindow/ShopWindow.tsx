@@ -8,6 +8,7 @@ type ShopWindowProps = {
   onClose: () => void;
 };
 
+// Add purchasable items here. Their `name` is also the inventory item ID.
 const shops = {
   "gas-station": {
     title: "GAS STATION SHOP",
@@ -31,6 +32,26 @@ const shops = {
         name: "Steel Maiden",
         price: 8,
         image: "/images/locations/NeedleGroove/shop/SteelMaiden.png",
+      },
+      {
+        name: "High Volts",
+        price: 9,
+        image: "/images/locations/NeedleGroove/shop/HighVolts.png",
+      },
+      {
+        name: "Leopard Hazard",
+        price: 10,
+        image: "/images/locations/NeedleGroove/shop/LeopardHazard.png",
+      },
+      {
+        name: "Puppet Masters",
+        price: 9,
+        image: "/images/locations/NeedleGroove/shop/PuppetMasters.png",
+      },
+      {
+        name: "Ricky Valentine",
+        price: 11,
+        image: "/images/locations/NeedleGroove/shop/RickyValentine.png",
       },
     ],
   },

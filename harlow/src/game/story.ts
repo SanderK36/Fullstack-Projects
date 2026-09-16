@@ -36,6 +36,7 @@ export type Conversation = {
 };
 
 export function narration(text: string): StoryEntry {
+  // Scene description without a speaker.
   return {
     type: "narration",
     text,
@@ -46,6 +47,7 @@ export function thought(
   text: string,
   condition?: ThoughtCondition
 ): StoryEntry {
+  // Ethan's internal narration; an optional time condition controls visibility.
   return {
     type: "thought",
     text,
@@ -54,6 +56,7 @@ export function thought(
 }
 
 export function ethan(text: string): StoryEntry {
+  // Convenience helper for dialogue spoken by the player character.
   return {
     type: "conversation",
     character: "Ethan",
@@ -65,6 +68,7 @@ export function npc(
   character: string,
   text: string
 ): StoryEntry {
+  // Use this for any new NPC. Also add their portrait in StoryLog's getPortrait.
   return {
     type: "conversation",
     character,

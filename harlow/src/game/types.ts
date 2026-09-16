@@ -65,7 +65,8 @@ export type Location =
 "Hospital" |
 "Bus Stop" |
 "Diner" |
-"Motel";
+"Motel" |
+"Scrapyard";
 
 export type Weather =
 "Sunny" |

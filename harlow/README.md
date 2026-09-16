@@ -1,6 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Harlow
 
-## Getting Started
+## Adding game content
+
+### Add a scene
+
+1. Put the scene artwork in `public/images/locations/...`.
+2. In `src/game/scenes.ts`, create a `Scene` object with a unique `id`, story,
+   `location`, day/night images, and choices.
+3. Add that object to the exported `scenes` map at the bottom of the file.
+4. Add a choice in an existing scene whose `nextScene` equals the new id.
+5. For an outdoor destination, also add it to `exteriorDestinations` so it
+   appears in walk and bus menus.
+
+### Add an item
+
+1. Put its image in `public/images/items/`.
+2. Add `itemToAdd: "Item name"` to a choice, or add it to a shop in
+   `src/components/ShopWindow/ShopWindow.tsx`.
+3. Add the same name and image path to `getItemImage` in
+   `src/components/InventoryWindow/InventoryWindow.tsx`.
+
+Item names are currently the inventory IDs, so capitalization and spelling must
+match in all three places.
+
+### Add an NPC
+
+1. Put their portrait in `public/images/characters/`.
+2. Add `{ name, image, from?, until? }` to a scene's `characters` list.
+3. Add dialogue with `npc("Name", "Dialogue")` in the scene conversation.
+4. Add the name/path to `getPortrait` in `src/components/StoryLog/StoryLog.tsx`.
+5. If their conversation opens from a regular scene choice, add that choice's
+   action to `CONVERSATION_ACTIONS` in `src/game/useGame.ts`.
+
+`from` and `until` are minutes after midnight; for example, 480 is 08:00 and
+1080 is 18:00.
+
+## Run locally
+
+### Start development
 
 First, run the development server:
 

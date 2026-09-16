@@ -12,12 +12,18 @@ import TravelOverlay from "@/components/TravelOverlay/TravelOverlay";
 import TravelWindow from "@/components/TravelWindow/TravelWindow";
 import InventoryWindow from "@/components/InventoryWindow/InventoryWindow";
 import ShopWindow from "@/components/ShopWindow/ShopWindow";
+import GameMenu from "@/components/GameMenu/GameMenu";
+import CharacterWindow from "@/components/CharacterWindow/CharacterWindow";
 
 import { isNightTime } from "@/game/utils";
 import { useGame } from "@/game/useGame";
 import { isExteriorScene } from "@/game/scenes";
 
 export default function Home() {
+  // The menu is intentionally UI-only: starting a game reveals the existing
+  // initial state created by useGame without resetting or changing it.
+  const [hasStarted, setHasStarted] = useState(false);
+  const [showCharacterDirectory, setShowCharacterDirectory] = useState(false);
   const {
     gameState,
     playerState,
@@ -46,9 +52,11 @@ export default function Home() {
   } = useGame();
   const [travelMode, setTravelMode] = useState<"walk" | "bus">("walk");
 
+  // Indoor home scenes use the compact two-column action layout.
   const homeSceneIds = [
     "hallway",
     "living-room",
+    "living-room-relaxing",
     "kitchen",
     "bathroom",
     "ethan-room",
@@ -59,9 +67,12 @@ export default function Home() {
     "attic",
     "basement",
     "garage",
+    "garage-bench",
+    "garage-bench-empty",
   ];
 
   const isInsideHome = homeSceneIds.includes(currentScene.id);
+  // Character art has priority, then weather-specific art, then day/night art.
   const sceneImage =
     activeCharacter?.image ??
     currentScene.image.weather?.[gameState.weather] ??
@@ -69,11 +80,39 @@ export default function Home() {
       ? currentScene.image.night
       : currentScene.image.day);
 
+  if (!hasStarted) {
+    return (
+      <main className="mainMenu">
+        <div className="mainMenuArtwork" aria-hidden="true" />
+        <div className="mainMenuShade" aria-hidden="true" />
+
+        <section className="mainMenuContent" aria-labelledby="game-title">
+          <p className="mainMenuEyebrow">A small-town mystery unfolds</p>
+          <h1 id="game-title">Harlow: 1982</h1>
+          <div className="mainMenuActions">
+            <button className="mainMenuStart" onClick={() => setHasStarted(true)}>
+              New Game
+            </button>
+            {/* TODO: Load the saved game here once the save system exists. */}
+            <button
+              className="mainMenuStart mainMenuContinue"
+              onClick={() => setHasStarted(true)}
+            >
+              Continue
+            </button>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
   return (
     <main className="game">
       <div className="game-panel">
 
         <h1>HARLOW</h1>
+
+        <GameMenu onOpenCharacters={() => setShowCharacterDirectory(true)} />
         
         <GameStatus
           player={playerState}
@@ -147,6 +186,9 @@ export default function Home() {
             onPurchase={buyItem}
             onClose={() => setActiveShop(null)}
           />
+        )}
+        {showCharacterDirectory && (
+          <CharacterWindow onClose={() => setShowCharacterDirectory(false)} />
         )}
 
         <ActionList

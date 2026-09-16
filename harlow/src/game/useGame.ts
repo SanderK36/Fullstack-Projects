@@ -17,6 +17,7 @@ import type { Choice, GameChoice } from "@/game/choices";
 import type { StoryEntry } from "@/game/story";
 
 const CONVERSATION_ACTIONS = new Set([
+  // Add an action name here when a scene choice should open its conversation data.
   "talkToMom",
   "talkToMarlene",
   "talkToJohnny",
@@ -31,33 +32,46 @@ const TRAVEL_DURATION = 3000;
 type ShopId = "gas-station" | "needle-groove";
 
 export function useGame() {
+  // Persistent world and player data. Add a field to its type and initial value
+  // before using it in a scene requirement or effect.
   const [gameState, setGameState] = useState(initialGameState);
   const [playerState, setPlayerState] = useState(player);
+
+  // The currently displayed scene and its short, time-aware thought.
   const [currentScene, setCurrentScene] = useState(hallway);
   const [currentThought, setCurrentThought] = useState<string | null>(
     getSceneThought(hallway.id, initialGameState.time)
   );
   const [currentEffects, setCurrentEffects] = useState<StoryEntry[]>([]);
 
+  // UI-only state: none of these values are part of the game save/progression.
   const [showStats, setShowStats] = useState(false);
   const [showInventory, setShowInventory] = useState(false);
   const [showTravel, setShowTravel] = useState(false);
   const [activeShop, setActiveShop] = useState<ShopId | null>(null);
 
+  // Conversation state is kept separate from scene narration so dialogue can
+  // grow as the player selects responses without changing the base scene.
   const [conversation, setConversation] = useState<StoryEntry[]>([]);
   const [conversationActive, setConversationActive] = useState(false);
   const [usedConversationChoices, setUsedConversationChoices] = useState<string[]>([]);
 
+  // A non-null destination displays the full-screen travel transition.
   const [travelingTo, setTravelingTo] = useState<{
     location: string;
     method: "walk" | "bus";
     isNight: boolean;
   } | null>(null);
+  // Small pieces of story progress that currently need custom logic. For more
+  // flags, consider grouping them into a future `storyFlags` object.
   const [busStopReturnSceneId, setBusStopReturnSceneId] = useState("front-yard");
   const [marleneActive, setMarleneActive] = useState(false);
   const [deskCigarettesPickedUp, setDeskCigarettesPickedUp] = useState(false);
+  const [scrapyardKnifePickedUp, setScrapyardKnifePickedUp] = useState(false);
+  const [garageFlashlightPickedUp, setGarageFlashlightPickedUp] = useState(false);
 
   function advanceTime(minutes: number) {
+    // Keep time changes in one place so thoughts and day/night images stay synced.
     const nextGameState = advanceGameTime(gameState, minutes);
 
     setGameState(nextGameState);
@@ -67,6 +81,7 @@ export function useGame() {
   }
 
   function moveToScene(sceneId: string, time: number) {
+    // Every `nextScene` in scene data must match a key in `scenes`.
     const nextScene = scenes[sceneId as keyof typeof scenes];
 
     if (!nextScene) {
@@ -88,6 +103,7 @@ export function useGame() {
   }
 
   function openConversation() {
+    // The action determines *which* NPC to talk to; the scene owns the dialogue.
     const opening = currentScene.conversation?.opening;
 
     if (!opening) {
@@ -108,6 +124,7 @@ export function useGame() {
   }
 
   function applyChoiceEffects(choice: Choice) {
+    // Effects are optional and update both the player state and feedback text.
     if (!choice.effects) {
       return;
     }
@@ -128,6 +145,7 @@ export function useGame() {
   }
 
   function handleTravel(choice: Choice) {
+    // Travel waits for the overlay before applying its time cost and effects.
     const destination = scenes[choice.nextScene as keyof typeof scenes]?.location ?? "Unknown";
 
     setTravelingTo({
@@ -145,6 +163,8 @@ export function useGame() {
   }
 
   function handleChoice(choice: GameChoice) {
+    // This is the central choice router. Prefer declarative scene fields
+    // (`nextScene`, `itemToAdd`, `effects`) over adding action-specific cases.
     if ("response" in choice) {
       handleConversationChoice(choice);
       return;
@@ -195,10 +215,22 @@ export function useGame() {
       setDeskCigarettesPickedUp(true);
     }
 
+    if (choice.action === "takeScrapyardKnife") {
+      setScrapyardKnifePickedUp(true);
+    }
+
+    if (choice.action === "pickUpGarageFlashlight") {
+      setGarageFlashlightPickedUp(true);
+    }
+
     const nextSceneId =
       choice.action === "lookAtDesk" && deskCigarettesPickedUp
         ? "ethan-room-desk-empty"
-        : choice.nextScene;
+        : choice.action === "lookAtScrapyardDesk" && scrapyardKnifePickedUp
+          ? "scrapyard-desk-empty"
+          : choice.action === "lookAtGarageBench" && garageFlashlightPickedUp
+            ? "garage-bench-empty"
+            : choice.nextScene;
 
     moveToScene(nextSceneId, nextGameState.time);
 
@@ -219,6 +251,8 @@ export function useGame() {
   }
 
   function isChoiceAvailable(choice: Choice) {
+    // Temporary availability rules for story moments. Keep rules keyed by action
+    // names, or move them into a richer `requirements` type as the game grows.
     const { action } = choice;
     const { time } = gameState;
 
@@ -231,10 +265,14 @@ export function useGame() {
     if (action === "talkToMarlene" || action === "leaveMarleneCounter") return marleneActive;
     if (marleneActive && (action === "leaveHospital" || action === "goToHospitalRoom")) return false;
     if (action === "pickUpCigarettes") return !deskCigarettesPickedUp;
+    if (action === "takeScrapyardKnife") return !scrapyardKnifePickedUp;
+    if (action === "pickUpGarageFlashlight") return !garageFlashlightPickedUp;
 
     return true;
   }
 
+  // A scene can list multiple NPCs; only the first one available at this time
+  // is rendered over the scene image.
   const activeCharacter = currentScene.characters?.find((character) => {
     if (character.name === "Marlene" && !marleneActive) {
       return false;

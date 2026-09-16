@@ -11,7 +11,9 @@
   --gold: #d93443;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   position: relative;
@@ -19,14 +21,10 @@ body {
   margin: 0;
   color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
-  background:
-    radial-gradient(circle at 10% 0%, rgba(126, 12, 25, 0.2), transparent 31rem),
-    radial-gradient(circle at 88% 18%, rgba(78, 5, 12, 0.2), transparent 26rem),
-    var(--bg);
+  background: radial-gradient(circle at 10% 0%, rgba(126, 12, 25, 0.2), transparent 31rem), radial-gradient(circle at 88% 18%, rgba(78, 5, 12, 0.2), transparent 26rem), var(--bg);
 }
 
-body::before,
-body::after {
+body::before, body::after {
   position: fixed;
   z-index: 0;
   width: 110vw;
@@ -43,26 +41,141 @@ body::after {
 body::before {
   top: 4vh;
   left: -110vw;
-  background:
-    radial-gradient(ellipse at 23% 48%, rgba(190, 18, 37, .88), transparent 38%),
-    radial-gradient(ellipse at 74% 35%, rgba(128, 9, 23, .76), transparent 40%);
+  background: radial-gradient(ellipse at 23% 48%, rgba(190, 18, 37, .88), transparent 38%), radial-gradient(ellipse at 74% 35%, rgba(128, 9, 23, .76), transparent 40%);
   animation: fogCrossRight 32s linear infinite;
 }
 
 body::after {
   right: -110vw;
   bottom: -8vh;
-  background:
-    radial-gradient(ellipse at 28% 62%, rgba(105, 6, 18, .9), transparent 40%),
-    radial-gradient(ellipse at 78% 44%, rgba(166, 12, 29, .8), transparent 38%);
+  background: radial-gradient(ellipse at 28% 62%, rgba(105, 6, 18, .9), transparent 40%), radial-gradient(ellipse at 78% 44%, rgba(166, 12, 29, .8), transparent 38%);
   animation: fogCrossLeft 38s linear infinite;
 }
 
-button { font-family: inherit; }
+button {
+  font-family: inherit;
+}
 
-.game { position: relative; z-index: 1; width: min(1240px, 100%); margin: 0 auto; padding: clamp(16px, 3vw, 42px); }
+/* Opening screen: artwork is kept separate from the content so the overlay
+   preserves legibility on both wide and narrow screens. */
+.mainMenu {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  overflow: hidden;
+  background: #080405;
+}
+
+.mainMenuArtwork,
+.mainMenuShade {
+  position: absolute;
+  inset: 0;
+}
+
+.mainMenuArtwork {
+  background: url("/mainMenu.png") center / cover no-repeat;
+  animation: menuArtworkEnter 800ms ease-out;
+}
+
+.mainMenuShade {
+  background:
+    linear-gradient(90deg, rgba(8, 4, 5, 0.82), rgba(8, 4, 5, 0.16) 62%, rgba(8, 4, 5, 0.56)),
+    linear-gradient(0deg, rgba(8, 4, 5, 0.72), transparent 55%);
+}
+
+.mainMenuContent {
+  position: relative;
+  justify-self: stretch;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 48px clamp(32px, 13vw, 180px);
+  text-align: left;
+  text-shadow: 0 5px 24px rgba(0, 0, 0, 0.85);
+  animation: menuContentEnter 700ms 150ms both ease-out;
+}
+
+.mainMenuEyebrow {
+  margin: 0 0 18px;
+  padding-left: 15px;
+  color: #f7e5e6;
+  font-size: clamp(13px, 1.5vw, 17px);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.mainMenu h1 {
+  margin: 0;
+  color: var(--text);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(52px, 7.4vw, 100px);
+  font-weight: 400;
+  letter-spacing: 0.055em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.mainMenuActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 34px;
+}
+
+.mainMenuStart {
+  min-width: 176px;
+  padding: 13px 24px;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  background: rgba(169, 22, 36, 0.72);
+  border: 1px solid rgba(255, 220, 222, 0.55);
+  border-radius: 6px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+}
+
+.mainMenuStart:hover,
+.mainMenuStart:focus-visible {
+  background: var(--accent-bright);
+  box-shadow: 0 13px 32px rgba(0, 0, 0, 0.42);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.mainMenuStart:active {
+  transform: translateY(0);
+}
+
+.mainMenuContinue {
+  color: #f6e7e8;
+  background: rgba(20, 12, 13, 0.6);
+  border-color: rgba(255, 220, 222, 0.36);
+}
+
+.mainMenuContinue:hover,
+.mainMenuContinue:focus-visible {
+  background: rgba(93, 27, 35, 0.84);
+}
+
+.game {
+  position: relative;
+  z-index: 1;
+  width: min(1240px, 100%);
+  margin: 0 auto;
+  padding: clamp(16px, 3vw, 42px);
+}
 
 .game-panel {
+  position: relative;
   overflow: hidden;
   padding: clamp(20px, 4vw, 48px);
   background: linear-gradient(145deg, rgba(31, 17, 18, 0.97), rgba(12, 10, 10, 0.98));
@@ -119,21 +232,129 @@ button { font-family: inherit; }
   font-size: 11px;
 }
 
-.waitControls button::after { display: none; }
+.waitControls button::after {
+  display: none;
+}
 
-@keyframes sceneImageEnter { from { opacity: 0; transform: scale(0.985); } to { opacity: 1; transform: scale(1); } }
-@keyframes fogCrossRight { from { transform: translate3d(-4vw, -3vh, 0) scale(.92); } to { transform: translate3d(210vw, 8vh, 0) scale(1.08); } }
-@keyframes fogCrossLeft { from { transform: translate3d(5vw, 5vh, 0) scale(1.08); } to { transform: translate3d(-210vw, -7vh, 0) scale(.9); } }
+@keyframes sceneImageEnter {
+  from {
+    opacity: 0;
+    transform: scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+}
+
+@keyframes menuArtworkEnter {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes menuContentEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fogCrossRight {
+  from {
+    transform: translate3d(-4vw, -3vh, 0) scale(.92);
+  }
+
+  to {
+    transform: translate3d(210vw, 8vh, 0) scale(1.08);
+  }
+
+}
+
+@keyframes fogCrossLeft {
+  from {
+    transform: translate3d(5vw, 5vh, 0) scale(1.08);
+  }
+
+  to {
+    transform: translate3d(-210vw, -7vh, 0) scale(.9);
+  }
+
+}
 
 @media (max-width: 640px) {
-  .game { padding: 0; }
-  .game-panel { min-height: 100vh; border-radius: 0; }
-  .game-panel > h1 { font-size: 32px; }
-  .scene-image { margin-top: 20px; border-radius: 10px; }
-  .waitControls > span { width: 100%; margin-right: 0; text-align: center; }
+  .mainMenuContent {
+    width: 100%;
+    padding: 40px 32px;
+  }
+
+  .mainMenuShade {
+    background:
+      linear-gradient(90deg, rgba(8, 4, 5, 0.64), rgba(8, 4, 5, 0.26)),
+      linear-gradient(0deg, rgba(8, 4, 5, 0.76), transparent 62%);
+  }
+
+  .mainMenu h1 {
+    font-size: clamp(44px, 12vw, 68px);
+    letter-spacing: 0.035em;
+  }
+
+  .mainMenuActions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .game {
+    padding: 0;
+  }
+
+  .game-panel {
+    min-height: 100vh;
+    border-radius: 0;
+  }
+
+  .game-panel > h1 {
+    font-size: 32px;
+  }
+
+  .scene-image {
+    margin-top: 20px;
+    border-radius: 10px;
+  }
+
+  .waitControls > span {
+    width: 100%;
+    margin-right: 0;
+    text-align: center;
+  }
+
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { scroll-behavior: auto !important; }
-  .scene-image, body::before, body::after { animation: none; }
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+  }
+
+  .scene-image, body::before, body::after {
+    animation: none;
+  }
+
+  .mainMenuArtwork,
+  .mainMenuContent {
+    animation: none;
+  }
+
 }

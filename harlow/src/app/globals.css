@@ -21,35 +21,7 @@ body {
   margin: 0;
   color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
-  background: radial-gradient(circle at 10% 0%, rgba(126, 12, 25, 0.2), transparent 31rem), radial-gradient(circle at 88% 18%, rgba(78, 5, 12, 0.2), transparent 26rem), var(--bg);
-}
-
-body::before, body::after {
-  position: fixed;
-  z-index: 0;
-  width: 110vw;
-  height: 70vw;
-  min-width: 520px;
-  min-height: 420px;
-  border-radius: 50%;
-  pointer-events: none;
-  content: "";
-  filter: blur(68px);
-  opacity: .54;
-}
-
-body::before {
-  top: 4vh;
-  left: -110vw;
-  background: radial-gradient(ellipse at 23% 48%, rgba(190, 18, 37, .88), transparent 38%), radial-gradient(ellipse at 74% 35%, rgba(128, 9, 23, .76), transparent 40%);
-  animation: fogCrossRight 32s linear infinite;
-}
-
-body::after {
-  right: -110vw;
-  bottom: -8vh;
-  background: radial-gradient(ellipse at 28% 62%, rgba(105, 6, 18, .9), transparent 40%), radial-gradient(ellipse at 78% 44%, rgba(166, 12, 29, .8), transparent 38%);
-  animation: fogCrossLeft 38s linear infinite;
+  background: var(--bg);
 }
 
 button {
@@ -85,6 +57,54 @@ button {
     linear-gradient(0deg, rgba(8, 4, 5, 0.72), transparent 55%);
 }
 
+.mainMenuBranding {
+  position: absolute;
+  z-index: 1;
+  top: clamp(20px, 3vw, 42px);
+  left: clamp(20px, 3vw, 42px);
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.4vw, 18px);
+}
+
+.mainMenuStudioLogo,
+.mainMenuSocialLink {
+  height: auto;
+  mix-blend-mode: screen;
+  opacity: 0.84;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.72));
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.mainMenuStudioLogo {
+  width: clamp(88px, 11vw, 150px);
+  mix-blend-mode: normal;
+}
+
+.mainMenuStudioLogo:hover,
+.mainMenuSocialLink:hover,
+.mainMenuSocialLink:focus-visible {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.mainMenuSocialLink {
+  display: block;
+  width: clamp(44px, 4.8vw, 68px);
+  border-radius: 50%;
+}
+
+.mainMenuSocialLink img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: invert(1);
+}
+
+.mainMenuSocialLink:focus-visible {
+  outline: 2px solid #f5eeee;
+  outline-offset: 4px;
+}
 .mainMenuContent {
   position: relative;
   justify-self: stretch;
@@ -95,6 +115,21 @@ button {
   text-align: left;
   text-shadow: 0 5px 24px rgba(0, 0, 0, 0.85);
   animation: menuContentEnter 700ms 150ms both ease-out;
+}
+
+.mainMenuCopyright {
+  position: absolute;
+  z-index: 1;
+  bottom: clamp(18px, 3vw, 34px);
+  left: 50%;
+  margin: 0;
+  color: rgba(245, 238, 238, 0.72);
+  font-size: clamp(10px, 1vw, 12px);
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.78);
+  transform: translateX(-50%);
+  font-size: 15px;
 }
 
 .mainMenuEyebrow {
@@ -174,8 +209,52 @@ button {
   padding: clamp(16px, 3vw, 42px);
 }
 
+.gameClouds {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0.62;
+  filter: brightness(1.18) saturate(1.05);
+  transition: opacity 600ms ease, filter 600ms ease;
+}
+
+.gameCloudsNight {
+  opacity: 0.16;
+  filter: brightness(0.5) saturate(0.65);
+}
+
+.gameCloud {
+  position: absolute;
+  top: 0;
+  width: 200%;
+  left: 0;
+  height: 100vh;
+  background-repeat: repeat-x;
+  background-position: 0 0;
+  background-size: 50% 100%;
+  will-change: transform;
+}
+
+.gameCloudOne {
+  background-image: url("https://s.cdpn.io/15514/clouds_2.png");
+  animation: cloudLoopOne 150s linear infinite;
+}
+
+.gameCloudTwo {
+  background-image: url("https://s.cdpn.io/15514/clouds_1.png");
+  animation: cloudLoopTwo 120s linear infinite;
+}
+
+.gameCloudThree {
+  background-image: url("https://s.cdpn.io/15514/clouds_3.png");
+  animation: cloudLoopThree 135s linear infinite;
+}
+
 .game-panel {
   position: relative;
+  z-index: 1;
   overflow: hidden;
   padding: clamp(20px, 4vw, 48px);
   background: linear-gradient(145deg, rgba(31, 17, 18, 0.97), rgba(12, 10, 10, 0.98));
@@ -195,15 +274,206 @@ button {
   text-shadow: 0 8px 24px rgba(0, 0, 0, 0.42);
 }
 
+.scene-image-frame {
+  position: relative;
+  width: min(100%, 900px);
+  margin: 28px auto 0;
+}
+
 .scene-image {
   display: block;
-  width: min(100%, 900px);
+  width: 100%;
   height: auto;
-  margin: 28px auto 0;
   border: 1px solid var(--line-strong);
   border-radius: 14px;
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.32);
   animation: sceneImageEnter 420ms ease-out;
+}
+
+.scene-hotspot {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: #fff4f4;
+  background: rgba(217, 52, 67, 0);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.scene-hotspot span {
+  padding: 6px 9px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  opacity: 0;
+  text-transform: uppercase;
+  text-shadow: 0 2px 5px #000;
+  transform: translateY(3px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.scene-hotspot:hover,
+.scene-hotspot:focus-visible {
+  background: rgba(217, 52, 67, 0.2);
+  border-color: rgba(255, 220, 222, 0.8);
+  box-shadow: inset 0 0 28px rgba(255, 89, 102, 0.4), 0 0 16px rgba(217, 52, 67, 0.48);
+  outline: none;
+}
+
+.scene-hotspot:hover span,
+.scene-hotspot:focus-visible span {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scene-hotspot-lookAtDesk {
+  top: 41%;
+  left: 55%;
+  width: 15%;
+  height: 10%;
+}
+
+.scene-hotspot-pickUpCigarettes {
+  top: 58%;
+  left: 46%;
+  width: 23%;
+  height: 25%;
+}
+
+.scene-hotspot-goLivingRoom {
+  top: 13%;
+  left: 0;
+  width: 28%;
+  height: 72%;
+}
+
+.scene-hotspot-goKitchen {
+  top: 8%;
+  right: 0;
+  width: 23%;
+  height: 84%;
+}
+
+.scene-hotspot-lookAtGarageBench {
+  top: 37%;
+  left: 2%;
+  width: 15%;
+  height: 15%;
+}
+
+.scene-hotspot-pickUpGarageFlashlight {
+  top: 51%;
+  left: 38%;
+  width: 29%;
+  height: 23%;
+}
+
+.scene-hotspot-goHallway {
+  top: 11%;
+  left: 23%;
+  width: 10%;
+  height: 52%;
+}
+
+.scene-hotspot-basement-goHallway {
+  top: 24%;
+  left: 0;
+  width: 18%;
+  height: 65%;
+}
+
+.scene-hotspot-enterNeedleAndGroove {
+  top: 45%;
+  left: 51%;
+  width: 9%;
+  height: 39%;
+}
+
+.scene-hotspot-talkToJohnny {
+  top: 23%;
+  left: 48%;
+  width: 15%;
+  height: 30%;
+}
+
+.scene-hotspot-enterNeedleAndGrooveBackroom {
+  top: 30%;
+  left: 18%;
+  width: 13%;
+  height: 35%;
+}
+
+.scene-hotspot-enterPoliceStation {
+  top: 47%;
+  left: 43%;
+  width: 14%;
+  height: 17%;
+}
+
+.scene-hotspot-leavePoliceStation {
+  top: 18%;
+  left: 1%;
+  width: 13%;
+  height: 50%;
+}
+
+.scene-hotspot-enterHospital {
+  top: 56%;
+  left: 40%;
+  width: 22%;
+  height: 15%;
+}
+
+.scene-hotspot-goToMarleneCounter {
+  top: 32%;
+  left: 30%;
+  width: 20%;
+  height: 20%;
+}
+
+.scene-hotspot-talkToMarlene {
+  top: 7%;
+  left: 18%;
+  width: 65%;
+  height: 82%;
+}
+
+.scene-hotspot-goToHospitalRoom {
+  top: 26%;
+  left: 68%;
+  width: 16%;
+  height: 44%;
+}
+
+.scene-hotspot-scrapyard-enterScrapyard {
+  top: 36%;
+  left: 79%;
+  width: 18%;
+  height: 20%;
+}
+
+.scene-hotspot-scrapyard-inside-lookAtScrapyardDesk {
+  top: 50%;
+  left: 0;
+  width: 25%;
+  height: 15%;
+}
+
+.scene-hotspot-scrapyard-inside-leaveScrapyard {
+  top: 20%;
+  left: 53%;
+  width: 29%;
+  height: 42%;
+}
+
+.scene-hotspot-scrapyard-desk-takeScrapyardKnife {
+  top: 35%;
+  left: 40%;
+  width: 25%;
+  height: 32%;
 }
 
 .waitControls {
@@ -273,29 +543,27 @@ button {
   }
 }
 
-@keyframes fogCrossRight {
-  from {
-    transform: translate3d(-4vw, -3vh, 0) scale(.92);
-  }
-
-  to {
-    transform: translate3d(210vw, 8vh, 0) scale(1.08);
-  }
-
+@keyframes cloudLoopOne {
+  to { transform: translateX(-50%); }
 }
 
-@keyframes fogCrossLeft {
-  from {
-    transform: translate3d(5vw, 5vh, 0) scale(1.08);
-  }
+@keyframes cloudLoopTwo {
+  to { transform: translateX(-50%); }
+}
 
-  to {
-    transform: translate3d(-210vw, -7vh, 0) scale(.9);
-  }
-
+@keyframes cloudLoopThree {
+  to { transform: translateX(-50%); }
 }
 
 @media (max-width: 640px) {
+  .mainMenuStudioLogo {
+    width: 82px;
+  }
+
+  .mainMenuSocialLink {
+    width: 42px;
+  }
+
   .mainMenuContent {
     width: 100%;
     padding: 40px 32px;
@@ -348,7 +616,8 @@ button {
     scroll-behavior: auto !important;
   }
 
-  .scene-image, body::before, body::after {
+  .scene-image,
+  .gameCloud {
     animation: none;
   }
 

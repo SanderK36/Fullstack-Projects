@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
+import Image from "next/image";
 
 import GameStatus from "@/components/GameStatus/GameStatus";
 import ActionList from "@/components/ActionList/ActionList";
@@ -18,11 +19,45 @@ import CharacterWindow from "@/components/CharacterWindow/CharacterWindow";
 import { isNightTime } from "@/game/utils";
 import { useGame } from "@/game/useGame";
 import { isExteriorScene } from "@/game/scenes";
+import { clearSessionSave, readSessionSave } from "@/game/save";
+import type { Choice } from "@/game/choices";
+
+function subscribeToSession() {
+  return () => {};
+}
+
+function hasActiveSession() {
+  return readSessionSave() !== null;
+}
+
+const hotspotLabels: Record<string, string> = {
+  lookAtDesk: "Desk",
+  pickUpCigarettes: "Cigarettes",
+  goLivingRoom: "Living room",
+  goKitchen: "Kitchen",
+  lookAtGarageBench: "Workbench",
+  pickUpGarageFlashlight: "Flashlight",
+  goHallway: "Hallway",
+  enterNeedleAndGroove: "Enter shop",
+  talkToJohnny: "Johnny",
+  enterNeedleAndGrooveBackroom: "Backroom",
+  enterPoliceStation: "Enter station",
+  leavePoliceStation: "Go outside",
+  enterHospital: "Enter hospital",
+  goToMarleneCounter: "Reception desk",
+  talkToMarlene: "Marlene",
+  goToHospitalRoom: "Elevator",
+  enterScrapyard: "Garage",
+  lookAtScrapyardDesk: "Workbench",
+  takeScrapyardKnife: "Knife",
+  leaveScrapyard: "Exit garage",
+};
 
 export default function Home() {
   // The menu is intentionally UI-only: starting a game reveals the existing
   // initial state created by useGame without resetting or changing it.
   const [hasStarted, setHasStarted] = useState(false);
+  const resumedSession = useSyncExternalStore(subscribeToSession, hasActiveSession, () => false);
   const [showCharacterDirectory, setShowCharacterDirectory] = useState(false);
   const {
     gameState,
@@ -49,8 +84,26 @@ export default function Home() {
     activeShop,
     setActiveShop,
     buyItem,
+    saveGame,
+    loadGame,
+    loadMostRecentGame,
+    startGameSession,
   } = useGame();
   const [travelMode, setTravelMode] = useState<"walk" | "bus">("walk");
+
+  function continueGame() {
+    if (loadMostRecentGame()) setHasStarted(true);
+  }
+
+  function startNewGame() {
+    startGameSession();
+    setHasStarted(true);
+  }
+
+  function returnToMainMenu() {
+    clearSessionSave();
+    setHasStarted(false);
+  }
 
   // Indoor home scenes use the compact two-column action layout.
   const homeSceneIds = [
@@ -79,40 +132,119 @@ export default function Home() {
     (isNightTime(gameState.time)
       ? currentScene.image.night
       : currentScene.image.day);
+  const hotspotActions =
+    currentScene.id === "ethan-room"
+      ? ["lookAtDesk"]
+      : currentScene.id === "ethan-room-desk"
+        ? ["pickUpCigarettes"]
+        : currentScene.id === "hallway"
+          ? ["goLivingRoom", "goKitchen"]
+          : currentScene.id === "basement"
+            ? ["goHallway"]
+          : currentScene.id === "garage"
+            ? ["lookAtGarageBench", "goHallway"]
+            : currentScene.id === "garage-bench"
+              ? ["pickUpGarageFlashlight"]
+              : currentScene.id === "needle-and-groove"
+                ? ["enterNeedleAndGroove"]
+                : currentScene.id === "needle-and-groove-inside"
+                  ? ["talkToJohnny", "enterNeedleAndGrooveBackroom"]
+                  : currentScene.id === "police-station"
+                    ? ["enterPoliceStation"]
+                    : currentScene.id === "police-station-inside"
+                      ? ["leavePoliceStation"]
+                      : currentScene.id === "hospital"
+                        ? ["enterHospital"]
+                        : currentScene.id === "hospital-reception"
+                          ? ["goToMarleneCounter", "talkToMarlene", "goToHospitalRoom"]
+                          : currentScene.id === "scrapyard"
+                            ? ["enterScrapyard"]
+                            : currentScene.id === "scrapyard-inside"
+                              ? ["lookAtScrapyardDesk", "leaveScrapyard"]
+                              : currentScene.id === "scrapyard-desk"
+                                ? ["takeScrapyardKnife"]
+          : [];
+  const sceneHotspots = activeChoices.filter(
+    (choice): choice is Choice =>
+      "action" in choice &&
+      hotspotActions.includes(choice.action)
+  );
+  const choicesWithoutHotspotActions = activeChoices.filter(
+    (choice) =>
+      "response" in choice ||
+      !hotspotActions.includes(choice.action)
+  );
 
-  if (!hasStarted) {
+  if (!hasStarted && !resumedSession) {
     return (
       <main className="mainMenu">
         <div className="mainMenuArtwork" aria-hidden="true" />
         <div className="mainMenuShade" aria-hidden="true" />
+        <div className="mainMenuBranding">
+          <Image
+            className="mainMenuStudioLogo"
+            src="/LostFrequencyGames-transparent.png"
+            alt="Lost Frequency Games"
+            width={1254}
+            height={1254}
+          />
+          <a
+            className="mainMenuSocialLink"
+            href="https://x.com/HarlowTheGame"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Follow Harlow: 1982 on X"
+          >
+            <Image
+              src="/X.png"
+              alt=""
+              width={1500}
+              height={1500}
+            />
+          </a>
+        </div>
 
         <section className="mainMenuContent" aria-labelledby="game-title">
           <p className="mainMenuEyebrow">A small-town mystery unfolds</p>
           <h1 id="game-title">Harlow: 1982</h1>
           <div className="mainMenuActions">
-            <button className="mainMenuStart" onClick={() => setHasStarted(true)}>
+            <button className="mainMenuStart" onClick={startNewGame}>
               New Game
             </button>
-            {/* TODO: Load the saved game here once the save system exists. */}
             <button
               className="mainMenuStart mainMenuContinue"
-              onClick={() => setHasStarted(true)}
+              onClick={continueGame}
             >
               Continue
             </button>
           </div>
         </section>
+        <p className="mainMenuCopyright">
+          © 2026 Lost Frequency Games. All rights reserved.
+        </p>
       </main>
     );
   }
 
   return (
     <main className="game">
+      {isNightTime(gameState.time) && (
+        <div className="gameClouds gameCloudsNight" aria-hidden="true">
+          <div className="gameCloud gameCloudOne" />
+          <div className="gameCloud gameCloudTwo" />
+          <div className="gameCloud gameCloudThree" />
+        </div>
+      )}
       <div className="game-panel">
 
         <h1>HARLOW</h1>
 
-        <GameMenu onOpenCharacters={() => setShowCharacterDirectory(true)} />
+        <GameMenu
+          onOpenCharacters={() => setShowCharacterDirectory(true)}
+          onMainMenu={returnToMainMenu}
+          onSave={saveGame}
+          onLoad={loadGame}
+        />
         
         <GameStatus
           player={playerState}
@@ -121,12 +253,25 @@ export default function Home() {
           onInventoryClick={() => setShowInventory(true)}
         />
 
-        <img
-          key={sceneImage}
-          src={sceneImage}
-          alt=""
-          className="scene-image"
-        />
+        <div className="scene-image-frame">
+          <img
+            key={sceneImage}
+            src={sceneImage}
+            alt=""
+            className="scene-image"
+          />
+          {sceneHotspots.map((sceneHotspot) => (
+            <button
+              key={sceneHotspot.action}
+              type="button"
+              className={`scene-hotspot scene-hotspot-${sceneHotspot.action} scene-hotspot-${currentScene.id}-${sceneHotspot.action}`}
+              aria-label={hotspotLabels[sceneHotspot.action]}
+              onClick={() => handleChoice(sceneHotspot)}
+            >
+              <span>{hotspotLabels[sceneHotspot.action]}</span>
+            </button>
+          ))}
+        </div>
 
         <StoryLog
           entries={currentScene.story.filter(
@@ -197,7 +342,7 @@ export default function Home() {
               ? "What do you say?"
               : "What do you want to do?"
           }
-          choices={activeChoices}
+          choices={choicesWithoutHotspotActions}
           onChoice={handleChoice}
           onWalk={() => {
             setTravelMode("walk");

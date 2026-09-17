@@ -2,18 +2,50 @@
 
 import { useState } from "react";
 
+import SaveWindow from "@/components/SaveWindow/SaveWindow";
+import { readSaveSlots } from "@/game/save";
 import styles from "./GameMenu.module.css";
 
 type GameMenuProps = {
   onOpenCharacters: () => void;
+  onMainMenu: () => void;
+  onSave: (slotNumber: number) => boolean;
+  onLoad: (slotNumber: number) => boolean;
 };
 
-export default function GameMenu({ onOpenCharacters }: GameMenuProps) {
+export default function GameMenu({ onOpenCharacters, onMainMenu, onSave, onLoad }: GameMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [saveMode, setSaveMode] = useState<"save" | "load" | null>(null);
+  const [slots, setSlots] = useState(() => readSaveSlots());
+  const [saveMessage, setSaveMessage] = useState<string | null>(null);
 
   function openCharacters() {
     setIsOpen(false);
     onOpenCharacters();
+  }
+
+  function goToMainMenu() {
+    setIsOpen(false);
+    onMainMenu();
+  }
+
+  function openSaveWindow(mode: "save" | "load") {
+    setSlots(readSaveSlots());
+    setSaveMessage(null);
+    setIsOpen(false);
+    setSaveMode(mode);
+  }
+
+  function selectSlot(slotNumber: number) {
+    if (saveMode === "save") {
+      setSaveMessage(onSave(slotNumber) ? `Saved in slot ${slotNumber}.` : "Could not save the game.");
+      setSlots(readSaveSlots());
+      return;
+    }
+
+    if (saveMode === "load" && onLoad(slotNumber)) {
+      setSaveMode(null);
+    }
   }
 
   return (
@@ -36,13 +68,19 @@ export default function GameMenu({ onOpenCharacters }: GameMenuProps) {
           <button type="button" onClick={openCharacters}>
             Characters
           </button>
-          <button type="button" disabled title="Save is not available yet.">
-            Save
-          </button>
-          <button type="button" disabled title="Load is not available yet.">
-            Load
-          </button>
+          <button type="button" onClick={goToMainMenu}>Main Menu</button>
+          <button type="button" onClick={() => openSaveWindow("save")}>Save</button>
+          <button type="button" onClick={() => openSaveWindow("load")}>Load</button>
         </nav>
+      )}
+      {saveMode && (
+        <SaveWindow
+          mode={saveMode}
+          slots={slots}
+          message={saveMessage}
+          onSelect={selectSlot}
+          onClose={() => setSaveMode(null)}
+        />
       )}
     </div>
   );

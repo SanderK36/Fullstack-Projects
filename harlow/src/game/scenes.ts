@@ -1495,9 +1495,9 @@ export const hospitalReception: Scene = {
       timeCost: 0,
     },
     {
-      label: "Go to Room 312",
+      label: "Go to the elevator",
       action: "goToHospitalRoom",
-      nextScene: "hospital-room-312",
+      nextScene: "hospital-elevator",
       timeCost: 1,
     },
     {
@@ -1528,6 +1528,33 @@ export const earlConversation: Conversation = {
         npc("Earl", "That's what I thought."),
       ],
       endsConversation: true,
+    },
+  ],
+};
+
+export const hospitalElevator: Scene = {
+  id: "hospital-elevator",
+  story: [
+    narration("You wait by the hospital elevator."),
+    thought("The doors stand quietly at the end of the corridor."),
+  ],
+  location: "Hospital",
+  image: {
+    day: "./images/locations/hospital/hospitalElevator.png",
+    night: "./images/locations/hospital/hospitalElevator.png",
+  },
+  choices: [
+    {
+      label: "Go to Room 312",
+      action: "goToHospitalRoom312",
+      nextScene: "hospital-room-312",
+      timeCost: 1,
+    },
+    {
+      label: "Go back to reception",
+      action: "returnToHospitalReception",
+      nextScene: "hospital-reception",
+      timeCost: 1,
     },
   ],
 };
@@ -1651,10 +1678,37 @@ export const motelInside: Scene = {
       timeCost: 0,
     },
     {
+      label: "Go to your room",
+      action: "goToMotelRoom",
+      nextScene: "motel-room-203",
+      timeCost: 1,
+    },
+    {
       label: "Go outside",
       action: "leaveMotel",
       nextScene: "motel",
       timeCost: 0,
+    },
+  ],
+};
+
+export const motelRoom203: Scene = {
+  id: "motel-room-203",
+  story: [
+    narration("You step into Room 203."),
+    thought("For the moment, it is quiet."),
+  ],
+  location: "Motel",
+  image: {
+    day: "./images/locations/motel/motelRoom203.png",
+    night: "./images/locations/motel/motelRoom203.png",
+  },
+  choices: [
+    {
+      label: "Return to reception",
+      action: "returnToMotelReception",
+      nextScene: "motel-inside",
+      timeCost: 1,
     },
   ],
 };
@@ -1807,10 +1861,12 @@ export const scenes = {
   "cementary-backside": cementaryBackside,
   hospital,
   "hospital-reception": hospitalReception,
+  "hospital-elevator": hospitalElevator,
   "hospital-room-312": hospitalRoom312,
   "bus-stop": busStop,
   motel,
   "motel-inside": motelInside,
+  "motel-room-203": motelRoom203,
   diner,
   "diner-inside": dinerInside,
 };

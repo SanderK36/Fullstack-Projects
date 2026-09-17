@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { resolveAction } from "@/game/actions";
 import { applyEffects, effectsToStory } from "@/game/effects";
@@ -13,6 +13,13 @@ import {
 } from "@/game/scenes";
 import { advanceGameTime } from "@/game/time";
 import { isNightTime } from "@/game/utils";
+import {
+  readMostRecentSave,
+  readSaveSlot,
+  readSessionSave,
+  writeSaveSlot,
+  writeSessionSave,
+} from "@/game/save";
 import type { Choice, GameChoice } from "@/game/choices";
 import type { StoryEntry } from "@/game/story";
 
@@ -32,15 +39,18 @@ const TRAVEL_DURATION = 3000;
 type ShopId = "gas-station" | "needle-groove";
 
 export function useGame() {
+  const sessionSave = readSessionSave();
+  const sessionScene = sessionSave && scenes[sessionSave.currentSceneId as keyof typeof scenes];
+
   // Persistent world and player data. Add a field to its type and initial value
   // before using it in a scene requirement or effect.
-  const [gameState, setGameState] = useState(initialGameState);
-  const [playerState, setPlayerState] = useState(player);
+  const [gameState, setGameState] = useState(sessionSave?.gameState ?? initialGameState);
+  const [playerState, setPlayerState] = useState(sessionSave?.playerState ?? player);
 
   // The currently displayed scene and its short, time-aware thought.
-  const [currentScene, setCurrentScene] = useState(hallway);
+  const [currentScene, setCurrentScene] = useState(sessionScene ?? hallway);
   const [currentThought, setCurrentThought] = useState<string | null>(
-    getSceneThought(hallway.id, initialGameState.time)
+    getSceneThought(sessionScene?.id ?? hallway.id, sessionSave?.gameState.time ?? initialGameState.time)
   );
   const [currentEffects, setCurrentEffects] = useState<StoryEntry[]>([]);
 
@@ -64,11 +74,31 @@ export function useGame() {
   } | null>(null);
   // Small pieces of story progress that currently need custom logic. For more
   // flags, consider grouping them into a future `storyFlags` object.
-  const [busStopReturnSceneId, setBusStopReturnSceneId] = useState("front-yard");
-  const [marleneActive, setMarleneActive] = useState(false);
-  const [deskCigarettesPickedUp, setDeskCigarettesPickedUp] = useState(false);
-  const [scrapyardKnifePickedUp, setScrapyardKnifePickedUp] = useState(false);
-  const [garageFlashlightPickedUp, setGarageFlashlightPickedUp] = useState(false);
+  const [busStopReturnSceneId, setBusStopReturnSceneId] = useState(sessionSave?.busStopReturnSceneId ?? "front-yard");
+  const [marleneActive, setMarleneActive] = useState(sessionSave?.marleneActive ?? false);
+  const [deskCigarettesPickedUp, setDeskCigarettesPickedUp] = useState(sessionSave?.deskCigarettesPickedUp ?? false);
+  const [scrapyardKnifePickedUp, setScrapyardKnifePickedUp] = useState(sessionSave?.scrapyardKnifePickedUp ?? false);
+  const [garageFlashlightPickedUp, setGarageFlashlightPickedUp] = useState(sessionSave?.garageFlashlightPickedUp ?? false);
+
+  const currentSave = useCallback(() => {
+    return {
+      version: 1 as const,
+      gameState,
+      playerState,
+      currentSceneId: currentScene.id,
+      busStopReturnSceneId,
+      marleneActive,
+      deskCigarettesPickedUp,
+      scrapyardKnifePickedUp,
+      garageFlashlightPickedUp,
+    };
+  }, [gameState, playerState, currentScene, busStopReturnSceneId, marleneActive, deskCigarettesPickedUp, scrapyardKnifePickedUp, garageFlashlightPickedUp]);
+
+  // This is a temporary, per-tab resume point. It survives refreshes but is
+  // automatically cleared when the browser tab is closed.
+  useEffect(() => {
+    if (readSessionSave()) writeSessionSave(currentSave());
+  }, [currentSave]);
 
   function advanceTime(minutes: number) {
     // Keep time changes in one place so thoughts and day/night images stay synced.
@@ -271,6 +301,54 @@ export function useGame() {
     return true;
   }
 
+  function saveGame(slotNumber: number) {
+    return writeSaveSlot(slotNumber, currentSave());
+  }
+
+  function restoreSave(save: ReturnType<typeof readSaveSlot>) {
+    const savedScene = save && scenes[save.currentSceneId as keyof typeof scenes];
+
+    // Ignore saves from an older/incomplete build instead of leaving the game
+    // on a scene that no longer exists.
+    if (!save || !savedScene) return false;
+
+    writeSessionSave(save);
+
+    setGameState(save.gameState);
+    setPlayerState(save.playerState);
+    setCurrentScene(savedScene);
+    setCurrentThought(getSceneThought(savedScene.id, save.gameState.time));
+    setCurrentEffects([]);
+    setBusStopReturnSceneId(save.busStopReturnSceneId);
+    setMarleneActive(save.marleneActive);
+    setDeskCigarettesPickedUp(save.deskCigarettesPickedUp);
+    setScrapyardKnifePickedUp(save.scrapyardKnifePickedUp);
+    setGarageFlashlightPickedUp(save.garageFlashlightPickedUp);
+
+    // Modal and transition state is not saved, so always resume at the scene.
+    setShowStats(false);
+    setShowInventory(false);
+    setShowTravel(false);
+    setActiveShop(null);
+    setConversation([]);
+    setConversationActive(false);
+    setUsedConversationChoices([]);
+    setTravelingTo(null);
+    return true;
+  }
+
+  function loadGame(slotNumber: number) {
+    return restoreSave(readSaveSlot(slotNumber));
+  }
+
+  function loadMostRecentGame() {
+    return restoreSave(readMostRecentSave());
+  }
+
+  function startGameSession() {
+    return writeSessionSave(currentSave());
+  }
+
   // A scene can list multiple NPCs; only the first one available at this time
   // is rendered over the scene image.
   const activeCharacter = currentScene.characters?.find((character) => {
@@ -311,6 +389,10 @@ export function useGame() {
     setShowTravel,
     activeShop,
     setActiveShop,
+    saveGame,
+    loadGame,
+    loadMostRecentGame,
+    startGameSession,
     handleChoice,
     goToBusStop,
     wait: advanceTime,

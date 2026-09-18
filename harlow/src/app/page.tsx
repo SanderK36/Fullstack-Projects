@@ -54,9 +54,9 @@ const hotspotLabels: Record<string, string> = {
 };
 
 export default function Home() {
-  // The menu is intentionally UI-only: starting a game reveals the existing
-  // initial state created by useGame without resetting or changing it.
-  const [hasStarted, setHasStarted] = useState(false);
+  // Restore the session until the player explicitly chooses a screen.
+  // Returning to the menu must override the session detected on refresh.
+  const [hasStarted, setHasStarted] = useState<boolean | null>(null);
   const resumedSession = useSyncExternalStore(subscribeToSession, hasActiveSession, () => false);
   const [showCharacterDirectory, setShowCharacterDirectory] = useState(false);
   const {
@@ -175,7 +175,7 @@ export default function Home() {
       !hotspotActions.includes(choice.action)
   );
 
-  if (!hasStarted && !resumedSession) {
+  if (!(hasStarted ?? resumedSession)) {
     return (
       <main className="mainMenu">
         <div className="mainMenuArtwork" aria-hidden="true" />

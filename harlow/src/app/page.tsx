@@ -51,6 +51,12 @@ const hotspotLabels: Record<string, string> = {
   lookAtScrapyardDesk: "Workbench",
   takeScrapyardKnife: "Knife",
   leaveScrapyard: "Exit garage",
+  enterCemetery: "Enter church",
+  goCemeteryBackside: "Back of church",
+  leaveCemeteryBackside: "Go back inside",
+  enterMotel: "Enter office",
+  leaveMotel: "Go outside",
+  talkToEarl: "Earl",
 };
 
 export default function Home() {
@@ -163,7 +169,17 @@ export default function Home() {
                               ? ["lookAtScrapyardDesk", "leaveScrapyard"]
                               : currentScene.id === "scrapyard-desk"
                                 ? ["takeScrapyardKnife"]
-          : [];
+                                : currentScene.id === "cementary"
+                                  ? ["enterCemetery", "goCemeteryBackside"]
+                                  : currentScene.id === "cementary-inside"
+                                    ? ["goCemeteryBackside"]
+                                    : currentScene.id === "cementary-backside"
+                                      ? ["leaveCemeteryBackside"]
+                                      : currentScene.id === "motel"
+                                        ? ["enterMotel"]
+                                        : currentScene.id === "motel-inside"
+                                          ? ["leaveMotel", "talkToEarl"]
+                                          : [];
   const sceneHotspots = activeChoices.filter(
     (choice): choice is Choice =>
       "action" in choice &&

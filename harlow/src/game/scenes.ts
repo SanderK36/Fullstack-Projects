@@ -1376,6 +1376,12 @@ export const cementary: Scene = {
       nextScene: "cementary-inside",
       timeCost: 1,
     },
+    {
+      label: "Walk around to the back of the church",
+      action: "goCemeteryBackside",
+      nextScene: "cementary-backside",
+      timeCost: 2,
+    },
   ],
 };
 

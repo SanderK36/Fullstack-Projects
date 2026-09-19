@@ -476,6 +476,55 @@ button {
   height: 32%;
 }
 
+.scene-hotspot-cementary-enterCemetery {
+  top: 51%;
+  left: 57.9%;
+  width: 5.8%;
+  height: 11%;
+}
+
+.scene-hotspot-cementary-goCemeteryBackside {
+  top: 50%;
+  left: 78%;
+  width: 10%;
+  height: 10%;
+}
+
+.scene-hotspot-cementary-inside-goCemeteryBackside {
+  top: 35.3%;
+  left: 27.8%;
+  width: 7%;
+  height: 23.5%;
+}
+
+.scene-hotspot-cementary-backside-leaveCemeteryBackside {
+  top: 54.3%;
+  left: 52.1%;
+  width: 3.3%;
+  height: 10.8%;
+}
+
+.scene-hotspot-motel-enterMotel {
+  top: 56%;
+  left: 35.8%;
+  width: 5.5%;
+  height: 17%;
+}
+
+.scene-hotspot-motel-inside-leaveMotel {
+  top: 3%;
+  left: 4.5%;
+  width: 12.5%;
+  height: 65%;
+}
+
+.scene-hotspot-motel-inside-talkToEarl {
+  top: 21%;
+  left: 48%;
+  width: 15.5%;
+  height: 24%;
+}
+
 .waitControls {
   display: flex;
   flex-wrap: wrap;

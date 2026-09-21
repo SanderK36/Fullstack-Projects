@@ -62,10 +62,13 @@ export default function ActionList({
         ))}
 
         {!isConversation && canTravel && isBusStop ? (
-          <ActionButton
-            label="Take the bus"
-            onClick={onBus}
-          />
+          <>
+            <ActionButton label="Walk" onClick={onWalk} />
+            <ActionButton
+              label="Take the bus"
+              onClick={onBus}
+            />
+          </>
         ) : !isConversation && canTravel ? (
           <>
             <ActionButton label="Walk" onClick={onWalk} />

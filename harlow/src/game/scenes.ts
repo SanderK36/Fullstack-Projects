@@ -281,6 +281,12 @@ export const frontYard: Scene = {
   
   choices: [
     {
+      label: "Enter the garage",
+      action: "enterGarage",
+      nextScene: "garage",
+      timeCost: 2,
+    },
+    {
       label: "Go to the backyard",
       action: "goBackYard",
       nextScene: "back-yard",

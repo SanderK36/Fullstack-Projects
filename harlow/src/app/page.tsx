@@ -56,6 +56,9 @@ const hotspotLabels: Record<string, string> = {
   leaveCemeteryBackside: "Go back inside",
   enterMotel: "Enter office",
   leaveMotel: "Go outside",
+  goBackYard: "Backyard",
+  goHome: "Go inside",
+  enterGarage: "Enter garage",
   talkToEarl: "Earl",
 };
 
@@ -179,7 +182,9 @@ export default function Home() {
                                         ? ["enterMotel"]
                                         : currentScene.id === "motel-inside"
                                           ? ["leaveMotel", "talkToEarl"]
-                                          : [];
+                                          : currentScene.id === "front-yard"
+                                            ? ["goBackYard", "goHome", "enterGarage"]
+                                            : [];
   const sceneHotspots = activeChoices.filter(
     (choice): choice is Choice =>
       "action" in choice &&

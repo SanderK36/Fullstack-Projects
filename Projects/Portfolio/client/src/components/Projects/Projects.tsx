@@ -15,7 +15,7 @@ function Projects() {
     {
       title: "Movie search app",
       description:
-        "A app where you search for your favorite movies",
+        "A movie search application for finding your favorite films and discovering something new to watch. Built with React, Next.js, and Tailwind CSS.",
       technologies: ["React", "Next.js", "Tailwind CSS"],
       image: "/projects/movieSearchAppThumbnail.png",
       liveUrl: "https://moviescout-beryl.vercel.app/",

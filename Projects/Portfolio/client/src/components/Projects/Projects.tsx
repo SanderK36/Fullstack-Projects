@@ -18,8 +18,8 @@ function Projects() {
       description:
         "A app where you search for your favorite movies",
       technologies: ["React", "Next.js", "Tailwind CSS"],
-      image: "/projects/weather-app.png",
-      liveUrl: "https://your-weather-app-url.com",
+      image: "/projects/movieSearchAppThumbnail.png",
+      liveUrl: "https://moviescout-beryl.vercel.app/",
       githubUrl: "https://github.com/yourusername/weather-app",
     },
     {

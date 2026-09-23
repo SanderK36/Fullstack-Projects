@@ -24,6 +24,111 @@
   color: #94a3b8;
 }
 
+.education {
+  width: 100%;
+  max-width: 760px;
+  margin-top: 3.5rem;
+  text-align: left;
+}
+
+.education-heading {
+  margin-bottom: 1.75rem;
+}
+
+.education-eyebrow {
+  color: #a5b4fc;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.education-heading h3 {
+  margin: 0.5rem 0 0;
+  color: #f8fafc;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.education-timeline {
+  --logo-size: 64px;
+  --timeline-gap: 1.75rem;
+  list-style: none;
+  margin: 0 0 0 calc(var(--logo-size) + 20px);
+  padding: 0 0 0 var(--timeline-gap);
+  border-left: 1px solid #475569;
+}
+
+.education-item {
+  position: relative;
+  padding-bottom: 1.25rem;
+}
+
+.education-item:last-child {
+  padding-bottom: 0;
+}
+
+.education-item::before {
+  content: "";
+  position: absolute;
+  top: 1.75rem;
+  left: calc(-1 * var(--timeline-gap) - 6px);
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #a5b4fc;
+  box-shadow: 0 0 0 5px #1e293b;
+}
+
+.education-logo {
+  position: absolute;
+  top: calc(1.75rem + 5.5px - var(--logo-size) / 2);
+  left: calc(-1 * var(--timeline-gap) - 20px - var(--logo-size));
+  width: var(--logo-size);
+  height: var(--logo-size);
+  object-fit: contain;
+  box-sizing: border-box;
+  padding: 6px;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.education-card {
+  padding: 1.5rem;
+  border: 1px solid #334155;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #1e293b, #182236);
+}
+
+.education-period {
+  display: inline-block;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid rgba(129, 140, 248, 0.25);
+  border-radius: 999px;
+  background: rgba(99, 102, 241, 0.12);
+  color: #c7d2fe;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.education-card h4 {
+  margin: 1rem 0 0.4rem;
+  color: #f8fafc;
+  font-size: 1.15rem;
+  overflow-wrap: anywhere;
+}
+
+.education-school {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.education-card p {
+  margin: 0.85rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
 @media (max-width: 600px) {
   .about {
     padding: 4rem 0;
@@ -32,5 +137,14 @@
   .about p {
     font-size: 1rem;
     line-height: 1.7;
+  }
+
+  .education-timeline {
+    --logo-size: 40px;
+    --timeline-gap: 1.25rem;
+  }
+
+  .education-card {
+    padding: 1.25rem;
   }
 }

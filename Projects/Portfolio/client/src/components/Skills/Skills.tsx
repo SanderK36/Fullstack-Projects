@@ -19,6 +19,7 @@ function Skills() {
       { name: "Tailwind", color: "#38bdf8" },
       { name: "MongoDB", color: "#47a248" },
       { name: "jQuery", color: "#0769ad" },
+      { name: "PHP", color: "#777bb4" },
     ]
 
   return (

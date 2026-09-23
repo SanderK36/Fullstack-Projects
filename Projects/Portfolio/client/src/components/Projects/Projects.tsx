@@ -11,7 +11,6 @@ function Projects() {
       technologies: ["React", "Next.js", "CSS",],
       image: "/projects/harlowThumbnail.png",
       liveUrl: "https://harlow-alpha.vercel.app/",
-      githubUrl: "https://github.com/yourusername/your-repository",
     },
     {
       title: "Movie search app",
@@ -20,16 +19,14 @@ function Projects() {
       technologies: ["React", "Next.js", "Tailwind CSS"],
       image: "/projects/movieSearchAppThumbnail.png",
       liveUrl: "https://moviescout-beryl.vercel.app/",
-      githubUrl: "https://github.com/yourusername/weather-app",
     },
     {
-      title: "Task Manager",
+      title: "In development",
       description:
-        "A web application for creating and managing daily tasks.",
-      technologies: ["React", "TypeScript", "API"],
+        "TBA",
+      technologies: ["TBA"],
       image: "/projects/task-manager.png",
       liveUrl: "https://your-task-manager-url.com",
-      githubUrl: "https://github.com/yourusername/task-manager",
     },
   ];
 
@@ -48,7 +45,6 @@ function Projects() {
               technologies={project.technologies}
               image={project.image}
               liveUrl={project.liveUrl}
-              githubUrl={project.githubUrl}
             />
           ))}
         </div>

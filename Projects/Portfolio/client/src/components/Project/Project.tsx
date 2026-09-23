@@ -6,7 +6,6 @@ type ProjectProps = {
   technologies: string[];
   image: string;
   liveUrl: string;
-  githubUrl: string;
 };
 
 function Project({
@@ -15,7 +14,6 @@ function Project({
   technologies,
   image,
   liveUrl,
-  githubUrl,
 }: ProjectProps) {
   return (
     <article className="project">
@@ -33,9 +31,7 @@ function Project({
         </div>
 
         <div className="project-links">
-          <a href={liveUrl} target="_blank" rel="noopener noreferrer">Live Demo</a>
-
-          <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="github-link">GitHub</a>
+          <a href={liveUrl} target="_blank" rel="noopener noreferrer">Visit</a>
         </div>
       </div>
     </article>

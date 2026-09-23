@@ -39,7 +39,9 @@ function Contact() {
       setIsSending(true);
       setStatus("Sending...");
 
-      const response = await fetch("http://localhost:5000/api/contact", {
+      const apiUrl = import.meta.env.VITE_API_URL;
+
+      const response = await fetch(`${apiUrl}/api/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -63,7 +65,11 @@ function Contact() {
       setEmail("");
       setMessage("");
     } catch (error) {
-      setStatus( error instanceof Error ? error.message : "Something went wrong.");
+      setStatus(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong."
+      );
     } finally {
       setIsSending(false);
     }
@@ -76,15 +82,44 @@ function Contact() {
           <h2>Contact Me</h2>
 
           <form className="contact-form" onSubmit={handleSubmit}>
-            <input type="text" placeholder="Your name" value={name} onChange={(event) => setName(event.target.value)} disabled={isSending}/>
+            <input
+              type="text"
+              placeholder="Your name"
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+              disabled={isSending}
+            />
 
-            <input type="email" placeholder="Your email" value={email} onChange={(event) => setEmail(event.target.value)} disabled={isSending}/>
+            <input
+              type="email"
+              placeholder="Your email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              disabled={isSending}
+            />
 
-            <textarea placeholder="Your message" value={message} onChange={(event) => setMessage(event.target.value)} disabled={isSending}/>
+            <textarea
+              placeholder="Your message"
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              disabled={isSending}
+            />
 
-            <button type="submit" disabled={isSending}> {isSending ? "Sending..." : "Send Message"} </button>
+            <button type="submit" disabled={isSending}>
+              {isSending ? "Sending..." : "Send Message"}
+            </button>
 
-            {status && (<p className={ status === "Message sent successfully!" ? "form-success" : "form-status"}>{status}</p>)}
+            {status && (
+              <p
+                className={
+                  status === "Message sent successfully!"
+                    ? "form-success"
+                    : "form-status"
+                }
+              >
+                {status}
+              </p>
+            )}
           </form>
         </div>
       </FadeIn>

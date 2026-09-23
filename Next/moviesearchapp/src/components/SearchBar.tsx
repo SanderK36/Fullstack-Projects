@@ -76,7 +76,7 @@ export default function SearchBar({
   }
 
   return (
-    <div className="relative mx-auto mt-10 max-w-2xl">
+    <div className="relative z-50 mx-auto mt-10 max-w-2xl">
       <div className="flex gap-3">
         <input
           type="text"

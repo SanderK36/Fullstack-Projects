@@ -5,19 +5,19 @@ import "./Projects.css";
 function Projects() {
   const projects = [
     {
-      title: "Portfolio Website",
+      title: "Harlow: 1982",
       description:
-        "A full-stack personal portfolio built with React, TypeScript, Express, MongoDB, and Nodemailer.",
-      technologies: ["React", "TypeScript", "Express", "MongoDB"],
-      image: "/projects/portfolio.png",
-      liveUrl: "https://your-live-demo-url.com",
+        "A point-and-click horror game set in 1982, where you play as 20 year old Ethan who tries to uncover the mystery about your sister disappearance",
+      technologies: ["React", "Next.js", "CSS",],
+      image: "/projects/harlowThumbnail.png",
+      liveUrl: "https://harlow-alpha.vercel.app/",
       githubUrl: "https://github.com/yourusername/your-repository",
     },
     {
-      title: "Weather App",
+      title: "Movie search app",
       description:
-        "A weather application that displays current weather information using an external API.",
-      technologies: ["React", "TypeScript", "Express"],
+        "A app where you search for your favorite movies",
+      technologies: ["React", "Next.js", "Tailwind CSS"],
       image: "/projects/weather-app.png",
       liveUrl: "https://your-weather-app-url.com",
       githubUrl: "https://github.com/yourusername/weather-app",

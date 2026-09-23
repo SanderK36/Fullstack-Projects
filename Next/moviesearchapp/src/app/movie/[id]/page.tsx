@@ -30,12 +30,18 @@ export default async function MoviePage({
 }: MoviePageProps) {
   const { id } = await params;
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000"}/api/movie/${id}`,
-    {
-      cache: "no-store",
-    }
-  );
+  const apiKey = process.env.TMDB_API_KEY;
+
+if (!apiKey) {
+  throw new Error("TMDB_API_KEY is not configured");
+}
+
+const response = await fetch(
+  `https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}&language=en-US`,
+  {
+    cache: "no-store",
+  }
+);
 
   if (!response.ok) {
     return (
@@ -64,7 +70,7 @@ export default async function MoviePage({
 
   return (
     <main className="min-h-screen bg-[#080814] text-white">
-      <section className="relative overflow-hidden">
+      <section className="relative min-h-screen overflow-hidden">
         {movie.backdrop_path && (
           <div className="absolute inset-0">
             <Image

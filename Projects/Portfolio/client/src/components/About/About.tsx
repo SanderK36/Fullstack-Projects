@@ -15,8 +15,8 @@ function About() {
       degree: "Backend Development",
       school: "Noroff",
       logo: "/education/Noroff.png",
-      period: "2026 — 2027",
-      description: "I completed a one-year Backend Development program focused on designing, building, and deploying modern server-side applications and APIs. I developed practical skills in JavaScript, Node.js, Express.js, REST APIs, SQL databases, and database management while learning how to structure reliable and maintainable backend systems. The program covered API design and development, CRUD operations, data modeling, authentication and authorization, security, error handling, testing, and working with relational databases. I also gained experience with Git and GitHub, environment configuration, deployment, and connecting backend services to frontend applications. Throughout the program, I applied these skills through practical projects, building complete backend solutions from database design through API deployment.",
+      period: "2026 — Present",
+      description: "A one-year Backend Development program focused on designing, building, and deploying modern server-side applications and APIs. I developed practical skills in JavaScript, Node.js, Express.js, REST APIs, SQL databases, and database management while learning how to structure reliable and maintainable backend systems. The program covered API design and development, CRUD operations, data modeling, authentication and authorization, security, error handling, testing, and working with relational databases. I also gained experience with Git and GitHub, environment configuration, deployment, and connecting backend services to frontend applications. Throughout the program, I applied these skills through practical projects, building complete backend solutions from database design through API deployment.",
     },
   ];
 

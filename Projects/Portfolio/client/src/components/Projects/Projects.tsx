@@ -7,10 +7,10 @@ function Projects() {
     {
       title: "Harlow: 1982",
       description:
-        "A point-and-click horror game set in 1982, where you play as 20 year old Ethan who tries to uncover the mystery about your sister disappearance",
+        "A point-and-click horror game set in 1982, where you play as 20 year old Ethan who tries to uncover the mystery about your sister disappearance. Check out our studio for more information.",
       technologies: ["React", "Next.js", "CSS",],
       image: "/projects/harlowThumbnail.png",
-      liveUrl: "https://harlow-alpha.vercel.app/",
+      liveUrl: "www.lostfrequencygames.com",
     },
     {
       title: "Movie search app",

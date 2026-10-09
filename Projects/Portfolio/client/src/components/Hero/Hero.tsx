@@ -6,7 +6,7 @@ function Hero() {
       <div className="container">
         <h1>Sander Karlsen</h1>
 
-        <p>Junior Developer</p>
+        <p>Junior Full-Stack Developer</p>
 
         <div className="hero-buttons">
           <a href="#projects" className="hero-button"> View My Projects </a>

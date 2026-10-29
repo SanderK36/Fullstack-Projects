@@ -1,6 +1,7 @@
 import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import Post from "./components/Post/Post";
+import UserPost from "./components/UserPost/UserPost";
 
 type PostData = {
   id: number;
@@ -32,25 +33,31 @@ const posts: PostData[] = [
     likes: 25,
     posted: "Today",
   },
+  {
+    id: 4,
+    author: "Per Olsen",
+    content: "Jeg elsker programmering!",
+    likes: 0,
+    posted: "Yesterday",
+  },
 ];
 
 function App() {
   return (
     <div>
       <Navbar />
-
-      <h1>FaceSpace</h1>
-      <p>Welcome to FaceSpace!</p>
-
-      {posts.map((post) => (
-        <Post
-          key={post.id}
-          author={post.author}
-          content={post.content}
-          likes={post.likes}
-          posted={post.posted}
-        />
-      ))}
+      <main className="feed">
+        <UserPost author={posts[0].author} />
+        {posts.map((post) => (
+          <Post
+            key={post.id}
+            author={post.author}
+            content={post.content}
+            likes={post.likes}
+            posted={post.posted}
+          />
+        ))}
+      </main>
     </div>
   );
 }

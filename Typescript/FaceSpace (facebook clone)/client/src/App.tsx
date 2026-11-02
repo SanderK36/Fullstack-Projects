@@ -45,7 +45,14 @@ const initialPosts: PostData[] = [
 
 function App() {
   const [posts, setPosts] = useState<PostData[]>(initialPosts);
+  const [searchQuery, setSearchQuery] = useState("");
   const currentUser = "Sander";
+
+  const normalizedQuery = searchQuery.trim().toLowerCase();
+
+  const filteredPosts = posts.filter((post) =>
+    post.content.toLowerCase().includes(normalizedQuery),
+  );
 
   function addPost(content: string) {
     const newPost: PostData = {
@@ -57,18 +64,34 @@ function App() {
     };
     setPosts((prevPosts) => [newPost, ...prevPosts]);
   }
+
+  function deletePost(id: number) {
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
+  }
+
   return (
     <div>
-      <Navbar />
+      <Navbar searchQuery={searchQuery} onSearchChange={setSearchQuery} />
+      <p>
+        {posts.length === 0 ? "No posts yet" : `Total posts: ${posts.length}`}
+      </p>
       <main className="feed">
         <UserPost author={currentUser} onAddPost={addPost} />
-        {posts.map((post) => (
+
+        {posts.length === 0 && (
+          <p className="noPosts">
+            Could'nt find any posts. Try refreshing the page.
+          </p>
+        )}
+
+        {filteredPosts.map((post) => (
           <Post
             key={post.id}
             author={post.author}
             content={post.content}
             likes={post.likes}
             posted={post.posted}
+            onDelete={() => deletePost(post.id)}
           />
         ))}
       </main>

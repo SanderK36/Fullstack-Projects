@@ -1,6 +1,11 @@
 import styles from "./Navbar.module.css";
 
-function Navbar() {
+type NavbarProps = {
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
+};
+
+function Navbar({ searchQuery, onSearchChange }: NavbarProps) {
   return (
     <nav className={styles.navbar} aria-label="Hovednavigasjon">
       <div className={styles.left}>
@@ -14,6 +19,8 @@ function Navbar() {
           placeholder="Søk på FaceSpace"
           aria-label="Søk på FaceSpace"
           className={styles.search}
+          value={searchQuery}
+          onChange={(e) => onSearchChange(e.target.value)}
         />
 
         <button

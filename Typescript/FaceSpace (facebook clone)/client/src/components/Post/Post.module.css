@@ -84,3 +84,19 @@
 .actionButton:hover {
   background-color: #1877f2;
 }
+
+.deleteButton {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  margin-left: auto;
+}
+
+.deleteButton:hover {
+  background-color: #981a16;
+}

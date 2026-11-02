@@ -6,9 +6,10 @@ export type PostProps = {
   content: string;
   likes: number;
   posted: string;
+  onDelete: () => void;
 };
 
-function Post({ author, content, likes, posted }: PostProps) {
+function Post({ author, content, likes, posted, onDelete }: PostProps) {
   const [like, setLike] = useState(likes);
   const [isLiked, setIsLiked] = useState(false);
 
@@ -24,11 +25,17 @@ function Post({ author, content, likes, posted }: PostProps) {
     <article className={styles.postContainer}>
       <div className={styles.postHeader}>
         <div className={styles.avatar}>{author.charAt(0)}</div>
-
         <div className={styles.authorInfo}>
           <h3 className={styles.author}>{author}</h3>
           <span className={styles.posted}>{posted}</span>
         </div>
+        <button
+          className={styles.deleteButton}
+          type="button"
+          onClick={onDelete}
+        >
+          Slett
+        </button>
       </div>
 
       <p className={styles.content}>{content}</p>
